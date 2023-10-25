@@ -1,0 +1,25 @@
+(ns budget-app.main
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
+   [cljd.flutter.alpha2 :as f]))
+
+(defn main []
+  (m.WidgetsFlutterBinding/ensureInitialized)
+  (await (.load dotenv/dotenv .fileName ".env"))
+  (m/runApp
+   (m/MaterialApp
+    .title "Welcome to Flutter"
+    .theme (m/ThemeData .primarySwatch m.Colors/blue
+                        .fontFamily "MongolianBaiZheng")
+    .home
+    (m/Scaffold
+     .appBar (m/AppBar
+              .title (m/Text "Mongolian Quotes"))
+     .body
+     (m/Center
+      .child
+      (m/Column
+       .children
+       [(m/Text "ABC")])))
+    .debugShowCheckedModeBanner false)))
