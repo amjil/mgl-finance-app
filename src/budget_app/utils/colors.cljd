@@ -1,0 +1,20 @@
+(ns budget-app.utils.colors
+  (:require 
+   ["package:flutter/material.dart" :as m]))
+
+(def green (m/Color 0xff00968A))
+(def text-field (m/Color 0xffF7F8F9))
+(def text-field-border (m/Color 0xffECEFF5))
+(def font-black (m/Color 0xff353535))
+(def grey (m/Color 0xffADB6C1))
+(def grey-text (m/Color 0xff9FA6B6))
+(def grey-text-field (m/Color 0xffF7F8F9))
+(def green-dark (m/Color 0xff137E75))
+(def card (m/Color 0xffEDF1F0))
+(def green-nav (m/Color 0xff085E57))
+
+(def dark-scaffold (m/Color 0xff121418))
+(def dark-card (m/Color 0xff1B1F24))
+(def dark-green (m/Color 0xff198786))
+(def dark-green-black (m/Color 0xff027273))
+(def dark-green-icon (.fromARGB m/Color 255 0 91 93))
