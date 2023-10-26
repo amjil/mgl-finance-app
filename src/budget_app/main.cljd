@@ -10,51 +10,38 @@
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
   (await (.load dotenv/dotenv .fileName ".env"))
+  
+  (let [theme-setting (await (pref/get-value 
+                              {:type :int :key "theme-setting"}))
+        initial-theme (cond
+                        (nil? theme-setting)
+                        adaptive.AdaptiveThemeMode/system
 
-  (let [window (-> m/WidgetsBinding .instance .-window)]
-    (set!
-     (.-onPlatformBrightnessChanged window)
-     (fn []
-       (let [theme-setting (await (pref/get-value {:type :int :key "theme-setting"}))]
-         (cond
-           (nil? theme-setting)
-           (swap! gs/state assoc :brightness "light")
+                        :else
+                        (condp = theme-setting
+                          0 adaptive.AdaptiveThemeMode/light
+                          1 adaptive.AdaptiveThemeMode/dark
+                          adaptive.AdaptiveThemeMode/system))]
 
-           :else
-           (condp = theme-setting
-             0 (swap! gs/state assoc :brightness "light")
-             1 (swap! gs/state assoc :brightness "dark")
-             (swap! gs/state assoc :brightness "system")))))))
-
-  (m/runApp
-   (f/widget
-    :context ctx
-    :bg-watcher ([{brightness :brightness} gs/state]
-                 (when-not (nil? ctx)
-                   (condp = brightness
-                     "light"
-                     (-> adaptive/AdaptiveTheme (.of ctx) .setLight)
-                     "dark"
-                     (-> adaptive/AdaptiveTheme (.of ctx) .setDark)
-                     (-> adaptive/AdaptiveTheme (.of ctx) .setSystem))))
-    (adaptive/AdaptiveTheme
-    ;;  .debugShowFloatingThemeButton true
-     .light (.light m/ThemeData .useMaterial3 true)
-     .dark (.dark m/ThemeData .useMaterial3 true)
-     .initial adaptive.AdaptiveThemeMode/light
-     .builder (fn [light dark]
-                (m/MaterialApp
-                 .title "Welcome to Flutter"
-                 .theme light
-                 .darkTheme dark
-                 .home
-                 (m/Scaffold
-                  .appBar (m/AppBar
-                           .title (m/Text "Budget"))
-                  .body
-                  (m/Center
-                   .child
-                   (m/Column
-                    .children
-                    [(m/Text "ABC")])))
-                 .debugShowCheckedModeBanner false))))))
+    (m/runApp
+     (adaptive/AdaptiveTheme
+      ;; .debugShowFloatingThemeButton true
+      .light (.light m/ThemeData .useMaterial3 true)
+      .dark (.dark m/ThemeData .useMaterial3 true)
+      .initial initial-theme
+      .builder (fn [light dark]
+                 (m/MaterialApp
+                  .title "Welcome to Flutter"
+                  .theme light
+                  .darkTheme dark
+                  .home
+                  (m/Scaffold
+                   .appBar (m/AppBar
+                            .title (m/Text "Budget"))
+                   .body
+                   (m/Center
+                    .child
+                    (m/Column
+                     .children
+                     [(m/Text "ABC")])))
+                  .debugShowCheckedModeBanner false))))))
