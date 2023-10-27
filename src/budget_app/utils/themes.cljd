@@ -4,23 +4,25 @@
    [budget-app.services.pref :as pref]))
 
 (defn set-dark [ctx]
-  (-> adaptive/AdaptiveTheme 
+  (pref/set-int "theme-setting" 1)
+  (-> adaptive/AdaptiveTheme
       (.of ctx)
       .setDark))
 
 (defn set-light [ctx]
+  (pref/set-int "theme-setting" 0)
   (-> adaptive/AdaptiveTheme 
       (.of ctx)
       .setLight))
 
 (defn set-system [ctx]
+  (pref/set-int "theme-setting" 2)
   (-> adaptive/AdaptiveTheme 
       (.of ctx)
       .setSystem))
 
 (defn initial-theme []
-  (let [theme-setting (await (pref/get-value
-                              {:type :int :key "theme-setting"}))]
+  (let [theme-setting (await (pref/get-int "theme-setting"))]
     (cond
       (nil? theme-setting)
       adaptive.AdaptiveThemeMode/system
