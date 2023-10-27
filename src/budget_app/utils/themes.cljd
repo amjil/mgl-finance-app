@@ -1,7 +1,9 @@
 (ns budget-app.utils.themes
   (:require
+   ["package:flutter/material.dart" :as m]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
-   [budget-app.services.pref :as pref]))
+   [budget-app.services.pref :as pref]
+   [budget-app.utils.colors :as colors]))
 
 (defn set-dark [ctx]
   (pref/set-int "theme-setting" 1)
@@ -21,6 +23,12 @@
       (.of ctx)
       .setSystem))
 
+(defn is-dark-mode [ctx]
+  (= (-> m/Theme
+         (.of ctx)
+         .-brightness)
+     m.Brightness/dark))
+
 (defn initial-theme []
   (let [theme-setting (await (pref/get-int "theme-setting"))]
     (cond
@@ -32,3 +40,47 @@
         0 adaptive.AdaptiveThemeMode/light
         1 adaptive.AdaptiveThemeMode/dark
         adaptive.AdaptiveThemeMode/system))))
+
+(def light-theme
+  (m/ThemeData
+   .canvasColor colors/card
+   .textTheme (m/TextTheme
+               .bodyLarge (m/TextStyle .color colors/font-black)
+               .bodyMedium (m/TextStyle .color colors/font-black)
+               .bodySmall (m/TextStyle .color colors/font-black))
+   .fontFamily "MongolianBaiZheng"
+   .scaffoldBackgroundColor m.Colors/white
+   .colorScheme (.light m/ColorScheme)
+   .primaryColor colors/green
+   .cardColor colors/card
+   .inputDecorationTheme (m/InputDecorationTheme
+                          .hoverColor colors/green
+                          .focusColor colors/text-field
+                          .focusedBorder
+                          (m/OutlineInputBorder
+                           .borderRadius (.circular m/BorderRadius 12)
+                           .borderSide (m/BorderSide .color colors/text-field-border))
+                          .enabledBorder
+                          (m/OutlineInputBorder
+                           .borderSide (m/BorderSide .color colors/text-field-border)
+                           .borderRadius (.circular m/BorderRadius 12)))))
+
+(def dark-theme
+  (m/ThemeData
+   .canvasColor colors/dark-card
+   .fontFamily "MongolianBaiZheng"
+   .scaffoldBackgroundColor colors/dark-scaffold
+   .colorScheme (.dark m/ColorScheme)
+   .primaryColor colors/dark-green
+   .cardColor colors/dark-card
+   .inputDecorationTheme (m/InputDecorationTheme
+                          .hoverColor colors/dark-green
+                          .focusColor colors/dark-green
+                          .focusedBorder
+                          (m/OutlineInputBorder
+                           .borderRadius (.circular m/BorderRadius 12)
+                           .borderSide (m/BorderSide .color m.Colors/transparent))
+                          .enabledBorder
+                          (m/OutlineInputBorder
+                           .borderSide (m/BorderSide .color m.Colors/transparent)
+                           .borderRadius (.circular m/BorderRadius 12)))))

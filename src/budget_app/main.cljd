@@ -14,8 +14,10 @@
     (m/runApp
      (adaptive/AdaptiveTheme
       ;; .debugShowFloatingThemeButton true
-      .light (.light m/ThemeData .useMaterial3 true)
-      .dark (.dark m/ThemeData .useMaterial3 true)
+      ;; .light (.light m/ThemeData .useMaterial3 true)
+      ;; .dark (.dark m/ThemeData .useMaterial3 true)
+      .light themes/light-theme
+      .dark themes/dark-theme
       .initial initial-theme
       .builder (fn [light dark]
                  (m/MaterialApp
