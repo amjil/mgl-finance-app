@@ -1,0 +1,56 @@
+(ns budget-app.widgets.navbar
+  (:require
+   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
+   ["package:flutter/material.dart" :as m]
+   ["package:flutter/painting.dart" :as painting]
+   [cljd.flutter.alpha2 :as f]
+   [budget-app.utils.themes :as themes]
+   [budget-app.utils.colors :as colors]
+   [budget-app.screens.home :as home]
+   [budget-app.screens.planning :as planning]
+   [budget-app.screens.profile :as profile]
+   [budget-app.screens.wallet :as wallet]))
+
+(defn- nav-item [color icon]
+  (tab/PersistentBottomNavBarItem
+   .inactiveColorPrimary color
+   .activeColorPrimary color
+   .icon icon))
+
+(defn bottom-nav []
+  (f/widget
+   :context ctx
+   :let [color (if (themes/is-dark-mode ctx)
+                 colors/dark-green-icon
+                 colors/green-nav)]
+   :managed [controller (tab/PersistentTabController .initialIndex 0)]
+   (tab/PersistentTabView
+    ctx
+    .screens [home/screen
+              wallet/screen
+              planning/screen
+              profile/screen]
+    .items [(nav-item color (m/Icon m.Icons/home))
+            (nav-item color (m/Icon m.Icons/account_balance_wallet))
+            (nav-item color (m/Icon m.Icons/article))
+            (nav-item color (m/Icon m.Icons/person))]
+    .controller controller
+    .navBarHeight 60
+    .decoration
+    (tab/NavBarDecoration .colorBehindNavBar
+                          (if (themes/is-dark-mode ctx)
+                            colors/dark-green-back
+                            colors/green-dark)
+                          .borderRadius
+                          (.only painting/BorderRadius
+                                 .topLeft (.circular painting/Radius 15)
+                                 .topRight (.circular painting/Radius 15)))
+    .padding (.all tab/NavBarPadding 0)
+    .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
+    .navBarStyle (.-style3 tab/NavBarStyle)
+    .itemAnimationProperties
+    (tab/ItemAnimationProperties
+     .duration (Duration .milliseconds 400)
+     .curve (.-ease m/Curves))
+    .screenTransitionAnimation
+    (tab/ScreenTransitionAnimation .curve (.-ease m/Curves)))))

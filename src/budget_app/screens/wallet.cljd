@@ -1,0 +1,14 @@
+(ns budget-app.screens.wallet
+  (:require
+   ["package:flutter/material.dart" :as m]
+   [cljd.flutter.alpha2 :as f]))
+
+(def screen
+  (f/widget
+   (m/Scaffold
+    .appBar (m/AppBar
+             .title (m/Text "Budget"))
+    .body
+    (m/Center
+     .child
+     (m/Text "wallet")))))

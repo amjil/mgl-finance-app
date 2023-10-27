@@ -16,5 +16,5 @@
 (def dark-scaffold (m/Color 0xff121418))
 (def dark-card (m/Color 0xff1B1F24))
 (def dark-green (m/Color 0xff198786))
-(def dark-green-black (m/Color 0xff027273))
+(def dark-green-back (m/Color 0xff027273))
 (def dark-green-icon (.fromARGB m/Color 255 0 91 93))

@@ -3,13 +3,14 @@
    ["package:flutter/material.dart" :as m]
    ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
-   [budget-app.utils.themes :as themes]))
+   [budget-app.utils.themes :as themes]
+   [budget-app.widgets.navbar :as nav]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
   (await (.load dotenv/dotenv .fileName ".env"))
   
-  (let [initial-theme (themes/initial-theme)] 
+  (let [initial-theme (await (themes/initial-theme))] 
     (m/runApp
      (adaptive/AdaptiveTheme
       ;; .debugShowFloatingThemeButton true
@@ -21,14 +22,5 @@
                   .title "Welcome to Flutter"
                   .theme light
                   .darkTheme dark
-                  .home
-                  (m/Scaffold
-                   .appBar (m/AppBar
-                            .title (m/Text "Budget"))
-                   .body
-                   (m/Center
-                    .child
-                    (m/Column
-                     .children
-                     [(m/Text "ABC")])))
+                  .home (nav/bottom-nav)
                   .debugShowCheckedModeBanner false))))))
