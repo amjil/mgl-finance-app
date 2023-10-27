@@ -3,26 +3,13 @@
    ["package:flutter/material.dart" :as m]
    ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
-   [budget-app.services.pref :as pref]
-   [budget-app.states.global :as gs]
-   [cljd.flutter.alpha2 :as f]))
+   [budget-app.utils.themes :as themes]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
   (await (.load dotenv/dotenv .fileName ".env"))
   
-  (let [theme-setting (await (pref/get-value 
-                              {:type :int :key "theme-setting"}))
-        initial-theme (cond
-                        (nil? theme-setting)
-                        adaptive.AdaptiveThemeMode/system
-
-                        :else
-                        (condp = theme-setting
-                          0 adaptive.AdaptiveThemeMode/light
-                          1 adaptive.AdaptiveThemeMode/dark
-                          adaptive.AdaptiveThemeMode/system))]
-
+  (let [initial-theme (themes/initial-theme)] 
     (m/runApp
      (adaptive/AdaptiveTheme
       ;; .debugShowFloatingThemeButton true

@@ -1,0 +1,32 @@
+(ns budget-app.utils.themes
+  (:require
+   ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
+   [budget-app.services.pref :as pref]))
+
+(defn set-dark [ctx]
+  (-> adaptive/AdaptiveTheme 
+      (.of ctx)
+      .setDark))
+
+(defn set-light [ctx]
+  (-> adaptive/AdaptiveTheme 
+      (.of ctx)
+      .setLight))
+
+(defn set-system [ctx]
+  (-> adaptive/AdaptiveTheme 
+      (.of ctx)
+      .setSystem))
+
+(defn initial-theme []
+  (let [theme-setting (await (pref/get-value
+                              {:type :int :key "theme-setting"}))]
+    (cond
+      (nil? theme-setting)
+      adaptive.AdaptiveThemeMode/system
+
+      :else
+      (condp = theme-setting
+        0 adaptive.AdaptiveThemeMode/light
+        1 adaptive.AdaptiveThemeMode/dark
+        adaptive.AdaptiveThemeMode/system))))
