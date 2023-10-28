@@ -1,0 +1,37 @@
+(ns budget-app.widgets.custom-card
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]))
+
+(defn card [width height title balance]
+  (f/widget
+   :context context
+   (m/Container
+    .height height 
+    .width width 
+    .decoration
+    (m/BoxDecoration .borderRadius
+                     (.all m/BorderRadius (.circular m/Radius 20))
+                     .color (-> m/Theme (.of context) .-cardColor))
+    .child
+    (m/Padding .padding
+               (.symmetric m/EdgeInsets .horizontal 2 .vertical 15)
+               .child
+               (m/Row .crossAxisAlignment m.CrossAxisAlignment/center
+                      .mainAxisAlignment m.MainAxisAlignment/center
+                      .children
+                      [(mgl/MongolText title
+                               .style
+                               (m/TextStyle .fontSize 18
+                                            .color (-> m/Theme (.of context) .-primaryColor)
+                                            .fontWeight m.FontWeight/w500))
+                    ;;    (m/SizedBox .width 2)
+                       (m/Column
+                        .mainAxisAlignment m.MainAxisAlignment/center
+                        .children
+                        [(m/Icon m.Icons/currency_rupee .size 18)
+                         (mgl/MongolText balance
+                                         .style (m/TextStyle
+                                                 .fontSize 18
+                                                 .fontWeight m.FontWeight/w500))])])))))
