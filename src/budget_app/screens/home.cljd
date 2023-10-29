@@ -5,8 +5,10 @@
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
    [budget-app.widgets.custom-card :as custom-card]
+   [budget-app.widgets.transaction-card :as transaction-card]
    [budget-app.utils.themes :as themes]
-   [budget-app.utils.colors :as colors]))
+   [budget-app.utils.colors :as colors]
+   [budget-app.states.transactions :as transactions]))
 
 (def screen
   (f/widget
@@ -26,140 +28,156 @@
     (fn [context ^m/BoxConstraints constraints]
       (m/Padding
        .padding (.symmetric m/EdgeInsets .horizontal 16 .vertical 16)
-       .child (m/Row
-               .crossAxisAlignment m.CrossAxisAlignment/start
-               .children [(m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
-                          (mgl/MongolText
-                           "Budget"
-                           .textAlign mgl.MongolTextAlign/top
-                           .style (m/TextStyle .fontSize 32
-                                               .color (-> m/Theme (.of context) .-primaryColor)
-                                               .fontWeight (.-w600 m/FontWeight)))
-                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                          (m/Stack
-                           .children
-                           [(m/Container
-                             .height (* 0.4 (.-maxHeight constraints))
-                             .width (* 0.36 (.-maxWidth constraints))
-                             .decoration (m/BoxDecoration
-                                          .color
-                                          (-> m/Theme (.of context) .-primaryColor)
-                                          .borderRadius (.all m/BorderRadius (.circular m/Radius 20))))
-                            (m/Positioned
-                             .top 10
-                             .left 10
-                             .child (mgl/MongolText
-                                     "Total Balance"
-                                     .style (m/TextStyle
-                                             .fontSize 25
-                                             .color m.Colors/white
-                                             .fontWeight (.-w500 m/FontWeight))))
-                            (m/Positioned
-                             .top 10
-                             .left 50
-                             .child
-                             (m/Icon m.Icons/currency_rupee
-                                     .size 30
-                                     .color m.Colors/white))
-                            (m/Positioned
-                             .top 40
-                             .left 50
-                             .child
-                             (m/SizedBox
-                              .height 60
-                              .child
-                              (mgl/MongolText (.toStringAsFixed 5000 0)
-                                              .style (m/TextStyle
-                                                      .fontSize 20
-                                                      .color m.Colors/white
-                                                      .fontWeight m.FontWeight/bold))))
-                            (f/widget
-                             (m/Positioned
-                              .bottom 15
-                              .left 50)
-                             (m/Container
-                              .decoration
-                              (m/BoxDecoration
-                               .borderRadius
-                               (.all m/BorderRadius (.circular m/Radius 25))
-                               .color
-                               (if (themes/is-dark-mode ctx)
-                                 colors/dark-green-back
-                                 colors/green-dark)))
-                             (m/Padding .padding
-                                        (.symmetric m/EdgeInsets .horizontal 4 .vertical 10))
-                             (m/Column
-                              .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                              .children
-                              [(m/Icon m.Icons/account_balance
-                                       .color m.Colors/white
-                                       .size 18)
-                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (mgl/MongolText
-                                "2000"
+       .child
+       (m/Column
+        .crossAxisAlignment m.CrossAxisAlignment/start
+        .children
+        [(m/Row
+          .crossAxisAlignment m.CrossAxisAlignment/start
+          .children [(m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
+                     (mgl/MongolText
+                      "Budget"
+                      .textAlign mgl.MongolTextAlign/top
+                      .style (m/TextStyle .fontSize 32
+                                          .color (-> m/Theme (.of context) .-primaryColor)
+                                          .fontWeight (.-w600 m/FontWeight)))
+                     (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                     (m/Stack
+                      .children
+                      [(m/Container
+                        .height (* 0.4 (.-maxHeight constraints))
+                        .width (* 0.36 (.-maxWidth constraints))
+                        .decoration (m/BoxDecoration
+                                     .color
+                                     (-> m/Theme (.of context) .-primaryColor)
+                                     .borderRadius (.all m/BorderRadius (.circular m/Radius 20))))
+                       (m/Positioned
+                        .top 10
+                        .left 10
+                        .child (mgl/MongolText
+                                "Total Balance"
                                 .style (m/TextStyle
-                                        .fontWeight m.FontWeight/w500
-                                        .color m.Colors/white))]))
-                            (m/Positioned
-                             .bottom 15
-                             .right 20
-                             .child
-                             (mgl/MongolText "Budgeto"
-                                             .style
-                                             (m/TextStyle
-                                              .fontWeight m.FontWeight/bold
-                                              .fontSize 20
-                                              .color
-                                              (-> m/Colors
-                                                  .-white
-                                                  (.withOpacity 0.5)))))
-                            (f/widget
-                             (m/Positioned
-                              .top 10
-                              .right 10)
-                             (m/GestureDetector .onTap (fn [] (dart:core/print "xxxx")))
-                             (m/Container .height (* (.-maxHeight constraints) 0.18)
-                                          .width (* (.-maxWidth constraints) 0.1)
-                                          .decoration
-                                          (m/BoxDecoration
-                                           .borderRadius (.all m/BorderRadius (.circular m/Radius 25))
-                                           .color
-                                           (if (themes/is-dark-mode ctx)
-                                             colors/dark-green-back
-                                             colors/green-dark)))
-                             (m/Padding
-                              .padding
-                              (.symmetric m/EdgeInsets .horizontal 5 .vertical 15)
-                              .child
-                              (m/Column .children
-                                        [(m/Icon m.Icons/add .color m.Colors/white .size 20)
-                                         (m/Spacer)
-                                         (mgl/MongolText
-                                          "Add Funds"
-                                          .style
-                                          (m/TextStyle .fontSize 15
-                                                       .fontWeight m.FontWeight/w700
-                                                       .color m.Colors/white))])))])
-                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                          (mgl/MongolText "Category Balance"
-                                          .style (m/TextStyle .fontSize 20))
-                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                          (m/Column
-                           .children
-                           [(m/Row
-                             .children
-                             [(custom-card/card
-                               (* (.-maxWidth constraints) 0.15)
-                               (* (.-maxHeight constraints) 0.20)
-                               "Need" (.toStringAsFixed 500 0))
-                              (m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
-                              (custom-card/card
-                               (* (.-maxWidth constraints) 0.15)
-                               (* (.-maxHeight constraints) 0.20)
-                               "Expenses" (.toStringAsFixed 900 0))])
-                            (m/SizedBox .height (* 0.004 (.-maxHeight constraints)))
-                            (custom-card/card
-                             (* (.-maxWidth constraints) 0.30)
-                             (* (.-maxHeight constraints) 0.20)
-                             "Savings" (.toStringAsFixed 2000 0))])]))))))
+                                        .fontSize 25
+                                        .color m.Colors/white
+                                        .fontWeight (.-w500 m/FontWeight))))
+                       (m/Positioned
+                        .top 10
+                        .left 50
+                        .child
+                        (m/Icon m.Icons/currency_rupee
+                                .size 30
+                                .color m.Colors/white))
+                       (m/Positioned
+                        .top 40
+                        .left 50
+                        .child
+                        (m/SizedBox
+                         .height 60
+                         .child
+                         (mgl/MongolText (.toStringAsFixed 5000 0)
+                                         .style (m/TextStyle
+                                                 .fontSize 20
+                                                 .color m.Colors/white
+                                                 .fontWeight m.FontWeight/bold))))
+                       (f/widget
+                        (m/Positioned
+                         .bottom 15
+                         .left 50)
+                        (m/Container
+                         .decoration
+                         (m/BoxDecoration
+                          .borderRadius
+                          (.all m/BorderRadius (.circular m/Radius 25))
+                          .color
+                          (if (themes/is-dark-mode ctx)
+                            colors/dark-green-back
+                            colors/green-dark)))
+                        (m/Padding .padding
+                                   (.symmetric m/EdgeInsets .horizontal 4 .vertical 10))
+                        (m/Column
+                         .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                         .children
+                         [(m/Icon m.Icons/account_balance
+                                  .color m.Colors/white
+                                  .size 18)
+                          (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                          (mgl/MongolText
+                           "2000"
+                           .style (m/TextStyle
+                                   .fontWeight m.FontWeight/w500
+                                   .color m.Colors/white))]))
+                       (m/Positioned
+                        .bottom 15
+                        .right 20
+                        .child
+                        (mgl/MongolText "Budgeto"
+                                        .style
+                                        (m/TextStyle
+                                         .fontWeight m.FontWeight/bold
+                                         .fontSize 20
+                                         .color
+                                         (-> m/Colors
+                                             .-white
+                                             (.withOpacity 0.5)))))
+                       (f/widget
+                        (m/Positioned
+                         .top 10
+                         .right 10)
+                        (m/GestureDetector .onTap (fn [] (dart:core/print "xxxx")))
+                        (m/Container .height (* (.-maxHeight constraints) 0.18)
+                                     .width (* (.-maxWidth constraints) 0.1)
+                                     .decoration
+                                     (m/BoxDecoration
+                                      .borderRadius (.all m/BorderRadius (.circular m/Radius 25))
+                                      .color
+                                      (if (themes/is-dark-mode ctx)
+                                        colors/dark-green-back
+                                        colors/green-dark)))
+                        (m/Padding
+                         .padding
+                         (.symmetric m/EdgeInsets .horizontal 5 .vertical 15)
+                         .child
+                         (m/Column .children
+                                   [(m/Icon m.Icons/add .color m.Colors/white .size 20)
+                                    (m/Spacer)
+                                    (mgl/MongolText
+                                     "Add Funds"
+                                     .style
+                                     (m/TextStyle .fontSize 15
+                                                  .fontWeight m.FontWeight/w700
+                                                  .color m.Colors/white))])))])
+                     (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                     (mgl/MongolText "Category Balance"
+                                     .style (m/TextStyle .fontSize 20))
+                     (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                     (m/Column
+                      .children
+                      [(m/Row
+                        .children
+                        [(custom-card/card
+                          (* (.-maxWidth constraints) 0.15)
+                          (* (.-maxHeight constraints) 0.20)
+                          "Need" (.toStringAsFixed 500 0))
+                         (m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
+                         (custom-card/card
+                          (* (.-maxWidth constraints) 0.15)
+                          (* (.-maxHeight constraints) 0.20)
+                          "Expenses" (.toStringAsFixed 900 0))])
+                       (m/SizedBox .height (* 0.004 (.-maxHeight constraints)))
+                       (custom-card/card
+                        (* (.-maxWidth constraints) 0.30)
+                        (* (.-maxHeight constraints) 0.20)
+                        "Savings" (.toStringAsFixed 2000 0))])])
+         (f/widget
+          (m/Expanded)
+          (m.ListView/separated
+                    .scrollDirection m.Axis/horizontal
+                    .itemCount (count transactions/transactions)
+                    .separatorBuilder (fn [_ i] (m/SizedBox .width 1))
+                    .itemBuilder (fn [context index]
+                                   (transaction-card/card
+                                    (* 0.05 (.-maxHeight constraints))
+                                    (nth (nth transactions/transactions index) 0)
+                                    (nth (nth transactions/transactions index) 1)
+                                    (nth (nth transactions/transactions index) 2)))))]))))))
 

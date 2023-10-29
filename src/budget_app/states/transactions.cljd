@@ -1,0 +1,6 @@
+(ns budget-app.states.transactions)
+
+(def transactions
+  [["Rent" "20231015" "-300"]
+   ["Insurance" "20231020" "-2100"]
+   ["Funds added!" "20231023" "+100000"]])
