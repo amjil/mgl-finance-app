@@ -1,0 +1,35 @@
+(ns budget-app.screens.add-funds
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]))
+
+(defn create-fund []
+  (f/widget
+   :context ctx
+   (m/Scaffold)
+   .body
+   (m/SafeArea)
+   (m/LayoutBuilder
+    .builder (fn [context constraints]
+               (f/widget
+                (m/Padding
+                 .padding (.symmetric m/EdgeInsets .horizontal 20 .vertical 20))
+                (m/Row
+                 .children [(m/Column
+                             .children [(m/IconButton
+                                         .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                                         .icon (m/Icon m.Icons/keyboard_backspace))])
+                            (m/SizedBox .width (* 0.02 (.-maxHeight constraints)))
+                            ;; (f/widget
+                            ;;  (m/Expanded)
+                            ;;  (m/SingleChildScrollView
+                            ;;   .scrollDirection m.Axis/horizontal)
+                            ;;  (m/Row
+                            ;;   .crossAxisAlignment m.CrossAxisAlignment/start
+                            ;;   .children []))
+                            ]))))))
+
+
+(defn ^m/Widget screen [ctx]
+  (create-fund))

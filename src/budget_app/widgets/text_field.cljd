@@ -1,0 +1,26 @@
+(ns budget-app.widgets.text-field
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]
+   [budget-app.utils.colors :as colors]))
+
+(defn field [obscure-text icon-name hint controller read-only]
+  (f/widget
+   :context ctx
+   (mgl/MongolTextField
+    .style (m/TextStyle .color colors/grey-text)
+    .cursorColor (-> m/Theme (.of ctx) .-primaryColor)
+    .controller controller
+    .obscureText obscure-text
+    .decoration (m/InputDecoration
+                 .prefixIcon (m/Icon icon-name .color colors/grey .size 18)
+                 .hintText hint
+                 .hintStyle (m/TextStyle .fontSize 16 .color colors/grey)
+                 .filled true
+                 .hoverColor colors/green
+                 .focusColor colors/text-field-border
+                 .focusedBorder (-> m/Theme (.of ctx) .-inputDecorationTheme .-focusedBorder)
+                 .enabledBorder (-> m/Theme (.of ctx) .-inputDecorationTheme .-enabledBorder))
+    .showCursor true
+    .readOnly read-only)))

@@ -4,7 +4,8 @@
    ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
    [budget-app.utils.themes :as themes]
-   [budget-app.widgets.navbar :as nav]))
+   [budget-app.widgets.navbar :as nav]
+   [budget-app.screens.add-funds :as add-funds]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
@@ -13,9 +14,6 @@
   (let [initial-theme (await (themes/initial-theme))] 
     (m/runApp
      (adaptive/AdaptiveTheme
-      ;; .debugShowFloatingThemeButton true
-      ;; .light (.light m/ThemeData .useMaterial3 true)
-      ;; .dark (.dark m/ThemeData .useMaterial3 true)
       .light themes/light-theme
       .dark themes/dark-theme
       .initial initial-theme
@@ -25,4 +23,7 @@
                   .theme light
                   .darkTheme dark
                   .home (nav/bottom-nav)
+                  ;; .initialRoute "/"
+                  ;; .routes {"/" nav/screen
+                  ;;          "/create_fund" add-funds/screen}
                   .debugShowCheckedModeBanner false))))))

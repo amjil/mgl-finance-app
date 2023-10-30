@@ -2,15 +2,12 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
-   [budget-app.utils.themes :as themes]
-   [budget-app.utils.colors :as colors]))
+   [cljd.flutter.alpha2 :as f]))
 
 (defn card [height transaction-name date-and-time transaction-amount]
   (f/widget
    :context context
    (m/Container
-    .margin (.symmetric m/EdgeInsets .vertical 5)
     .padding (.symmetric m/EdgeInsets .vertical 5)
     .width 65
     .decoration

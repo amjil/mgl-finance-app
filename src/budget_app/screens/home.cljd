@@ -12,6 +12,7 @@
 
 (def screen
   (f/widget
+   :get [m/Navigator]
    :context ctx
    (m/WillPopScope
     .onWillPop ^:async (fn []
@@ -137,15 +138,20 @@
                          .padding
                          (.symmetric m/EdgeInsets .horizontal 5 .vertical 15)
                          .child
-                         (m/Column .children
-                                   [(m/Icon m.Icons/add .color m.Colors/white .size 20)
-                                    (m/Spacer)
-                                    (mgl/MongolText
-                                     "Add Funds"
-                                     .style
-                                     (m/TextStyle .fontSize 15
-                                                  .fontWeight m.FontWeight/w700
-                                                  .color m.Colors/white))])))])
+                         (m/GestureDetector
+                          .onTap (fn []
+                                  ;;  (.pushNamed navigator "/create_fund")
+                                   nil)
+                          .child
+                          (m/Column .children
+                                    [(m/Icon m.Icons/add .color m.Colors/white .size 20)
+                                     (m/Spacer)
+                                     (mgl/MongolText
+                                      "Add Funds"
+                                      .style
+                                      (m/TextStyle .fontSize 15
+                                                   .fontWeight m.FontWeight/w700
+                                                   .color m.Colors/white))]))))])
                      (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                      (mgl/MongolText "Category Balance"
                                      .style (m/TextStyle .fontSize 20))
@@ -170,14 +176,23 @@
                         "Savings" (.toStringAsFixed 2000 0))])])
          (f/widget
           (m/Expanded)
-          (m.ListView/separated
-                    .scrollDirection m.Axis/horizontal
-                    .itemCount (count transactions/transactions)
-                    .separatorBuilder (fn [_ i] (m/SizedBox .width 1))
-                    .itemBuilder (fn [context index]
-                                   (transaction-card/card
-                                    (* 0.05 (.-maxHeight constraints))
-                                    (nth (nth transactions/transactions index) 0)
-                                    (nth (nth transactions/transactions index) 1)
-                                    (nth (nth transactions/transactions index) 2)))))]))))))
+          (m/Padding
+           .padding (.symmetric m/EdgeInsets .vertical 10))
+          (m/Row
+           .crossAxisAlignment m.CrossAxisAlignment/start
+           .children [(mgl/MongolText "All Transactions"
+                                      .style (m/TextStyle .fontSize 20))
+                      (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                      (m/Expanded
+                       .child
+                       (m.ListView/separated
+                        .scrollDirection m.Axis/horizontal
+                        .itemCount (count transactions/transactions)
+                        .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
+                        .itemBuilder (fn [_ index]
+                                       (transaction-card/card
+                                        (* 0.05 (.-maxHeight constraints))
+                                        (nth (nth transactions/transactions index) 0)
+                                        (nth (nth transactions/transactions index) 1)
+                                        (nth (nth transactions/transactions index) 2)))))]))]))))))
 

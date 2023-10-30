@@ -54,3 +54,6 @@
      .curve (.-ease m/Curves))
     .screenTransitionAnimation
     (tab/ScreenTransitionAnimation .curve (.-ease m/Curves)))))
+
+(defn ^m/Widget screen [ctx]
+  (bottom-nav))
