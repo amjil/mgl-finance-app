@@ -8,6 +8,7 @@
 (defn field [obscure-text icon-name hint controller read-only]
   (f/widget
    :context ctx
+   (m/Expanded)
    (mgl/MongolTextField
     .style (m/TextStyle .color colors/grey-text)
     .cursorColor (-> m/Theme (.of ctx) .-primaryColor)
@@ -24,3 +25,12 @@
                  .enabledBorder (-> m/Theme (.of ctx) .-inputDecorationTheme .-enabledBorder))
     .showCursor true
     .readOnly read-only)))
+
+(defn label-field [label height obscure-text icon-name hint controller read-only]
+  (m/Column
+   .children [(mgl/MongolText
+               label
+               .style (m/TextStyle .fontSize 18)
+               .textAlign mgl.MongolTextAlign/top)
+              (m/SizedBox .height height)
+              (field obscure-text icon-name hint controller read-only)]))
