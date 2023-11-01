@@ -22,8 +22,8 @@
                   .title "Welcome to Flutter"
                   .theme light
                   .darkTheme dark
-                  .home (nav/bottom-nav)
-                  ;; .initialRoute "/"
-                  ;; .routes {"/" nav/screen
-                  ;;          "/create_fund" add-funds/screen}
+                  ;; .home (nav/bottom-nav)
+                  .initialRoute "/"
+                  .routes {"/" nav/screen
+                           "/create_fund" add-funds/screen}
                   .debugShowCheckedModeBanner false))))))

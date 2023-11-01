@@ -2,34 +2,48 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]))
+   [cljd.flutter.alpha2 :as f]
+   [budget-app.widgets.text-field :as custom-field]))
 
-(defn create-fund []
+(def create-fund
   (f/widget
    :context ctx
+   :managed [amount-controller (m/TextEditingController)
+             split-controller (m/TextEditingController)]
    (m/Scaffold)
    .body
    (m/SafeArea)
    (m/LayoutBuilder
     .builder (fn [context constraints]
-               (f/widget
-                (m/Padding
-                 .padding (.symmetric m/EdgeInsets .horizontal 20 .vertical 20))
                 (m/Row
                  .children [(m/Column
                              .children [(m/IconButton
                                          .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
-                                         .icon (m/Icon m.Icons/keyboard_backspace))])
-                            (m/SizedBox .width (* 0.02 (.-maxHeight constraints)))
-                            ;; (f/widget
-                            ;;  (m/Expanded)
-                            ;;  (m/SingleChildScrollView
-                            ;;   .scrollDirection m.Axis/horizontal)
-                            ;;  (m/Row
-                            ;;   .crossAxisAlignment m.CrossAxisAlignment/start
-                            ;;   .children []))
-                            ]))))))
+                                         .icon (m/Icon m.Icons/keyboard_backspace))
+                                        (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                                        (mgl/MongolText
+                                         "Add Funds"
+                                         .textAlign mgl.MongolTextAlign/top
+                                         .style (m/TextStyle
+                                                 .color (-> m/Theme (.of context) .-primaryColor)
+                                                 .fontSize 28
+                                                 .fontWeight m.FontWeight/w600))])
+                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                            (f/widget
+                             (m/Padding .padding (.symmetric m/EdgeInsets .vertical (* 0.08 (.-maxHeight constraints))))
+                             (m/SingleChildScrollView
+                              .scrollDirection m.Axis/horizontal)
+                             (m/Row
+                              .crossAxisAlignment m.CrossAxisAlignment/start
+                              .children [(custom-field/label-field
+                                          "Enter amount" (* 0.02 (.-maxHeight constraints)) false
+                                          m.Icons/currency_rupee nil amount-controller true)
+                                         (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
+                                         (custom-field/label-field
+                                          "Percentage split" (* 0.02 (.-maxHeight constraints)) false
+                                          m.Icons/currency_rupee nil split-controller true)
+                                         ]))])))))
 
 
 (defn ^m/Widget screen [ctx]
-  (create-fund))
+  create-fund)

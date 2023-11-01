@@ -3,7 +3,9 @@
    ["package:flutter/material.dart" :as m]
    ["package:flutter/services.dart" :as services]
    ["package:mongol/mongol.dart" :as mgl]
+   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
+   [budget-app.screens.add-funds :as add-funds]
    [budget-app.widgets.custom-card :as custom-card]
    [budget-app.widgets.transaction-card :as transaction-card]
    [budget-app.utils.themes :as themes]
@@ -124,7 +126,15 @@
                         (m/Positioned
                          .top 10
                          .right 10)
-                        (m/GestureDetector .onTap (fn [] (dart:core/print "xxxx")))
+                        (m/GestureDetector .onTap (fn [] (dart:core/print "xxxx")
+                                                    ;; (.push navigator (#/(m/MaterialPageRoute Object) .builder (f/build add-funds/create-fund)))
+                                                    (tab.PersistentNavBarNavigator/pushNewScreen
+                                                     ctx 
+                                                     .screen 
+                                                     (add-funds/screen ctx)
+                                                    ;;  ^m/Widget add-funds/screen
+                                                     .withNavBar false)
+                                                    nil))
                         (m/Container .height (* (.-maxHeight constraints) 0.18)
                                      .width (* (.-maxWidth constraints) 0.1)
                                      .decoration
@@ -138,20 +148,15 @@
                          .padding
                          (.symmetric m/EdgeInsets .horizontal 5 .vertical 15)
                          .child
-                         (m/GestureDetector
-                          .onTap (fn []
-                                  ;;  (.pushNamed navigator "/create_fund")
-                                   nil)
-                          .child
-                          (m/Column .children
-                                    [(m/Icon m.Icons/add .color m.Colors/white .size 20)
-                                     (m/Spacer)
-                                     (mgl/MongolText
-                                      "Add Funds"
-                                      .style
-                                      (m/TextStyle .fontSize 15
-                                                   .fontWeight m.FontWeight/w700
-                                                   .color m.Colors/white))]))))])
+                         (m/Column .children
+                                   [(m/Icon m.Icons/add .color m.Colors/white .size 20)
+                                    (m/Spacer)
+                                    (mgl/MongolText
+                                     "Add Funds"
+                                     .style
+                                     (m/TextStyle .fontSize 15
+                                                  .fontWeight m.FontWeight/w700
+                                                  .color m.Colors/white))])))])
                      (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                      (mgl/MongolText "Category Balance"
                                      .style (m/TextStyle .fontSize 20))
