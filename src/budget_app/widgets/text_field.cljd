@@ -8,7 +8,7 @@
 (defn field [obscure-text icon-name hint controller read-only]
   (f/widget
    :context ctx
-   (m/Expanded)
+  ;;  (m/Expanded)
    (mgl/MongolTextField
     .style (m/TextStyle .color colors/grey-text)
     .cursorColor (-> m/Theme (.of ctx) .-primaryColor)
@@ -28,9 +28,15 @@
 
 (defn label-field [label height obscure-text icon-name hint controller read-only]
   (m/Column
-   .children [(mgl/MongolText
-               label
-               .style (m/TextStyle .fontSize 18)
-               .textAlign mgl.MongolTextAlign/top)
-              (m/SizedBox .height height)
-              (field obscure-text icon-name hint controller read-only)]))
+   .crossAxisAlignment m.CrossAxisAlignment/center
+   .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+   .children [(m/Expanded
+               .child
+               (mgl/MongolText
+                label
+                .style (m/TextStyle .fontSize 18)
+                .textAlign mgl.MongolTextAlign/top))
+              (m/Expanded
+               .flex 3
+               .child
+               (field obscure-text icon-name hint controller read-only))]))
