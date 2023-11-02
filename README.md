@@ -1,6 +1,6 @@
-# mongol_budget
+# mgl_finance_app
 
-A new Flutter project.
+A Personal Finance Management Flutter APP.
 
 <br/>
 <img src="screenshots/screenshot1.png" width="300">
