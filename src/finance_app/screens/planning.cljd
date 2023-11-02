@@ -1,4 +1,4 @@
-(ns budget-app.screens.profile
+(ns finance-app.screens.planning
   (:require
    ["package:flutter/material.dart" :as m]
    [cljd.flutter.alpha2 :as f]))
@@ -11,4 +11,4 @@
     .body
     (m/Center
      .child
-     (m/Text "Profile")))))
+     (m/Text "Planning")))))

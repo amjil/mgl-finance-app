@@ -1,9 +1,9 @@
-(ns budget-app.utils.themes
+(ns finance-app.utils.themes
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
-   [budget-app.services.pref :as pref]
-   [budget-app.utils.colors :as colors]))
+   [finance-app.services.pref :as pref]
+   [finance-app.utils.colors :as colors]))
 
 (defn set-dark [ctx]
   (pref/set-int "theme-setting" 1)

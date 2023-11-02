@@ -1,4 +1,4 @@
-(ns budget-app.states.transactions)
+(ns finance-app.states.transactions)
 
 (def transactions
   [["Rent" "20231015" "-300"]

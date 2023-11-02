@@ -1,4 +1,4 @@
-(ns budget-app.widgets.custom-card
+(ns finance-app.widgets.custom-card
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]

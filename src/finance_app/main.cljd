@@ -1,11 +1,11 @@
-(ns budget-app.main
+(ns finance-app.main
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
-   [budget-app.utils.themes :as themes]
-   [budget-app.widgets.navbar :as nav]
-   [budget-app.screens.add-funds :as add-funds]))
+   [finance-app.utils.themes :as themes]
+   [finance-app.widgets.navbar :as nav]
+   [finance-app.screens.add-funds :as add-funds]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)

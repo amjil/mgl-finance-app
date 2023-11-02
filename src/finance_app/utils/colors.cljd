@@ -1,4 +1,4 @@
-(ns budget-app.utils.colors
+(ns finance-app.utils.colors
   (:require 
    ["package:flutter/material.dart" :as m]))
 

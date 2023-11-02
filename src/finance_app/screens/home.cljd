@@ -1,16 +1,16 @@
-(ns budget-app.screens.home
+(ns finance-app.screens.home
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:flutter/services.dart" :as services]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
-   [budget-app.screens.add-funds :as add-funds]
-   [budget-app.widgets.custom-card :as custom-card]
-   [budget-app.widgets.transaction-card :as transaction-card]
-   [budget-app.utils.themes :as themes]
-   [budget-app.utils.colors :as colors]
-   [budget-app.states.transactions :as transactions]))
+   [finance-app.screens.add-funds :as add-funds]
+   [finance-app.widgets.custom-card :as custom-card]
+   [finance-app.widgets.transaction-card :as transaction-card]
+   [finance-app.utils.themes :as themes]
+   [finance-app.utils.colors :as colors]
+   [finance-app.states.transactions :as transactions]))
 
 (def screen
   (f/widget

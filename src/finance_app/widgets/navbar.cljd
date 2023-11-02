@@ -1,15 +1,15 @@
-(ns budget-app.widgets.navbar
+(ns finance-app.widgets.navbar
   (:require
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    ["package:flutter/material.dart" :as m]
    ["package:flutter/painting.dart" :as painting]
    [cljd.flutter.alpha2 :as f]
-   [budget-app.utils.themes :as themes]
-   [budget-app.utils.colors :as colors]
-   [budget-app.screens.home :as home]
-   [budget-app.screens.planning :as planning]
-   [budget-app.screens.profile :as profile]
-   [budget-app.screens.wallet :as wallet]))
+   [finance-app.utils.themes :as themes]
+   [finance-app.utils.colors :as colors]
+   [finance-app.screens.home :as home]
+   [finance-app.screens.planning :as planning]
+   [finance-app.screens.profile :as profile]
+   [finance-app.screens.wallet :as wallet]))
 
 (defn- nav-item [color icon]
   (tab/PersistentBottomNavBarItem

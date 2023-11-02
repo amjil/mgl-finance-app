@@ -1,11 +1,11 @@
-(ns budget-app.screens.add-funds
+(ns finance-app.screens.add-funds
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
-   [budget-app.widgets.text-field :as custom-field]
-   [budget-app.widgets.button :as button]
-   [budget-app.utils.colors :as colors]))
+   [finance-app.widgets.text-field :as custom-field]
+   [finance-app.widgets.button :as button]
+   [finance-app.utils.colors :as colors]))
 
 (declare on-add)
 

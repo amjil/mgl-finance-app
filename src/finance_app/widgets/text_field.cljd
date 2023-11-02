@@ -1,9 +1,9 @@
-(ns budget-app.widgets.text-field
+(ns finance-app.widgets.text-field
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
-   [budget-app.utils.colors :as colors]))
+   [finance-app.utils.colors :as colors]))
 
 (defn field [obscure-text icon-name hint controller read-only]
   (f/widget
