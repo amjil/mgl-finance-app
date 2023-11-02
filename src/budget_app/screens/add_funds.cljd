@@ -3,18 +3,25 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
-   [budget-app.widgets.text-field :as custom-field]))
+   [budget-app.widgets.text-field :as custom-field]
+   [budget-app.widgets.button :as button]
+   [budget-app.utils.colors :as colors]))
+
+(declare on-add)
 
 (def create-fund
   (f/widget
    :context ctx
    :managed [amount-controller (m/TextEditingController)
-             split-controller (m/TextEditingController)]
+             needs-controller (m/TextEditingController)
+             expenses-controller (m/TextEditingController)
+             savings-controller (m/TextEditingController)
+             scroll-controller (m/ScrollController)]
    (m/Scaffold)
    .body
    (m/SafeArea)
    (m/LayoutBuilder
-    .builder (fn [context constraints]
+    .builder (fn [context ^m/BoxConstraints constraints]
                (m/Row
                 .children [(m/Column
                             .children [(m/IconButton
@@ -30,8 +37,16 @@
                                                 .fontWeight m.FontWeight/w600))])
                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                            (f/widget
+                            (m/Expanded)
                             (m/Padding .padding (.symmetric m/EdgeInsets .vertical (* 0.08 (.-maxHeight constraints))))
+                            (m/Scrollbar
+                             .controller scroll-controller
+                            ;;  .thumbVisibility true
+                             .thickness 10
+                             .radius (.circular m/Radius 20)
+                             .scrollbarOrientation m.ScrollbarOrientation/top)
                             (m/SingleChildScrollView
+                             .controller scroll-controller
                              .scrollDirection m.Axis/horizontal)
                             (m/Row
                              .crossAxisAlignment m.CrossAxisAlignment/start
@@ -40,9 +55,29 @@
                                          m.Icons/currency_rupee nil amount-controller true)
                                         (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
                                         (custom-field/label-field
-                                         "Percentage split" (* 0.02 (.-maxHeight constraints)) false
-                                         m.Icons/currency_rupee nil split-controller true)]))])))))
+                                         "Percentage split for Needs" (* 0.02 (.-maxHeight constraints)) false
+                                         m.Icons/calculate nil needs-controller true)
+                                        (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
+                                        (custom-field/label-field
+                                         "Percentage split for Expenses" (* 0.02 (.-maxHeight constraints)) false
+                                         m.Icons/calculate nil expenses-controller true)
+                                        (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
+                                        (custom-field/label-field
+                                         "Percentage split for Savings" (* 0.02 (.-maxHeight constraints)) false
+                                         m.Icons/calculate nil savings-controller true)
+                                        (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
+                                        (mgl/MongolText
+                                         "If the split percentage for Needs, Expenses and Savings are not given it will be taken as 50%, 30% and 20% respectively."
+                                         .style (m/TextStyle .color colors/grey-text .fontSize 14)
+                                         .textAlign mgl.MongolTextAlign/top)
+                                        (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))]))
+                           (m/SizedBox .width (* 0.04 (.-maxWidth constraints)))
+                           (button/button constraints (-> m/Theme (.of context) .-primaryColor)
+                                          "Add" (fn [] (on-add)))])))))
 
 
 (defn ^m/Widget screen [ctx]
   create-fund)
+
+(defn on-add []
+  )

@@ -5,10 +5,13 @@
 
 (def screen
   (f/widget
-   (m/Scaffold
-    .appBar (m/AppBar
-             .title (m/Text "Budget"))
+   :get [m/Navigator]
+   :context ctx
+   (m/Scaffold)
     .body
+    (m/LayoutBuilder
+     .builder
+     (fn [context ^m/BoxConstraints constraints]))
     (m/Center
      .child
-     (m/Text "wallet")))))
+     (m/Text "wallet"))))

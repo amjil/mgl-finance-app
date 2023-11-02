@@ -132,7 +132,6 @@
                                                      ctx 
                                                      .screen 
                                                      (add-funds/screen ctx)
-                                                    ;;  ^m/Widget add-funds/screen
                                                      .withNavBar false)
                                                     nil))
                         (m/Container .height (* (.-maxHeight constraints) 0.18)
