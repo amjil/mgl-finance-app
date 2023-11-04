@@ -1,0 +1,9 @@
+(ns finance-app.utils.datetime
+  (:require 
+   ["package:intl/intl.dart" :as intl]))
+
+(defn current-date []
+  (let [date (.now DateTime)
+        formatter (intl.DateFormat/Md )
+        ]
+    ))

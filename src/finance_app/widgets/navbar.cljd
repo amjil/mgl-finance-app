@@ -27,12 +27,12 @@
    (tab/PersistentTabView
     ctx
     .screens [home/screen
-              wallet/screen
               planning/screen
+              wallet/screen
               profile/screen]
     .items [(nav-item color (m/Icon m.Icons/home))
-            (nav-item color (m/Icon m.Icons/account_balance_wallet))
-            (nav-item color (m/Icon m.Icons/article))
+            (nav-item color (m/Icon m.Icons/add_box))
+            (nav-item color (m/Icon m.Icons/insert_chart))
             (nav-item color (m/Icon m.Icons/person))]
     .controller controller
     .navBarHeight 60
@@ -47,7 +47,8 @@
                                  .topRight (.circular painting/Radius 15)))
     .padding (.all tab/NavBarPadding 0)
     .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
-    .navBarStyle (.-style3 tab/NavBarStyle)
+    ;; .navBarStyle (.-style13 tab/NavBarStyle)
+    .navBarStyle (.-neumorphic tab/NavBarStyle)
     .itemAnimationProperties
     (tab/ItemAnimationProperties
      .duration (Duration .milliseconds 400)
