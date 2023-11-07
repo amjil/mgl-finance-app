@@ -28,10 +28,8 @@
     ctx
     .screens [home/screen
               planning/screen
-              wallet/screen
               profile/screen]
     .items [(nav-item color (m/Icon m.Icons/home))
-            (nav-item color (m/Icon m.Icons/add_box))
             (nav-item color (m/Icon m.Icons/insert_chart))
             (nav-item color (m/Icon m.Icons/person))]
     .controller controller
@@ -47,8 +45,7 @@
                                  .topRight (.circular painting/Radius 15)))
     .padding (.all tab/NavBarPadding 0)
     .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
-    ;; .navBarStyle (.-style13 tab/NavBarStyle)
-    .navBarStyle (.-neumorphic tab/NavBarStyle)
+    .navBarStyle (.-style13 tab/NavBarStyle)
     .itemAnimationProperties
     (tab/ItemAnimationProperties
      .duration (Duration .milliseconds 400)

@@ -10,33 +10,73 @@
    [finance-app.widgets.transaction-card :as transaction-card]
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
-   [finance-app.states.transactions :as transactions]))
+   [finance-app.states.transactions :as transactions]
+   [finance-app.utils.datetime :as datetime]))
 
 (def screen
   (f/widget
    :get [m/Navigator]
    :context ctx
-   (m/Scaffold)
+   (m/Scaffold
+    .floatingActionButton 
+    (m/FloatingActionButton 
+     .onPressed (fn [] (dart:core/print "xxxx"))
+     .child (m/Icon m.Icons/add)))
    .body
    (m/SafeArea)
    (m/Padding
     .padding (.symmetric m/EdgeInsets .horizontal 16 .vertical 16))
-   (m/Column
-    .crossAxisAlignment m.CrossAxisAlignment/start
-    .children
-    [(m/Stack
-      .children [(m/Align
-                  .alignment m.Alignment/center
+   (m/LayoutBuilder
+    .builder (fn [context ^m/BoxConstraints constraints]
+               (m/Column
+                .crossAxisAlignment m.CrossAxisAlignment/start
+                .children
+                [(m/Stack
+                  .children [(m/Align
+                              .alignment m.Alignment/center
+                              .child (m/Row
+                                      .mainAxisAlignment m.MainAxisAlignment/center
+                                      .children [(m/Icon m.Icons/calendar_month)
+                                                 (m/Text
+                                                  (datetime/current-year-month))]))
+                             (m/Align
+                              .alignment m.Alignment/centerRight
+                              .child (m/IconButton
+                                      .padding m.EdgeInsets/zero
+                                      .constraints (m/BoxConstraints)
+                                      .icon (m/Icon m.Icons/search)
+                                      .onPressed (fn [] (dart:core/print "xxxx"))))])
+                 (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                 (m/Container
+                  .height (* 0.3 (.-maxHeight constraints))
+                  .decoration (m/BoxDecoration .color (-> m/Theme (.of context) .-primaryColor)
+                                               .borderRadius
+                                               (.all m/BorderRadius (.circular m/Radius 20)))
                   .child (m/Row
-                          .mainAxisAlignment m.MainAxisAlignment/center
-                          .children [(m/Icon m.Icons/arrow_circle_left)
-                                     
-                                     (m/Icon m.Icons/arrow_circle_right)]))
-                 (m/Align
-                  .alignment m.Alignment/centerRight
-                  .child (m/IconButton
-                          .padding m.EdgeInsets/zero
-                          .constraints (m/BoxConstraints)
-                          .icon (m/Icon m.Icons/search)
-                          .onPressed (fn [] (dart:core/print "xxxx"))))])])))
+                          .mainAxisAlignment m.MainAxisAlignment/spaceAround
+                          .children [(m/Row
+                                      .children [(mgl/MongolText
+                                                  "Expose"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                                 (mgl/MongolText
+                                                  "8000"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                                     (m/Row
+                                      .children [(mgl/MongolText "Incode"
+                                                                 .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                                 (mgl/MongolText
+                                                  "10000"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                                     (m/Row
+                                      .children [(mgl/MongolText
+                                                  "Balance"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                                 (mgl/MongolText
+                                                  "2000"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])]))
+
+                 ])))))
 

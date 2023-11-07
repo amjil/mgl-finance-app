@@ -2,8 +2,7 @@
   (:require 
    ["package:intl/intl.dart" :as intl]))
 
-(defn current-date []
+(defn current-year-month []
   (let [date (.now DateTime)
-        formatter (intl.DateFormat/Md )
-        ]
-    ))
+        formatter (intl/DateFormat "yM")]
+    (.format formatter date)))
