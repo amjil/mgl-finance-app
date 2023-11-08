@@ -1,0 +1,92 @@
+(ns finance-app.widgets.tab-view
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]))
+
+(defn view [info items]
+  (let [page-index (atom -1)]
+    (f/widget
+     :context ctx
+     :vsync vsync
+     :managed [page-controller (m/PageController)
+               animator0 (m/AnimationController .vsync vsync .duration (dart:core/Duration .milliseconds 300))
+               animator1 (m/AnimationController .vsync vsync .duration (dart:core/Duration .milliseconds 300))
+               animator2 (m/AnimationController .vsync vsync .duration (dart:core/Duration .milliseconds 300))
+               animator3 (m/AnimationController .vsync vsync .duration (dart:core/Duration .milliseconds 300))]
+     :let [page-i (do (.forward animator0) true)]
+     :watch [curr-page page-index]
+     (m/Container
+      .color (if (nil? (:bg-color info))
+               (-> m/Theme (.of ctx) .-canvasColor)
+               (:bg-color info)))
+     (m/Column
+      .mainAxisSize m.MainAxisSize/min
+      .children
+      [(f/widget
+        (m/Expanded)
+        (m/Row
+         .children
+         [(f/widget
+        ;;  (m/Material
+        ;;   .elevation 10
+        ;;   ;; .shadowColor m.Colors/grey
+        ;;   ;; .shape (m/BeveledRectangleBorder)
+        ;;   )
+           (m/Container
+            .width 40)
+           (m.ListView/builder
+            .itemCount (count items)
+            .itemBuilder
+            (fn [context i]
+              (m/Stack
+               .children
+               [(m/Positioned
+                 .top 2
+                 .bottom 2
+                 .left 0
+                 .child
+                 (if (and (= -1 curr-page) (zero? i))
+                   (m/Container .color m.Colors/blue
+                                .width 4)
+                   (m/ScaleTransition
+                    .child
+                    (m/Container .color m.Colors/blue
+                                 .width 4)
+                    .scale
+                    (.animate (m/Tween .begin 0.0 .end 1.0)
+                              (m/CurvedAnimation .parent
+                                                 (condp = i
+                                                   0 animator0
+                                                   1 animator1
+                                                   2 animator2
+                                                   3 animator3)
+                                                 .curve
+                                                 (.-elasticOut m/Curves))))))
+                (m/GestureDetector
+                 .onTap (fn []
+                          (.reset animator0)
+                          (.reset animator1)
+                          (.reset animator2)
+                          (.reset animator3)
+                          (condp = i
+                            0 (.forward animator0)
+                            1 (.forward animator1)
+                            2 (.forward animator2)
+                            3 (.forward animator3))
+                          (reset! page-index i)
+                          (.jumpToPage page-controller i)
+                          nil)
+                 .child (m/Container
+                         .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
+                         .child (mgl/MongolText (get-in items [i :tab :text]))))]))))
+          (m/VerticalDivider)
+          (f/widget
+           (m/Expanded)
+           (m.PageView/builder
+            .scrollDirection m.Axis/horizontal
+            .physics (m/NeverScrollableScrollPhysics)
+            .controller page-controller
+            .itemCount (count items)
+            .itemBuilder (fn [context i]
+                           (:page (nth items i)))))]))]))))
