@@ -1,0 +1,37 @@
+(ns finance-app.services.sqlite
+  (:require
+   ["package:sqflite/sqflite.dart" :as sql]
+   ["package:path/path.dart" :as path]
+   [finance-app.services.pref :as perf]))
+
+(declare add-column-if-not-exists
+         init-database)
+
+(defn initialize-db []
+  (let [dbpath (path/join (await (sql/getDatabasesPath))
+                          "database.db")]
+    (sql/openDatabase dbpath
+                      .onCreate (fn [^sql/Database db version]
+                                  (init-database db))
+                      .version 1)))
+
+(defn init-database [db]
+  (let [result (await (perf/get-int "db-version"))]
+    (cond
+      (nil? result)
+      (do
+        (.execute db "CREATE TABLE IF NOT EXISTS category_types(id integer, name varchar(80), types_of smallint)")
+        (.execute db "CREATE TABLE IF NOT EXISTS categories(id integer, content text, types_of integer, enabled smallint DEFAULT 1)")
+        (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, created_at datetime DEFAULT datetime('now'))")
+        ;; (perf/set-int "db-version" 1)
+        )
+      :else (dart:core/print "init-database :else"))))
+
+(defn add-column-if-not-exists [^sql/Database db table column new-column-sql]
+  (let [sql (str "SELECT COUNT (*) AS CNTREC 
+                  FROM pragma_table_info (?) 
+                  WHERE name= ?")
+        result (await (.rawQuery db sql [table column]))]
+    (when (zero? (-> result first (get "CNTREC")))
+      (.execute db new-column-sql))))
+

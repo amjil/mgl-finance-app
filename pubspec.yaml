@@ -38,11 +38,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_dotenv: ^5.1.0
   fl_chart: ^0.64.0
+  http: ^1.1.0
   intl: ^0.18.1
+  math_expressions: ^2.4.0
   mongol: ^6.0.1
   mongol_code: ^0.3.0
+  path: ^1.8.3
   persistent_bottom_nav_bar: ^5.0.2
   shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  vibration: ^1.8.3
 
 dev_dependencies:
   flutter_test:
