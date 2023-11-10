@@ -1,0 +1,64 @@
+(ns finance-app.widgets.num-keyboard
+  (:require 
+   ["package:flutter/material.dart" :as m]
+   [cljd.flutter.alpha2 :as f]))
+
+(defn base-button [v child on-tap]
+  (m/InkWell
+   .borderRadius (.circular m/BorderRadius 45)
+   .onTap on-tap 
+   .child
+   (m/Container
+    .alignment m.Alignment/center
+    .width 50
+    .height 50
+    .child child)))
+
+(defn num-button [v style on-tap]
+  (base-button
+   v
+   (m/Text v .style (or style (m/TextStyle .color (.-black m/Colors) .fontSize 28)))
+   on-tap))
+
+(defn icon-button [icon on-tap]
+  (base-button 
+   "icon"
+   (m/Icon icon)
+   on-tap))
+
+(defn on-tap [controller v]
+  (set! (.-text controller) (str (.-text controller) v)))
+
+(defn keyboard [controller]
+  (f/widget
+   (m/Container
+    .padding (m.EdgeInsets/only .left 32 .right 32 .top 20)
+    .alignment m.Alignment/center)
+   (m/Column
+    .children [(m/ButtonBar
+                .alignment m.MainAxisAlignment/spaceBetween
+                .children [(num-button "1" nil #(on-tap controller "1"))
+                           (num-button "2" nil #(on-tap controller "2"))
+                           (num-button "3" nil #(on-tap controller "3"))
+                           (icon-button m.Icons/backspace_outlined
+                                        (fn [] (when-not (empty? (.-text controller))
+                                                 (let [text (.-text controller)]
+                                                   (set! (.-text controller) (subs text 0 (dec (count text))))))))])
+               (m/ButtonBar
+                .alignment m.MainAxisAlignment/spaceBetween
+                .children [(num-button "4" nil #(on-tap controller "4"))
+                           (num-button "5" nil #(on-tap controller "5"))
+                           (num-button "6" nil #(on-tap controller "6"))
+                           (num-button "+" nil #(on-tap controller "+"))])
+               (m/ButtonBar
+                .alignment m.MainAxisAlignment/spaceBetween
+                .children [(num-button "7" nil #(on-tap controller "7"))
+                           (num-button "8" nil #(on-tap controller "8"))
+                           (num-button "9" nil #(on-tap controller "9"))
+                           (num-button "-" nil #(on-tap controller "-"))])
+               (m/ButtonBar
+                .alignment m.MainAxisAlignment/spaceBetween
+                .children [(num-button "C" nil #(set! (.-text controller) ""))
+                           (num-button "0" nil #(on-tap controller "0"))
+                           (num-button "." nil #(on-tap controller "."))
+                           (icon-button m.Icons/keyboard_backspace_outlined #(dart:core/print "yes"))])])))

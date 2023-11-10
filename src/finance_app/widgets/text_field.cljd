@@ -2,10 +2,12 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
+   ["package:math_expressions/math_expressions.dart" :as exp]
    [cljd.flutter.alpha2 :as f]
-   [finance-app.utils.colors :as colors]))
+   [finance-app.utils.colors :as colors]
+   [finance-app.states.global :as gs]))
 
-(defn field [obscure-text icon-name hint controller read-only]
+(defn field [obscure-text hint controller read-only]
   (f/widget
    :context ctx
   ;;  (m/Expanded)
@@ -15,7 +17,7 @@
     .controller controller
     .obscureText obscure-text
     .decoration (m/InputDecoration
-                 .prefixIcon (m/Icon icon-name .color colors/grey .size 18)
+                ;;  .prefixIcon (m/Icon icon-name .color colors/grey .size 18)
                  .hintText hint
                  .hintStyle (m/TextStyle .fontSize 16 .color colors/grey)
                  .filled true
@@ -26,17 +28,38 @@
     .showCursor true
     .readOnly read-only)))
 
-(defn label-field [label height obscure-text icon-name hint controller read-only]
-  (m/Column
-   .crossAxisAlignment m.CrossAxisAlignment/center
-   .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-   .children [(m/Expanded
-               .child
-               (mgl/MongolText
-                label
-                .style (m/TextStyle .fontSize 18)
-                .textAlign mgl.MongolTextAlign/top))
-              (m/Expanded
-               .flex 3
-               .child
-               (field obscure-text icon-name hint controller read-only))]))
+(defn num-field [controller value remark]
+  (f/widget
+   :watch [v value 
+           r remark]
+   :let [p (exp/Parser)]
+   (m/Container
+    .decoration (m/BoxDecoration 
+                 .border (m.Border/all .color m.Colors/blueAccent))
+    .padding (m.EdgeInsets/symmetric .vertical 10)
+    .width 60
+    .child
+    (m/Column
+     .mainAxisSize m.MainAxisSize/max
+     .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+     .children
+     [(m/GestureDetector
+       .onTap (fn []
+                (gs/open-floating-input controller))
+       .child
+       (mgl/MongolText
+        (if (empty? r)
+          "information for the bill"
+          r)
+        .style (m/TextStyle .fontSize 18)))
+      (mgl/MongolText
+       (if (empty? v)
+         "0.00"
+         (let [v (if (or (clojure.string/ends-with? v "+")
+                         (clojure.string/ends-with? v "-")
+                         (clojure.string/ends-with? v "."))
+                   (str v "0")
+                   v)]
+           (str (.evaluate (.parse p v) exp.EvaluationType/REAL (exp/ContextModel)))))
+       .style (m/TextStyle .fontSize 24
+                           .color m.Colors/red))]))))

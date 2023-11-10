@@ -18,3 +18,11 @@
            ;; lock for bg-watcher text-controller
            :edit-watcher/lock 2
            :draft/tabbar-index 0})))
+
+
+(defn ^:async set-text-controller [controller]
+  (swap! state assoc :keyboard/text-controller controller))
+
+(defn ^:async open-floating-input [controller]
+  (swap! state assoc :floating-input true)
+  (swap! state assoc :keyboard/text-controller controller))
