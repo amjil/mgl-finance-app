@@ -5,7 +5,7 @@
    ["package:mongol/mongol.dart" :as mgl]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
-   [finance-app.screens.add-funds :as add-funds]
+   [finance-app.screens.add-record :as add-record]
    [finance-app.widgets.custom-card :as custom-card]
    [finance-app.widgets.transaction-card :as transaction-card]
    [finance-app.utils.themes :as themes]
@@ -20,7 +20,13 @@
    (m/Scaffold
     .floatingActionButton 
     (m/FloatingActionButton 
-     .onPressed (fn [] (dart:core/print "xxxx"))
+     .onPressed (fn [] (dart:core/print "xxxx")
+                  (tab.PersistentNavBarNavigator/pushNewScreen
+                   ctx
+                   .screen
+                   (add-record/screen ctx)
+                   .withNavBar false)
+                  nil)
      .child (m/Icon m.Icons/add)))
    .body
    (m/SafeArea)
@@ -77,6 +83,23 @@
                                                  (mgl/MongolText
                                                   "2000"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])]))
-
-                 ])))))
+                 (f/widget
+                  (m/Expanded)
+                  (m/Padding
+                   .padding (.symmetric m/EdgeInsets .vertical 20))
+                  (m/Row
+                   .crossAxisAlignment m.CrossAxisAlignment/start
+                   .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                              (m/Expanded
+                               .child
+                               (m.ListView/separated
+                                .scrollDirection m.Axis/horizontal
+                                .itemCount (count transactions/transactions)
+                                .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
+                                .itemBuilder (fn [_ index]
+                                               (transaction-card/card
+                                                (* 0.05 (.-maxHeight constraints))
+                                                (nth (nth transactions/transactions index) 0)
+                                                (nth (nth transactions/transactions index) 1)
+                                                (nth (nth transactions/transactions index) 2)))))]))])))))
 
