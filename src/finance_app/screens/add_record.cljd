@@ -1,0 +1,67 @@
+(ns finance-app.screens.add-record
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.widgets.text-field :as custom-field]
+   [finance-app.widgets.button :as button]
+   [finance-app.widgets.tab-view :as tab-view]
+   [finance-app.widgets.num-keyboard :as num-keyboard]
+   [finance-app.widgets.floating-input :as floating-input]
+   [finance-app.screens.planning :as plan]
+   [finance-app.screens.profile :as profile]
+   [finance-app.screens.wallet :as wallet]
+   [finance-app.states.global :as gs]
+   [finance-app.utils.colors :as colors]))
+
+(declare on-add)
+
+(defn create-record []
+  (let [amount (atom nil)
+        text-value (atom nil)]
+    (f/widget
+     :context ctx
+     :managed [amount-controller (m/TextEditingController)
+               text-controller (m/TextEditingController)]
+     :watch [value amount
+             text text-value
+             {floating-input :floating-input} gs/state]
+     :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
+                  (reset! amount input-text))
+
+     (m/Scaffold)
+     .body
+     (m/SafeArea)
+     (m/Stack
+      .children
+      [(m/LayoutBuilder
+        .builder (fn [context ^m/BoxConstraints constraints]
+                   (m/Column
+                    .crossAxisAlignment m.CrossAxisAlignment/start
+                    .children [(m/IconButton
+                                .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                                .icon (m/Icon m.Icons/keyboard_backspace))
+                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                               (m/Expanded
+                                .child
+                                (m/Row
+                                 .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                            (m/Expanded
+                                             .child (tab-view/view nil [{:page plan/screen :tab {:text "Expense"}}
+                                                                        {:page profile/screen :tab {:text "Income"}}
+                                                                        {:page wallet/screen :tab {:text "Other"}}]))
+                                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                            (custom-field/num-field text-controller amount text-value)
+                                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
+                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                               (num-keyboard/keyboard amount-controller)])))
+       (if (true? floating-input)
+         (floating-input/input-box text-value)
+         (m/SizedBox))]))))
+
+
+(defn ^m/Widget screen [ctx]
+  (create-record))
+
+(defn on-add []
+  )
