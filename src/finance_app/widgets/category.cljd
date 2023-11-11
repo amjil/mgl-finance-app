@@ -1,0 +1,27 @@
+(ns finance-app.widgets.category
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.states.global :as gs]))
+
+(defn view [items]
+  (f/widget
+   :context ctx
+   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+   (m.GridView/builder
+    .scrollDirection m.Axis/horizontal
+    .gridDelegate (m/SliverGridDelegateWithFixedCrossAxisCount
+                   .crossAxisCount (quot h 200)
+                   .childAspectRatio 1.0)
+    .itemCount (count items)
+    .itemBuilder (fn [context i]
+                   (m/Row
+                    .children [(m/Icon (if (nil? (:icon (nth items i)))
+                                         m.Icons/ac_unit
+                                         (:icon (nth items i))))
+                               (m/SizedBox .width 10)
+                               (mgl/MongolText (if (empty? (:text (nth items i)))
+                                                 "Expense"
+                                                 (:text (nth items i))))])))))
+
