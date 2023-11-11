@@ -1,0 +1,75 @@
+(ns finance-app.utils.icons
+  (:require 
+   ["package:flutter/material.dart" :as m]
+   ["package:font_awesome_flutter/font_awesome_flutter.dart" :as font-awesome]
+   [font_awesome_flutter.dart :as font-awesome]))
+
+
+(def icons 
+  {;;    food
+   "Breakfast" font-awesome.FontAwesomeIcons/mugSaucer
+   "Lunch" font-awesome.FontAwesomeIcons/utensils
+   "Dinner" font-awesome.FontAwesomeIcons/egg
+   "Nightspot" font-awesome.FontAwesomeIcons/bacon
+   "Snack" font-awesome.FontAwesomeIcons/burger
+   "Fruit" font-awesome.FontAwesomeIcons/appleWhole
+   "Drink" font-awesome.FontAwesomeIcons/mugHot
+   "Vegetables" font-awesome.FontAwesomeIcons/carrot
+;;    traffic
+   "Bus" font-awesome.FontAwesomeIcons/bus
+   "Train" font-awesome.FontAwesomeIcons/trainSubway
+   "Taxi" font-awesome.FontAwesomeIcons/taxi
+   "Plane" font-awesome.FontAwesomeIcons/plane
+   "Boat" font-awesome.FontAwesomeIcons/ferry
+   "Railway" font-awesome.FontAwesomeIcons/train
+   "Metoro" font-awesome.FontAwesomeIcons/trainTram
+   "Bike" font-awesome.FontAwesomeIcons/bicycle
+;;    life
+   "Shop" font-awesome.FontAwesomeIcons/basketShopping
+   "House" font-awesome.FontAwesomeIcons/houseFlag
+   "Net" font-awesome.FontAwesomeIcons/wifi
+   "Insurance" font-awesome.FontAwesomeIcons/userShield
+   "ElecFee" font-awesome.FontAwesomeIcons/lightbulb
+   "TreeCity" font-awesome.FontAwesomeIcons/treeCity
+;;    repayment
+   "money-bill-1" font-awesome.FontAwesomeIcons/moneyBill1
+   "house-chimney" font-awesome.FontAwesomeIcons/houseChimney
+   "money-check-dollar" font-awesome.FontAwesomeIcons/moneyCheckDollar
+   "credit-card" font-awesome.FontAwesomeIcons/creditCard
+;;    health
+   "teeth" font-awesome.FontAwesomeIcons/teeth
+   "user-doctor" font-awesome.FontAwesomeIcons/userDoctor
+   "prescription-bottle" font-awesome.FontAwesomeIcons/prescriptionBottle
+   "suitcase-medical" font-awesome.FontAwesomeIcons/suitcaseMedical
+   "hospital" font-awesome.FontAwesomeIcons/hospital
+   "bed-pulse" font-awesome.FontAwesomeIcons/bed-pulse
+;;    edication
+   "book" font-awesome.FontAwesomeIcons/book
+   "book-open-reader" font-awesome.FontAwesomeIcons/bookOpenReader
+   "chalkboard-user" font-awesome.FontAwesomeIcons/chalkboardUser
+   "leanpub" font-awesome.FontAwesomeIcons/leanpub
+
+   ;;  entertainment
+   "heart" font-awesome.FontAwesomeIcons/heart
+   "film" font-awesome.FontAwesomeIcons/film
+   "champagne-glasses" font-awesome.FontAwesomeIcons/champagneGlasses
+   "chess-knight" font-awesome.FontAwesomeIcons/chessKnight
+   "person-skating" font-awesome.FontAwesomeIcons/person-skating
+   "microphone-lines" font-awesome.FontAwesomeIcons/microphone-lines
+   "umbrella-beach" font-awesome.FontAwesomeIcons/umbrella-beach
+   
+   ;; invest
+   "scale-balanced" font-awesome.FontAwesomeIcons/scale-balanced
+   "landmark" font-awesome.FontAwesomeIcons/landmark
+   "money-bill-trend-up" font-awesome.FontAwesomeIcons/money-bill-trend-up
+   "sack-dollar" font-awesome.FontAwesomeIcons/sack-dollar
+   
+   ;; other 
+   "piggy-bank" font-awesome.FontAwesomeIcons/piggy-bank
+   "comments-dollar" font-awesome.FontAwesomeIcons/comments-dollar
+   "coins" font-awesome.FontAwesomeIcons/coins
+
+   
+
+
+   })
