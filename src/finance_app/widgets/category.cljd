@@ -3,7 +3,9 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
-   [finance-app.states.global :as gs]))
+   [finance-app.states.global :as gs]
+   [finance-app.utils.icons :as icons]
+   [finance-app.utils.colors :as colors]))
 
 (defn view [items]
   (f/widget
@@ -12,7 +14,7 @@
    (m.GridView/builder
     .scrollDirection m.Axis/horizontal
     .gridDelegate (m/SliverGridDelegateWithFixedCrossAxisCount
-                   .crossAxisCount (quot h 200)
+                   .crossAxisCount (quot h 160)
                    .childAspectRatio 1.0)
     .itemCount (count items)
     .itemBuilder (fn [context i]
@@ -25,3 +27,101 @@
                                                  "Expense"
                                                  (:text (nth items i))))])))))
 
+(defn tab-view [tab-index info]
+  (let [tab-sub-index (atom 0)]
+    (f/widget
+     :context ctx
+     :watch [curr-sub-tab tab-sub-index
+             curr-tab tab-index]
+     (m/Container
+      .color (if (nil? (:bg-color info))
+               (-> m/Theme (.of ctx) .-canvasColor)
+               (:bg-color info)))
+     (m/Column
+      .mainAxisSize m.MainAxisSize/min
+      .children
+      [(f/widget
+        (m/Expanded)
+        (m/Row
+         .children
+         [(f/widget
+           (m/Container
+            .width 40)
+           (m.ListView/builder
+            .itemCount (count (get icons/class-names curr-tab))
+            .itemBuilder
+            (fn [context i]
+              (m/Stack
+               .children
+               [(m/Positioned
+                 .top 2
+                 .bottom 2
+                 .left 0
+                 .child
+                 (if (= curr-sub-tab i)
+                   (m/Container .color colors/green
+                                .width 1)
+                   (m/SizedBox)))
+                (m/GestureDetector
+                 .onTap (fn []
+                          (reset! tab-sub-index i)
+                          nil)
+                 .child (m/Container
+                         .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
+                         .child (mgl/MongolText (-> icons/class-names (get 0) (get i)))))]))))
+          (m/VerticalDivider)
+          (f/widget
+           (m/Expanded)
+           (view (map (fn [[k v]] (hash-map :icon v :text k))
+                      (select-keys icons/icons (-> icons/classified (get curr-tab) (get curr-sub-tab))))))]))]))))
+
+(def main-tab-list ["ᠵᠠᠷᠤᠯᠭ᠎ᠠ" 
+                    "ᠣᠷᠤᠯᠭ᠎ᠠ"])
+
+(defn main-tab [info]
+  (let [tab-index (atom 0)]
+    (f/widget
+     :context ctx
+     :watch [curr-tab tab-index]
+     (m/Container
+      .color (if (nil? (:bg-color info))
+               (-> m/Theme (.of ctx) .-canvasColor)
+               (:bg-color info)))
+     (m/Column
+      .mainAxisSize m.MainAxisSize/min
+      .children
+      [(f/widget
+        (m/Expanded)
+        (m/Row
+         .children
+         [(f/widget
+           (m/Container
+            .width 48)
+           (m.ListView/builder
+            .itemCount (count main-tab-list)
+            .itemBuilder
+            (fn [context i]
+              (m/Stack
+               .children
+               [(m/Positioned
+                 .top 2
+                 .bottom 2
+                 .left 0
+                 .child
+                 (if (= i curr-tab)
+                   (m/Container .color colors/green
+                                .width 1)
+                   (m/SizedBox)))
+                (m/GestureDetector
+                 .onTap (fn []
+                          (reset! tab-index i)
+                          nil)
+                 .child (m/Container
+                         .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
+                         .child (mgl/MongolText (get main-tab-list i)
+                                                .style (m/TextStyle .fontSize 20
+                                                                    .color colors/green))))]))))
+          (m/VerticalDivider)
+          (f/widget
+           (m/Expanded)
+           (tab-view tab-index nil))]))]))))

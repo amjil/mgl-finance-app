@@ -5,14 +5,14 @@
    [cljd.flutter.alpha2 :as f]
    [finance-app.widgets.text-field :as custom-field]
    [finance-app.widgets.button :as button]
-   [finance-app.widgets.tab-view :as tab-view]
    [finance-app.widgets.num-keyboard :as num-keyboard]
    [finance-app.widgets.floating-input :as floating-input]
    [finance-app.screens.planning :as plan]
    [finance-app.screens.profile :as profile]
    [finance-app.screens.wallet :as wallet]
    [finance-app.states.global :as gs]
-   [finance-app.utils.colors :as colors]))
+   [finance-app.utils.colors :as colors]
+   [finance-app.widgets.category :as category]))
 
 (declare on-add)
 
@@ -47,9 +47,8 @@
                                 (m/Row
                                  .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                                             (m/Expanded
-                                             .child (tab-view/view nil [{:page plan/screen :tab {:text "Expense"}}
-                                                                        {:page profile/screen :tab {:text "Income"}}
-                                                                        {:page wallet/screen :tab {:text "Other"}}]))
+                                             .child
+                                             (category/main-tab nil))
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                                             (custom-field/num-field text-controller amount text-value)
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
