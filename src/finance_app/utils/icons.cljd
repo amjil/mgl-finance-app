@@ -1,8 +1,7 @@
 (ns finance-app.utils.icons
-  (:require 
+  (:require
    ["package:flutter/material.dart" :as m]
-   ["package:font_awesome_flutter/font_awesome_flutter.dart" :as font-awesome]
-   [font_awesome_flutter.dart :as font-awesome]))
+   ["package:font_awesome_flutter/font_awesome_flutter.dart" :as font-awesome]))
 
 
 (def icons 
@@ -15,35 +14,35 @@
    "Fruit" font-awesome.FontAwesomeIcons/appleWhole
    "Drink" font-awesome.FontAwesomeIcons/mugHot
    "Vegetables" font-awesome.FontAwesomeIcons/carrot
-;;    traffic
+   ;;    traffic
    "Bus" font-awesome.FontAwesomeIcons/bus
    "Train" font-awesome.FontAwesomeIcons/trainSubway
    "Taxi" font-awesome.FontAwesomeIcons/taxi
    "Plane" font-awesome.FontAwesomeIcons/plane
    "Boat" font-awesome.FontAwesomeIcons/ferry
    "Railway" font-awesome.FontAwesomeIcons/train
-   "Metoro" font-awesome.FontAwesomeIcons/trainTram
+   "Metro" font-awesome.FontAwesomeIcons/trainTram
    "Bike" font-awesome.FontAwesomeIcons/bicycle
-;;    life
+   ;;    life 
    "Shop" font-awesome.FontAwesomeIcons/basketShopping
    "House" font-awesome.FontAwesomeIcons/houseFlag
    "Net" font-awesome.FontAwesomeIcons/wifi
    "Insurance" font-awesome.FontAwesomeIcons/userShield
    "ElecFee" font-awesome.FontAwesomeIcons/lightbulb
    "TreeCity" font-awesome.FontAwesomeIcons/treeCity
-;;    repayment
+   ;;    repayment
    "money-bill-1" font-awesome.FontAwesomeIcons/moneyBill1
    "house-chimney" font-awesome.FontAwesomeIcons/houseChimney
    "money-check-dollar" font-awesome.FontAwesomeIcons/moneyCheckDollar
    "credit-card" font-awesome.FontAwesomeIcons/creditCard
-;;    health
+   ;;    health
    "teeth" font-awesome.FontAwesomeIcons/teeth
    "user-doctor" font-awesome.FontAwesomeIcons/userDoctor
    "prescription-bottle" font-awesome.FontAwesomeIcons/prescriptionBottle
    "suitcase-medical" font-awesome.FontAwesomeIcons/suitcaseMedical
    "hospital" font-awesome.FontAwesomeIcons/hospital
-   "bed-pulse" font-awesome.FontAwesomeIcons/bed-pulse
-;;    edication
+   "bed-pulse" font-awesome.FontAwesomeIcons/bedPulse
+   ;;    edication
    "book" font-awesome.FontAwesomeIcons/book
    "book-open-reader" font-awesome.FontAwesomeIcons/bookOpenReader
    "chalkboard-user" font-awesome.FontAwesomeIcons/chalkboardUser
@@ -54,22 +53,78 @@
    "film" font-awesome.FontAwesomeIcons/film
    "champagne-glasses" font-awesome.FontAwesomeIcons/champagneGlasses
    "chess-knight" font-awesome.FontAwesomeIcons/chessKnight
-   "person-skating" font-awesome.FontAwesomeIcons/person-skating
-   "microphone-lines" font-awesome.FontAwesomeIcons/microphone-lines
-   "umbrella-beach" font-awesome.FontAwesomeIcons/umbrella-beach
-   
+   "person-skating" font-awesome.FontAwesomeIcons/personSkating
+   "microphone-lines" font-awesome.FontAwesomeIcons/microphoneLines
+   "umbrella-beach" font-awesome.FontAwesomeIcons/umbrellaBeach
+
    ;; invest
-   "scale-balanced" font-awesome.FontAwesomeIcons/scale-balanced
+   "scale-balanced" font-awesome.FontAwesomeIcons/scaleBalanced
    "landmark" font-awesome.FontAwesomeIcons/landmark
-   "money-bill-trend-up" font-awesome.FontAwesomeIcons/money-bill-trend-up
-   "sack-dollar" font-awesome.FontAwesomeIcons/sack-dollar
-   
+   "money-bill-trend-up" font-awesome.FontAwesomeIcons/moneyBillTrendUp
+   "sack-dollar" font-awesome.FontAwesomeIcons/sackDollar
+
    ;; other 
-   "piggy-bank" font-awesome.FontAwesomeIcons/piggy-bank
-   "comments-dollar" font-awesome.FontAwesomeIcons/comments-dollar
-   "coins" font-awesome.FontAwesomeIcons/coins
+   "piggy-bank" font-awesome.FontAwesomeIcons/piggyBank
+   "comments-dollar" font-awesome.FontAwesomeIcons/commentsDollar
+   "coins" font-awesome.FontAwesomeIcons/coins})
 
-   
-
-
-   })
+(def classified
+  {0 ["Shop"
+      "TreeCity"
+      "Dinner"
+      "Breakfast"
+      "Lunch"
+      "Snack"
+      "Bus"
+      "Metro"
+      "House"
+      "suitcase-medical"]
+   1 ["Breakfast"
+      "Lunch"
+      "Dinner"
+      "Nightspot"
+      "Snack"
+      "Fruit"
+      "Vegetables"]
+   2 ["Bus" 
+      "Train" 
+      "Taxi" 
+      "Plane"
+      "Boat"
+      "Railway"
+      "Metro"
+      "Bike"]
+   3 ["Shop"
+      "House"
+      "Net"
+      "Insurance"
+      "ElecFee"
+      "TreeCity"]
+   4 ["money-bill-1"
+      "house-chimney"
+      "money-check-dollar"
+      "credit-card"]
+   5 ["teeth"
+      "user-doctor"
+      "prescription-bottle"
+      "suitcase-medical"
+      "hospital"
+      "bed-pulse"]
+   6 ["book"
+      "book-open-reader"
+      "chalkboard-user"
+      "leanpub"]
+   7 ["heart"
+      "film"
+      "champagne-glasses"
+      "chess-knight"
+      "person-skating"
+      "microphone-lines"
+      "umbrella-beach"]
+   8 ["scale-balanced"
+      "landmark"
+      "money-bill-trend-up"
+      "sack-dollar"]
+   9 ["piggy-bank"
+      "comments-dollar"
+      "coins"]})
