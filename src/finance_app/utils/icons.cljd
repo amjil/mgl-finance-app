@@ -6,30 +6,28 @@
 
 (def icons
   {;;    food
-   "Breakfast" font-awesome.FontAwesomeIcons/mugSaucer
-   "Lunch" font-awesome.FontAwesomeIcons/utensils
-   "Dinner" font-awesome.FontAwesomeIcons/egg
-   "Nightspot" font-awesome.FontAwesomeIcons/bacon
-   "Snack" font-awesome.FontAwesomeIcons/burger
-   "Fruit" font-awesome.FontAwesomeIcons/appleWhole
-   "Drink" font-awesome.FontAwesomeIcons/mugHot
-   "Vegetables" font-awesome.FontAwesomeIcons/carrot
+   "breakfast" font-awesome.FontAwesomeIcons/mugSaucer
+   "lunch" font-awesome.FontAwesomeIcons/utensils
+   "dinner" font-awesome.FontAwesomeIcons/egg
+   "snack" font-awesome.FontAwesomeIcons/burger
+   "fruit" font-awesome.FontAwesomeIcons/appleWhole
+   "drink" font-awesome.FontAwesomeIcons/mugHot
+   "vegetables" font-awesome.FontAwesomeIcons/carrot
    ;;    traffic
-   "Bus" font-awesome.FontAwesomeIcons/bus
-   "Train" font-awesome.FontAwesomeIcons/trainSubway
-   "Taxi" font-awesome.FontAwesomeIcons/taxi
-   "Plane" font-awesome.FontAwesomeIcons/plane
-   "Boat" font-awesome.FontAwesomeIcons/ferry
-   "Railway" font-awesome.FontAwesomeIcons/train
-   "Metro" font-awesome.FontAwesomeIcons/trainTram
-   "Bike" font-awesome.FontAwesomeIcons/bicycle
+   "bus" font-awesome.FontAwesomeIcons/bus
+   "train" font-awesome.FontAwesomeIcons/trainSubway
+   "taxi" font-awesome.FontAwesomeIcons/taxi
+   "plane" font-awesome.FontAwesomeIcons/plane
+   "boat" font-awesome.FontAwesomeIcons/ferry
+   "car" font-awesome.FontAwesomeIcons/car
+   "bike" font-awesome.FontAwesomeIcons/bicycle
    ;;    life 
-   "Shop" font-awesome.FontAwesomeIcons/basketShopping
-   "House" font-awesome.FontAwesomeIcons/houseFlag
-   "Net" font-awesome.FontAwesomeIcons/wifi
-   "Insurance" font-awesome.FontAwesomeIcons/userShield
-   "ElecFee" font-awesome.FontAwesomeIcons/lightbulb
-   "TreeCity" font-awesome.FontAwesomeIcons/treeCity
+   "shop" font-awesome.FontAwesomeIcons/basketShopping
+   "house" font-awesome.FontAwesomeIcons/houseFlag
+   "net" font-awesome.FontAwesomeIcons/wifi
+   "insurance" font-awesome.FontAwesomeIcons/userShield
+   "elec fee" font-awesome.FontAwesomeIcons/lightbulb
+   "tree city" font-awesome.FontAwesomeIcons/treeCity
    ;;    repayment
    "money bill1" font-awesome.FontAwesomeIcons/moneyBill1
    "house chimney" font-awesome.FontAwesomeIcons/houseChimney
@@ -41,7 +39,7 @@
    "prescription bottle" font-awesome.FontAwesomeIcons/prescriptionBottle
    "suitcase medical" font-awesome.FontAwesomeIcons/suitcaseMedical
    "hospital" font-awesome.FontAwesomeIcons/hospital
-   "bed-pulse" font-awesome.FontAwesomeIcons/bedPulse
+   "bed pulse" font-awesome.FontAwesomeIcons/bedPulse
    ;;    edication
    "book" font-awesome.FontAwesomeIcons/book
    "book open reader" font-awesome.FontAwesomeIcons/bookOpenReader
@@ -51,7 +49,7 @@
    ;;  entertainment
    "heart" font-awesome.FontAwesomeIcons/heart
    "film" font-awesome.FontAwesomeIcons/film
-   "champagne glasses" font-awesome.FontAwesomeIcons/champagneGlasses
+   "music" font-awesome.FontAwesomeIcons/music
    "chess knight" font-awesome.FontAwesomeIcons/chessKnight
    "person skating" font-awesome.FontAwesomeIcons/personSkating
    "microphone lines" font-awesome.FontAwesomeIcons/microphoneLines
@@ -72,7 +70,6 @@
    ;; salary
    "salary" font-awesome.FontAwesomeIcons/circleDollarToSlot
    "bonus" font-awesome.FontAwesomeIcons/moneyBill
-   "yearly" font-awesome.FontAwesomeIcons/handHoldingDollar
    "sideline" font-awesome.FontAwesomeIcons/sackXmark
    "dividend" font-awesome.FontAwesomeIcons/coins
 
@@ -82,7 +79,7 @@
    "interest" font-awesome.FontAwesomeIcons/fileInvoiceDollar
 
    ;; other 
-   "alimoney" font-awesome.FontAwesomeIcons/moneyBill1Wave
+   "alimony" font-awesome.FontAwesomeIcons/moneyBill1Wave
    "lottery" font-awesome.FontAwesomeIcons/fileInvoice
    "gift" font-awesome.FontAwesomeIcons/receipt
    "subsidy" font-awesome.FontAwesomeIcons/moneyBills
@@ -120,7 +117,6 @@
     1 ["Breakfast"
        "Lunch"
        "Dinner"
-       "Nightspot"
        "Snack"
        "Fruit"
        "Vegetables"]
@@ -169,7 +165,6 @@
    1
    {0 ["salary"
        "bonus"
-       "yearly"
        "sideline"
        "dividend"]
     1 ["fund"

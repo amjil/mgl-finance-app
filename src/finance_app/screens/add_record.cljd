@@ -7,9 +7,6 @@
    [finance-app.widgets.button :as button]
    [finance-app.widgets.num-keyboard :as num-keyboard]
    [finance-app.widgets.floating-input :as floating-input]
-   [finance-app.screens.planning :as plan]
-   [finance-app.screens.profile :as profile]
-   [finance-app.screens.wallet :as wallet]
    [finance-app.states.global :as gs]
    [finance-app.utils.colors :as colors]
    [finance-app.widgets.category :as category]))
