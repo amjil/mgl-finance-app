@@ -1,7 +1,6 @@
 (ns finance-app.screens.home
   (:require
    ["package:flutter/material.dart" :as m]
-   ["package:flutter/services.dart" :as services]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
@@ -11,6 +10,7 @@
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
    [finance-app.states.transactions :as transactions]
+   [finance-app.states.categories :as categories]
    [finance-app.utils.datetime :as datetime]))
 
 (def screen
@@ -20,12 +20,14 @@
    (m/Scaffold
     .floatingActionButton 
     (m/FloatingActionButton 
-     .onPressed (fn [] (dart:core/print "xxxx")
+     .onPressed (fn [] ;(dart:core/print "xxxx")
+                  ;; (dart:core/print (categories/get-types))
                   (tab.PersistentNavBarNavigator/pushNewScreen
                    ctx
                    .screen
                    (add-record/screen ctx)
                    .withNavBar false)
+                  (categories/all-categories)
                   nil)
      .child (m/Icon m.Icons/add)))
    .body
@@ -44,7 +46,7 @@
                                       .mainAxisAlignment m.MainAxisAlignment/center
                                       .children [(m/Icon m.Icons/calendar_month)
                                                  (m/Text
-                                                  (datetime/current-year-month))]))
+                                                  (datetime/current-year-month "yyyy-MM"))]))
                              (m/Align
                               .alignment m.Alignment/centerRight
                               .child (m/IconButton

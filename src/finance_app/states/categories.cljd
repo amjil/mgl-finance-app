@@ -1,0 +1,20 @@
+(ns finance-app.states.categories
+  (:require
+   [finance-app.services.category :as category-service]
+   [finance-app.states.global :as gs]))
+
+(defn all-categories []
+  (when (empty? (:types @gs/state))
+    (let [categories (await (category-service/query-categories))
+          types (await (category-service/query-category-types))]
+      (swap! gs/state assoc :categories categories)
+      (swap! gs/state assoc :types types))))
+
+(defn get-types []
+  (let [types (:types @gs/state)]
+    (filter #(zero? (get % "types_of")) types)))
+
+(defn get-sub-types []
+  (let [t (:type @gs/state)
+        types (:types @gs/state)]
+    (filter #(= t (get % "types_of")) types)))

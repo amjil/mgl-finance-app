@@ -4,6 +4,7 @@
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
    [finance-app.states.global :as gs]
+   [finance-app.states.categories :as categories-state]
    [finance-app.utils.icons :as icons]
    [finance-app.utils.colors :as colors]))
 
@@ -98,7 +99,7 @@
            (m/Container
             .width 48)
            (m.ListView/builder
-            .itemCount (count main-tab-list)
+            .itemCount 2 
             .itemBuilder
             (fn [context i]
               (m/Stack
@@ -118,7 +119,7 @@
                           nil)
                  .child (m/Container
                          .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
-                         .child (mgl/MongolText (get main-tab-list i)
+                         .child (mgl/MongolText (-> (categories-state/get-types) (get i) (get "name"))
                                                 .style (m/TextStyle .fontSize 20
                                                                     .color colors/green))))]))))
           (m/VerticalDivider)

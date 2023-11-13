@@ -1,0 +1,56 @@
+(ns finance-app.services.transaction
+  (:require
+    ["package:sqflite/sqflite.dart" :as sqf]
+    [finance-app.services.sqlite :as sql]))
+
+(defn query-transactions [m]
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT id, category_id, content, types_of, amount, transaction_time, created_at
+         FROM transactions 
+         where strftime('%Y',transaction_time) = strftime('%Y', ?) 
+            AND  strftime('%m',transaction_time) = strftime('%m', ?)
+         ORDER BY id
+         ;"
+      [m m]))))
+
+(defn create-transaction [info]
+  (let [^sqf/Database db (await (sql/initialize-db))
+        id1 (await
+             (.rawInsert db
+                         "INSERT INTO transactions 
+                         (category_id, content, types_of, amount, transaction_time) 
+                         values (?, ?, ?, ?, ?)"
+                         [(:catetory_id info)
+                          (:content info)
+                          (:types_of info)
+                          (:amount info)
+                          (:transaction_time info)]))]
+    id1))
+
+(defn edit-transaction [id info]
+  (let [^sqf/Database db (await (sql/initialize-db))
+        num (await
+             (.rawInsert db
+                         "UPDATE transactions 
+                           set category_id = ?, content = ?, 
+                               types_of = ?, amount = ?, transaction_time = ?
+                          WHERE id = ?
+                          "
+                         [(:catetory_id info)
+                          (:content info)
+                          (:types_of info)
+                          (:amount info)
+                          (:transaction_time info)
+                          id]))]
+    num))
+
+
+(defn delete-transaction [id]
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawDelete db
+                 "DELETE FROM transactions WHERE id = ?"
+                 [id]))))

@@ -1,0 +1,26 @@
+(ns finance-app.services.category
+  (:require 
+   ["package:sqflite/sqflite.dart" :as sqf]
+   [finance-app.services.sqlite :as sql]))
+
+
+(defn query-category-types []
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT id, name, types_of
+         FROM category_types 
+         ORDER BY id
+         ;"))))
+
+
+(defn query-categories []
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT id, content, types_of, icon_name, default_order, enabled
+         FROM categories 
+         ORDER BY id
+         ;"))))

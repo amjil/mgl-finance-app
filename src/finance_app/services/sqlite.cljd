@@ -22,93 +22,93 @@
       (do
         (.execute db "CREATE TABLE IF NOT EXISTS category_types(id integer primary key AUTOINCREMENT, name varchar(80), types_of smallint)")
         (.execute db "CREATE TABLE IF NOT EXISTS categories(id integer primary key AUTOINCREMENT, content text, types_of integer, icon_name varchar(100), default_order smallint DEFAULT 0, enabled smallint DEFAULT 1)")
-        (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, created_at datetime DEFAULT datetime('now'))")
+        (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, transaction_time datetime DEFAULT CURRENT_TIMESTAMP, created_at datetime DEFAULT CURRENT_TIMESTAMP)")
         (.execute db "INSERT INTO category_types(name, types_of)
                       VALUES
-                      ('ᠵᠠᠷᠤᠯᠭ᠎ᠠ', 0)
-                      ('ᠣᠷᠤᠯᠭ᠎ᠠ', 0)
-                      ('ᠢᠳᠡᠭᠡᠨ', 1)
-                      ('ᠵᠠᠮ ᠬᠠᠷᠢᠯᠴᠠᠭ᠎ᠠ', 1)
-                      ('ᠠᠮᠢᠳᠤᠷᠠᠯ', 1)
-                      ('ᠲᠥᠯᠦᠯᠲᠡ', 1)
-                      ('ᠡᠷᠡᠭᠦᠯ ᠮᠡᠨᠳᠦ', 1)
-                      ('ᠪᠣᠯᠪᠠᠰᠤᠷᠠᠯ', 1)
-                      ('ᠵᠤᠭ᠎ᠠ ᠴᠡᠩᠭᠡᠯ', 1)
-                      ('ᠬᠦᠷᠦᠩᠭᠡᠵᠢᠯᠲᠡ', 1)
-                      ('ᠪᠣᠰᠤᠳ', 1)
-                      ('ᠴᠠᠯᠢᠩ', 2)
-                      ('ᠬᠦᠷᠦᠩᠭᠡᠵᠢᠯᠲᠡ', 2)
-                      ('ᠪᠣᠰᠤᠳ', 2)
+                      ('ᠵᠠᠷᠤᠯᠭ᠎ᠠ', 0),
+                      ('ᠣᠷᠤᠯᠭ᠎ᠠ', 0),
+                      ('ᠢᠳᠡᠭᠡᠨ', 1),
+                      ('ᠵᠠᠮ ᠬᠠᠷᠢᠯᠴᠠᠭ᠎ᠠ', 1),
+                      ('ᠠᠮᠢᠳᠤᠷᠠᠯ', 1),
+                      ('ᠲᠥᠯᠦᠯᠲᠡ', 1),
+                      ('ᠡᠷᠡᠭᠦᠯ ᠮᠡᠨᠳᠦ', 1),
+                      ('ᠪᠣᠯᠪᠠᠰᠤᠷᠠᠯ', 1),
+                      ('ᠵᠤᠭ᠎ᠠ ᠴᠡᠩᠭᠡᠯ', 1),
+                      ('ᠬᠦᠷᠦᠩᠭᠡᠵᠢᠯᠲᠡ', 1),
+                      ('ᠪᠣᠰᠤᠳ', 1),
+                      ('ᠴᠠᠯᠢᠩ', 2),
+                      ('ᠬᠦᠷᠦᠩᠭᠡᠵᠢᠯᠲᠡ', 2),
+                      ('ᠪᠣᠰᠤᠳ', 2);
                       ")
         (.execute db "INSERT INTO categories(content, types_of, icon_name)
                       VALUES
-                      ('ᠥᠷᠯᠥᠭᠡ ᠶᠢᠨ ᠴᠠᠢ', 1, 'breakfast')
-                      ('ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 1, 'lunch')
-                      ('ᠣᠷᠣᠢ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 1, 'dinner')
-                      ('ᠵᠠᠭᠤᠰᠢ', 1, 'snack')
-                      ('ᠵᠢᠮᠢᠰ', 1, 'fruit')
-                      ('ᠤᠮᠳᠠᠭᠠᠨ', 1, 'drink')
-                      ('ᠨᠣᠭᠤᠭ᠎ᠠ ᠴᠠᠭ᠎ᠠ', 1, 'vegetables')
+                      ('ᠥᠷᠯᠥᠭᠡ ᠶᠢᠨ ᠴᠠᠢ', 1, 'breakfast'),
+                      ('ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 1, 'lunch'),
+                      ('ᠣᠷᠣᠢ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 1, 'dinner'),
+                      ('ᠵᠠᠭᠤᠰᠢ', 1, 'snack'),
+                      ('ᠵᠢᠮᠢᠰ', 1, 'fruit'),
+                      ('ᠤᠮᠳᠠᠭᠠᠨ', 1, 'drink'),
+                      ('ᠨᠣᠭᠤᠭ᠎ᠠ ᠴᠠᠭ᠎ᠠ', 1, 'vegetables'),
 
-                      ('ᠠᠶᠠᠨᠴᠢᠨ ᠤ ᠲᠡᠷᠭᠡ', 2, 'bus')
-                      ('ᠭᠠᠯᠲᠤ ᠲᠡᠷᠭᠡ', 2, 'train')
-                      ('ᠲᠠᠺᠰᠢ', 2, 'taxi')
-                      ('ᠨᠢᠰᠭᠡᠯ', 2, 'plane')
-                      ('ᠣᠩᠭᠤᠴᠠ', 2, 'boat')
-                      ('ᠮᠠᠰᠢᠨ ᠲᠡᠷᠭᠡ', 2, 'car')
-                      ('ᠳᠤᠭᠤᠢ ᠲᠡᠷᠭᠡ', 2, 'bike')
+                      ('ᠠᠶᠠᠨᠴᠢᠨ ᠤ ᠲᠡᠷᠭᠡ', 2, 'bus'),
+                      ('ᠭᠠᠯᠲᠤ ᠲᠡᠷᠭᠡ', 2, 'train'),
+                      ('ᠲᠠᠺᠰᠢ', 2, 'taxi'),
+                      ('ᠨᠢᠰᠭᠡᠯ', 2, 'plane'),
+                      ('ᠣᠩᠭᠤᠴᠠ', 2, 'boat'),
+                      ('ᠮᠠᠰᠢᠨ ᠲᠡᠷᠭᠡ', 2, 'car'),
+                      ('ᠳᠤᠭᠤᠢ ᠲᠡᠷᠭᠡ', 2, 'bike'),
 
-                      ('ᠳᠡᠯᠭᠡᠭᠦᠷ', 3, 'shop')
-                      ('ᠲᠦᠷᠢᠶᠡᠰᠦ', 3, 'house')
-                      ('ᠢᠨ᠋ᠲ᠋ᠧᠷᠨᠧᠲ', 3, 'net')
-                      ('ᠳᠠᠭᠠᠳᠬᠠᠯ', 3, 'insurance')
-                      ('ᠴᠠᠬᠢᠯᠭᠠᠨ', 3, 'elec fee')
-                      ('ᠣᠷᠤᠨ ᠰᠠᠭᠤᠴᠠ', 3, 'tree city')
+                      ('ᠳᠡᠯᠭᠡᠭᠦᠷ', 3, 'shop'),
+                      ('ᠲᠦᠷᠢᠶᠡᠰᠦ', 3, 'house'),
+                      ('ᠢᠨ᠋ᠲ᠋ᠧᠷᠨᠧᠲ', 3, 'net'),
+                      ('ᠳᠠᠭᠠᠳᠬᠠᠯ', 3, 'insurance'),
+                      ('ᠴᠠᠬᠢᠯᠭᠠᠨ', 3, 'elec fee'),
+                      ('ᠣᠷᠤᠨ ᠰᠠᠭᠤᠴᠠ', 3, 'tree city'),
 
-                      ('ᠪᠠᠷᠢᠴᠠᠭᠠᠲᠤ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'money bill1')
-                      ('ᠢᠲᠡᠭᠡᠮᠵᠢᠲᠦ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'house chimney')
-                      ('ᠢᠲᠡᠭᠡᠮᠵᠢᠲᠦ ᠺᠠᠷᠲ', 4, 'money check dollar')
-                      ('ᠪᠣᠰᠤᠳ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'credit card')
+                      ('ᠪᠠᠷᠢᠴᠠᠭᠠᠲᠤ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'money bill1'),
+                      ('ᠢᠲᠡᠭᠡᠮᠵᠢᠲᠦ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'house chimney'),
+                      ('ᠢᠲᠡᠭᠡᠮᠵᠢᠲᠦ ᠺᠠᠷᠲ', 4, 'money check dollar'),
+                      ('ᠪᠣᠰᠤᠳ ᠵᠢᠭᠡᠯᠡᠯᠭᠡ', 4, 'credit card'),
 
-                      (' ᠭᠣᠣ᠎ᠠ ᠰᠠᠶ᠋ᠢᠬᠠᠨ', 5, 'teeth')
-                      ('ᠡᠮᠴᠢᠯᠡᢉᠡ', 5, 'user doctor')
-                      ('ᠰᠢᠨᠵᠢᠯᠡᢉᠡ', 5, 'prescription bottle')
-                      ('ᠡᠮ ᠦᠨ ᠵᠥᠢᠯ', 5, 'suitcase medical')
-                      ('ᠰᠣᠪᠢᠯᠭ᠎ᠠ', 5, 'bed pulse')
+                      (' ᠭᠣᠣ᠎ᠠ ᠰᠠᠶ᠋ᠢᠬᠠᠨ', 5, 'teeth'),
+                      ('ᠡᠮᠴᠢᠯᠡᢉᠡ', 5, 'user doctor'),
+                      ('ᠰᠢᠨᠵᠢᠯᠡᢉᠡ', 5, 'prescription bottle'),
+                      ('ᠡᠮ ᠦᠨ ᠵᠥᠢᠯ', 5, 'suitcase medical'),
+                      ('ᠰᠣᠪᠢᠯᠭ᠎ᠠ', 5, 'bed pulse'),
 
-                      ('ᠨᠣᠮ ᠳᠡᠪᠲᠡᠷ', 6, 'book')
-                      ('ᠰᠤᠷᠭᠠᠯᠲᠠ', 6, 'book open reader')
-                      ('ᠰᠤᠷᠭᠠᠭᠤᠯᠢ', 6, 'chalkboard user')
-                      ('ᠣᠶᠣᠨ ᠤ ᠦᠮᠴᠢ', 6, 'leanpub')
+                      ('ᠨᠣᠮ ᠳᠡᠪᠲᠡᠷ', 6, 'book'),
+                      ('ᠰᠤᠷᠭᠠᠯᠲᠠ', 6, 'book open reader'),
+                      ('ᠰᠤᠷᠭᠠᠭᠤᠯᠢ', 6, 'chalkboard user'),
+                      ('ᠣᠶᠣᠨ ᠤ ᠦᠮᠴᠢ', 6, 'leanpub'),
                       
-                      ('ᠪᠣᠯᠵᠤᠭ᠎ᠠ', 7, 'heart')
-                      ('ᠺᠢᠨᠤ᠋ ᠤᠷᠠᠯᠢᠭ', 7, 'film')
-                      ('ᠲᠣᠭᠯᠠᠭᠠᠮ', 7, 'chess knight')
-                      ('ᠳᠠᠭᠤᠤ', 7, 'music')
-                      ('ᠰᠫᠤᠷᠲ', 7, 'person skating')
-                      ('ᠠᠶᠠᠯᠠᠯ', 7, 'umbrella beach')
+                      ('ᠪᠣᠯᠵᠤᠭ᠎ᠠ', 7, 'heart'),
+                      ('ᠺᠢᠨᠤ᠋ ᠤᠷᠠᠯᠢᠭ', 7, 'film'),
+                      ('ᠲᠣᠭᠯᠠᠭᠠᠮ', 7, 'chess knight'),
+                      ('ᠳᠠᠭᠤᠤ', 7, 'music'),
+                      ('ᠰᠫᠤᠷᠲ', 7, 'person skating'),
+                      ('ᠠᠶᠠᠯᠠᠯ', 7, 'umbrella beach'),
                       
-                      ('ᠹᠣᠨ᠋ᠳ᠋', 8, 'scale balanced')
-                      ('ᠬᠣᠪᠢᠴᠠᠭ᠎ᠠ', 8, 'money bill trend up')
-                      ('ᠵᠢᠭᠡᠯᠡᠭᠦᠯᠬᠦ', 8, 'sack dollar')
+                      ('ᠹᠣᠨ᠋ᠳ᠋', 8, 'scale balanced'),
+                      ('ᠬᠣᠪᠢᠴᠠᠭ᠎ᠠ', 8, 'money bill trend up'),
+                      ('ᠵᠢᠭᠡᠯᠡᠭᠦᠯᠬᠦ', 8, 'sack dollar'),
                       
-                      ('ᠬᠦᠨᠳᠦᠯᠡᠯ ᠬᠠᠯᠠᠮᠵᠢᠯᠠᠯ', 9, 'comments dollar')
-                      ('ᠭᠠᠷᠤᠵᠠ', 9, 'coins')
-                      ('ᠪᠣᠰᠤᠳ', 9, 'piggy bank')
+                      ('ᠬᠦᠨᠳᠦᠯᠡᠯ ᠬᠠᠯᠠᠮᠵᠢᠯᠠᠯ', 9, 'comments dollar'),
+                      ('ᠭᠠᠷᠤᠵᠠ', 9, 'coins'),
+                      ('ᠪᠣᠰᠤᠳ', 9, 'piggy bank'),
                       
-                      ('ᠴᠠᠯᠢᠩ', 10, 'salary')
-                      ('ᠤᠷᠮᠠᠰᠢᠭᠤᠯᠤᠯ', 10, 'bonus')
-                      ('ᠴᠢᠯᠦᠭᠡᠨ ᠦ ᠠᠵᠢᠯ', 10, 'sideline')
-                      ('ᠨᠤᠭᠳᠠᠯ ᠠᠰᠢᠭ', 10, 'dividend')
+                      ('ᠴᠠᠯᠢᠩ', 10, 'salary'),
+                      ('ᠤᠷᠮᠠᠰᠢᠭᠤᠯᠤᠯ', 10, 'bonus'),
+                      ('ᠴᠢᠯᠦᠭᠡᠨ ᠦ ᠠᠵᠢᠯ', 10, 'sideline'),
+                      ('ᠨᠤᠭᠳᠠᠯ ᠠᠰᠢᠭ', 10, 'dividend'),
                       
-                      ('ᠹᠣᠨ᠋ᠳ᠋', 11, 'fund')
-                      ('ᠬᠣᠪᠢᠴᠠᠭ᠎ᠠ', 11, 'stock')
-                      ('ᠬᠦᠦ ᠮᠦᠩᠭᠦ', 11, 'interest')
+                      ('ᠹᠣᠨ᠋ᠳ᠋', 11, 'fund'),
+                      ('ᠬᠣᠪᠢᠴᠠᠭ᠎ᠠ', 11, 'stock'),
+                      ('ᠬᠦᠦ ᠮᠦᠩᠭᠦ', 11, 'interest'),
                       
-                      ('ᠲᠡᠳᠭᠦᠪᠦᠷᠢ', 12, 'alimony')
-                      ('ᠰᠤᠭᠤᠯᠤᠭ᠎ᠠ', 12, 'lottery')
-                      ('ᠪᠡᠯᠡᠭ', 12, 'gift')
-                      ('ᠪᠣᠰᠤᠳ', 12, 'other')
+                      ('ᠲᠡᠳᠭᠦᠪᠦᠷᠢ', 12, 'alimony'),
+                      ('ᠰᠤᠭᠤᠯᠤᠭ᠎ᠠ', 12, 'lottery'),
+                      ('ᠪᠡᠯᠡᠭ', 12, 'gift'),
+                      ('ᠪᠣᠰᠤᠳ', 12, 'other');
                       
                       ")
         (perf/set-int "db-version" 1))

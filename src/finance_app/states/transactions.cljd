@@ -1,6 +1,15 @@
-(ns finance-app.states.transactions)
+(ns finance-app.states.transactions
+  (:require
+   [finance-app.services.transaction :as transaction-service]
+   [finance-app.states.global :as gs]))
 
 (def transactions
   [["Rent" "20231015" "-300"]
    ["Insurance" "20231020" "-2100"]
    ["Funds added!" "20231023" "+100000"]])
+
+(defn query-transactions [m]
+  (when (empty? (get @gs/state (str "trans-" m)))
+    (let [trans (await (transaction-service/query-transactions m))]
+      (swap! gs/state assoc (str "trans-" m) trans))))
+
