@@ -11,7 +11,9 @@
    [finance-app.utils.colors :as colors]
    [finance-app.states.transactions :as transactions]
    [finance-app.states.categories :as categories]
-   [finance-app.utils.datetime :as datetime]))
+   [finance-app.states.global :as gs]
+   [finance-app.utils.datetime :as datetime]
+   [finance-app.services.pref :as pref]))
 
 (def screen
   (f/widget
@@ -21,13 +23,18 @@
     .floatingActionButton 
     (m/FloatingActionButton 
      .onPressed (fn [] ;(dart:core/print "xxxx")
-                  ;; (dart:core/print (categories/get-types))
+                  ;; (pref/remove-value "db-version")
+                  ;; (categories/get-sub-types 1))
                   (tab.PersistentNavBarNavigator/pushNewScreen
                    ctx
                    .screen
                    (add-record/screen ctx)
                    .withNavBar false)
                   (categories/all-categories)
+                  (swap! gs/state assoc :type 1)
+                  (swap! gs/state assoc :subtypes (categories/get-sub-types 1))
+                  (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))
+                  (swap! gs/state assoc :cates (categories/get-cates))
                   nil)
      .child (m/Icon m.Icons/add)))
    .body

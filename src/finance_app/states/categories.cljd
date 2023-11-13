@@ -14,7 +14,10 @@
   (let [types (:types @gs/state)]
     (filter #(zero? (get % "types_of")) types)))
 
-(defn get-sub-types []
-  (let [t (:type @gs/state)
-        types (:types @gs/state)]
+(defn get-sub-types [t]
+  (let [types (:types @gs/state)]
     (filter #(= t (get % "types_of")) types)))
+
+(defn get-cates []
+  (filter #(= (:subtype @gs/state) (get % "types_of")) 
+          (:categories @gs/state)))

@@ -6,7 +6,8 @@
    [finance-app.states.global :as gs]
    [finance-app.states.categories :as categories-state]
    [finance-app.utils.icons :as icons]
-   [finance-app.utils.colors :as colors]))
+   [finance-app.utils.colors :as colors]
+   [finance-app.states.categories :as categories]))
 
 (defn view [items]
   (f/widget
@@ -28,101 +29,104 @@
                                                  "Expense"
                                                  (:text (nth items i))))])))))
 
-(defn tab-view [tab-index info]
-  (let [tab-sub-index (atom 0)]
-    (f/widget
-     :context ctx
-     :watch [curr-sub-tab tab-sub-index
-             curr-tab tab-index]
-     (m/Container
-      .color (if (nil? (:bg-color info))
-               (-> m/Theme (.of ctx) .-canvasColor)
-               (:bg-color info)))
-     (m/Column
-      .mainAxisSize m.MainAxisSize/min
-      .children
-      [(f/widget
-        (m/Expanded)
-        (m/Row
-         .children
-         [(f/widget
-           (m/Container
-            .width 40)
-           (m.ListView/builder
-            .itemCount (count (get icons/class-names curr-tab))
-            .itemBuilder
-            (fn [context i]
-              (m/Stack
-               .children
-               [(m/Positioned
-                 .top 2
-                 .bottom 2
-                 .left 0
-                 .child
-                 (if (= curr-sub-tab i)
-                   (m/Container .color colors/green
-                                .width 1)
-                   (m/SizedBox)))
-                (m/GestureDetector
-                 .onTap (fn []
-                          (reset! tab-sub-index i)
-                          nil)
-                 .child (m/Container
-                         .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
-                         .child (mgl/MongolText (-> icons/class-names (get 0) (get i)))))]))))
-          (m/VerticalDivider)
-          (f/widget
-           (m/Expanded)
-           (view (map (fn [[k v]] (hash-map :icon v :text k))
-                      (select-keys icons/icons (-> icons/classified (get curr-tab) (get curr-sub-tab))))))]))]))))
-
-(def main-tab-list ["ᠵᠠᠷᠤᠯᠭ᠎ᠠ" 
-                    "ᠣᠷᠤᠯᠭ᠎ᠠ"])
+(defn tab-view [info]
+  (f/widget
+   :context ctx
+   :watch [{curr-sub-tab :subtype
+            subtypes :subtypes
+            curr-tab :tab
+            cates :cates} gs/state]
+   (m/Container
+    .color (if (nil? (:bg-color info))
+             (-> m/Theme (.of ctx) .-canvasColor)
+             (:bg-color info)))
+   (m/Column
+    .mainAxisSize m.MainAxisSize/min
+    .children
+    [(f/widget
+      (m/Expanded)
+      (m/Row
+       .children
+       [(f/widget
+         (m/Container
+          .width 40)
+         (m.ListView/builder
+          .itemCount (count subtypes)
+          .itemBuilder
+          (fn [context i]
+            (m/Stack
+             .children
+             [(m/Positioned
+               .top 2
+               .bottom 2
+               .left 0
+               .child
+               (if (= curr-sub-tab (-> subtypes (nth i) (get "id")))
+                 (m/Container .color colors/green
+                              .width 1)
+                 (m/SizedBox)))
+              (m/GestureDetector
+               .onTap (fn []
+                        (swap! gs/state assoc :subtype (-> subtypes (nth i) (get "id")))
+                        (swap! gs/state assoc :cates (categories/get-cates))
+                        nil)
+               .child (m/Container
+                       .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
+                       .child (mgl/MongolText (-> subtypes (nth i) (get "name")))))]))))
+        (m/VerticalDivider)
+        (f/widget
+         (m/Expanded)
+        ;;  (view (map (fn [[k v]] (hash-map :icon v :text k))
+                    ;; (select-keys icons/icons (categories/get-sub-types curr-tab))
+         (view (map (fn [v] (hash-map :icon (get icons/icons (get v "icon_name")) :text (get v "content")))
+                    cates)))]))])))
 
 (defn main-tab [info]
-  (let [tab-index (atom 0)]
-    (f/widget
-     :context ctx
-     :watch [curr-tab tab-index]
-     (m/Container
-      .color (if (nil? (:bg-color info))
-               (-> m/Theme (.of ctx) .-canvasColor)
-               (:bg-color info)))
-     (m/Column
-      .mainAxisSize m.MainAxisSize/min
-      .children
-      [(f/widget
-        (m/Expanded)
-        (m/Row
-         .children
-         [(f/widget
-           (m/Container
-            .width 48)
-           (m.ListView/builder
-            .itemCount 2 
-            .itemBuilder
-            (fn [context i]
-              (m/Stack
-               .children
-               [(m/Positioned
-                 .top 2
-                 .bottom 2
-                 .left 0
-                 .child
-                 (if (= i curr-tab)
-                   (m/Container .color colors/green
-                                .width 1)
-                   (m/SizedBox)))
-                (m/GestureDetector
-                 .onTap (fn []
-                          (reset! tab-index i)
-                          nil)
-                 .child (m/Container
-                         .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
-                         .child (mgl/MongolText (-> (categories-state/get-types) (get i) (get "name"))
-                                                .style (m/TextStyle .fontSize 20
-                                                                    .color colors/green))))]))))
-          (m/VerticalDivider)
-          (f/widget
-           (m/Expanded)
-           (tab-view tab-index nil))]))]))))
+  (f/widget
+   :context ctx
+   :watch [{curr-tab :type} gs/state]
+   (m/Container
+    .color (if (nil? (:bg-color info))
+             (-> m/Theme (.of ctx) .-canvasColor)
+             (:bg-color info)))
+   (m/Column
+    .mainAxisSize m.MainAxisSize/min
+    .children
+    [(f/widget
+      (m/Expanded)
+      (m/Row
+       .children
+       [(f/widget
+         (m/Container
+          .width 48)
+         (m.ListView/builder
+          .itemCount 2
+          .itemBuilder
+          (fn [context i]
+            (m/Stack
+             .children
+             [(m/Positioned
+               .top 2
+               .bottom 2
+               .left 0
+               .child
+               (if (= i (dec curr-tab))
+                 (m/Container .color colors/green
+                              .width 1)
+                 (m/SizedBox)))
+              (m/GestureDetector
+               .onTap (fn []
+                        (swap! gs/state assoc :type (inc i))
+                        (swap! gs/state assoc :subtypes (categories/get-sub-types (inc i)))
+                        (swap! gs/state assoc :subtype (-> (categories/get-sub-types (inc i)) (first) (get "id")))
+                        (swap! gs/state assoc :cates (categories/get-cates))
+                        nil)
+               .child (m/Container
+                       .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
+                       .child (mgl/MongolText (-> (categories-state/get-types) (get i) (get "name"))
+                                              .style (m/TextStyle .fontSize 20
+                                                                  .color colors/green))))]))))
+        (m/VerticalDivider)
+        (f/widget
+         (m/Expanded)
+         (tab-view nil))]))])))
