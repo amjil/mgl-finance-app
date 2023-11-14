@@ -13,6 +13,7 @@
   (f/widget
    :context ctx
    :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+   :watch [{curr-cate :curr-cate} gs/state]
    (m.GridView/builder
     .scrollDirection m.Axis/horizontal
     .gridDelegate (m/SliverGridDelegateWithFixedCrossAxisCount
@@ -20,14 +21,31 @@
                    .childAspectRatio 1.0)
     .itemCount (count items)
     .itemBuilder (fn [context i]
-                   (m/Row
-                    .children [(m/Icon (if (nil? (:icon (nth items i)))
-                                         m.Icons/ac_unit
-                                         (:icon (nth items i))))
-                               (m/SizedBox .width 10)
-                               (mgl/MongolText (if (empty? (:text (nth items i)))
-                                                 "Expense"
-                                                 (:text (nth items i))))])))))
+                   (f/widget
+                    (m/GestureDetector
+                     .onTap (fn []
+                              (swap! gs/state assoc :curr-cate (get (nth items i) :id))))
+                    (m/Container
+                     .color m.Colors/transparent)
+                    (m/Padding
+                     .padding (m.EdgeInsets/symmetric .vertical 10))
+                    (m/Row
+                     .children [(m/Icon (if (nil? (:icon (nth items i)))
+                                          m.Icons/ac_unit
+                                          (:icon (nth items i)))
+                                        .color (if (and (not (nil? curr-cate))
+                                                        (= (get (nth items i) :id) curr-cate))
+                                                 colors/green
+                                                 nil))
+                                (m/SizedBox .width 10)
+                                (mgl/MongolText (if (empty? (:text (nth items i)))
+                                                  "Expense"
+                                                  (:text (nth items i)))
+                                                .style (m/TextStyle
+                                                        .color (if (and (not (nil? curr-cate))
+                                                                        (= (get (nth items i) :id) curr-cate))
+                                                                 colors/green
+                                                                 nil)))]))))))
 
 (defn tab-view [info]
   (f/widget
@@ -76,9 +94,9 @@
         (m/VerticalDivider)
         (f/widget
          (m/Expanded)
-        ;;  (view (map (fn [[k v]] (hash-map :icon v :text k))
-                    ;; (select-keys icons/icons (categories/get-sub-types curr-tab))
-         (view (map (fn [v] (hash-map :icon (get icons/icons (get v "icon_name")) :text (get v "content")))
+         (view (map (fn [v] (hash-map :icon (get icons/icons (get v "icon_name")) 
+                                      :text (get v "content")
+                                      :id (get v "id")))
                     cates)))]))])))
 
 (defn main-tab [info]

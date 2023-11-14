@@ -1,7 +1,9 @@
 (ns finance-app.widgets.num-keyboard
   (:require 
    ["package:flutter/material.dart" :as m]
-   [cljd.flutter.alpha2 :as f]))
+   ["package:font_awesome_flutter/font_awesome_flutter.dart" :as font-awesome]
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.utils.colors :as colors]))
 
 (defn base-button [v child on-tap]
   (m/InkWell
@@ -61,4 +63,8 @@
                 .children [(num-button "C" nil #(set! (.-text controller) ""))
                            (num-button "0" nil #(on-tap controller "0"))
                            (num-button "." nil #(on-tap controller "."))
-                           (icon-button m.Icons/keyboard_backspace_outlined #(dart:core/print "yes"))])])))
+                           (base-button
+                            "confirm"
+                            (m/Icon font-awesome.FontAwesomeIcons/check
+                                    .color colors/green)
+                            #(dart:core/print "yes"))])])))

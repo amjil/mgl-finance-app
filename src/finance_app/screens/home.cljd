@@ -30,7 +30,7 @@
                    .screen
                    (add-record/screen ctx)
                    .withNavBar false)
-                  (categories/all-categories)
+                  (await (categories/all-categories))
                   (swap! gs/state assoc :type 1)
                   (swap! gs/state assoc :subtypes (categories/get-sub-types 1))
                   (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))

@@ -49,9 +49,13 @@
        .child
        (mgl/MongolText
         (if (empty? r)
-          "information for the bill"
+          "ᠳᠠᠩᠰᠠᠨ ᠤ ᠪᠣᠰᠤᠳ ᠨᠡᠮᠡᠯᠲᠡ ᠲᠠᠢᠯᠪᠦᠷᠢ ᠪᠠᠨ ᠪᠢᠴᠢᠭᠡᠷᠡᠢ"
           r)
-        .style (m/TextStyle .fontSize 18)))
+        .style (m/TextStyle .fontSize 20
+                            .color (if (empty? r)
+                                     colors/grey-text
+                                     colors/green)
+                            .fontWeight m.FontWeight/w400)))
       (mgl/MongolText
        (if (empty? v)
          "0.00"

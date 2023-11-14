@@ -20,10 +20,10 @@
     (cond
       (nil? result)
       (do
-        (.execute db "CREATE TABLE IF NOT EXISTS category_types(id integer primary key AUTOINCREMENT, name varchar(80), types_of smallint)")
-        (.execute db "CREATE TABLE IF NOT EXISTS categories(id integer primary key AUTOINCREMENT, content text, types_of integer, icon_name varchar(100), default_order smallint DEFAULT 0, enabled smallint DEFAULT 1)")
-        (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, transaction_time datetime DEFAULT CURRENT_TIMESTAMP, created_at datetime DEFAULT CURRENT_TIMESTAMP)")
-        (.execute db "INSERT INTO category_types(name, types_of)
+        (await (.execute db "CREATE TABLE IF NOT EXISTS category_types(id integer primary key AUTOINCREMENT, name varchar(80), types_of smallint)"))
+        (await (.execute db "CREATE TABLE IF NOT EXISTS categories(id integer primary key AUTOINCREMENT, content text, types_of integer, icon_name varchar(100), default_order smallint DEFAULT 0, enabled smallint DEFAULT 1)"))
+        (await (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, transaction_time datetime DEFAULT CURRENT_TIMESTAMP, created_at datetime DEFAULT CURRENT_TIMESTAMP)"))
+        (await (.execute db "INSERT INTO category_types(name, types_of)
                       VALUES
                       ('ᠵᠠᠷᠤᠯᠭ᠎ᠠ', 0),
                       ('ᠣᠷᠤᠯᠭ᠎ᠠ', 0),
@@ -39,13 +39,13 @@
                       ('ᠴᠠᠯᠢᠩ', 2),
                       ('ᠬᠦᠷᠦᠩᠭᠡᠵᠢᠯᠲᠡ', 2),
                       ('ᠪᠣᠰᠤᠳ', 2);
-                      ")
-        (.execute db "INSERT INTO categories(content, types_of, icon_name)
+                      "))
+        (await (.execute db "INSERT INTO categories(content, types_of, icon_name)
                       VALUES
                       ('ᠥᠷᠯᠥᠭᠡ ᠶᠢᠨ ᠴᠠᠢ', 3, 'breakfast'),
                       ('ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 3, 'lunch'),
                       ('ᠣᠷᠣᠢ ᠶᠢᠨ ᠬᠣᠭᠤᠯᠠ', 3, 'dinner'),
-                      ('ᠵᠠᠭᠤᠰᠢ', 3, 'snack'),
+                      ('ᠰᠤᠯᠠ ᠢᠳᠡᠭᠡᠨ', 3, 'snack'),
                       ('ᠵᠢᠮᠢᠰ', 3, 'fruit'),
                       ('ᠤᠮᠳᠠᠭᠠᠨ', 3, 'drink'),
                       ('ᠨᠣᠭᠤᠭ᠎ᠠ ᠴᠠᠭ᠎ᠠ', 3, 'vegetables'),
@@ -110,7 +110,7 @@
                       ('ᠪᠡᠯᠡᠭ', 14, 'gift'),
                       ('ᠪᠣᠰᠤᠳ', 14, 'other');
                       
-                      ")
+                      "))
         (perf/set-int "db-version" 1))
       :else (dart:core/print "init-database :else"))))
 
