@@ -1,0 +1,74 @@
+(ns finance-app.widgets.wheel-scroll
+  (:require 
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]))
+
+(def date-picker-options
+  {:item-extent 30.0
+   :diameter-ratio 3
+   :perspective 0.01
+   :loop? true})
+
+(def scroll-view-detail-options
+  {:label ""
+   :alignment (.center m/Alignment)
+   :margin (m.EdgeInsets/all 4)
+   :selected-text-style (m/TextStyle
+                         .fontSize 16
+                         .fontWeight (.w700 m/FontWeight))
+   :text-style (m/TextStyle
+                .fontSize 20
+                .fontWeight (.normal m/FontWeight))})
+
+(defn scroll-item [item selected]
+  (f/widget
+   (m/Container
+    .alignment (:alignment scroll-view-detail-options)
+    .child
+    (m/RotatedBox
+     .quarterTurns 1
+     .child
+     (mgl/MongolText
+      item
+      .style (if (true? selected)
+               (:selected-text-style scroll-view-detail-options)
+               (:text-style scroll-view-detail-options)))))))
+
+(defn scroll-view [controller info items]
+  (let [selected (atom 0)]
+    (f/widget
+     :context ctx
+     :watch [curr selected]
+     (m/Center)
+     (m/Container
+      .height (if (empty? (:height info))
+                80
+                (:height info))
+      .width (- (-> m/MediaQuery (.of ctx) .-size .-width) 60)
+      .margin (:margin scroll-view-detail-options))
+      (m/RotatedBox
+        .quarterTurns 3
+        .child
+        (.useDelegate
+         m/ListWheelScrollView
+         .itemExtent (:item-extent date-picker-options)
+         .diameterRatio (:diameter-ratio date-picker-options)
+         .magnification 1.4
+         .overAndUnderCenterOpacity 0.4
+         .controller controller
+         .physics (m/FixedExtentScrollPhysics)
+         .perspective (:perspective date-picker-options)
+         .onSelectedItemChanged (fn [i] (reset! selected i))
+         .childDelegate
+         (if (:loop? info)
+           (m/ListWheelChildLoopingListDelegate
+            .children
+            (map-indexed (fn [idx itm]
+                           (scroll-item itm (= curr idx)))
+                         items))
+           (m/ListWheelChildListDelegate
+            .children
+            (map-indexed (fn [idx itm]
+                           (scroll-item itm (= curr idx)))
+                         items))))))))

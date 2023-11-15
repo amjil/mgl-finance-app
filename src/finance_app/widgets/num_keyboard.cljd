@@ -31,8 +31,9 @@
 (defn on-tap [controller v]
   (set! (.-text controller) (str (.-text controller) v)))
 
-(defn keyboard [controller]
+(defn keyboard [value controller on-add]
   (f/widget
+   :watch [v value]
    (m/Container
     .padding (m.EdgeInsets/only .left 32 .right 32 .top 20)
     .alignment m.Alignment/center)
@@ -65,6 +66,9 @@
                            (num-button "." nil #(on-tap controller "."))
                            (base-button
                             "confirm"
-                            (m/Icon font-awesome.FontAwesomeIcons/check
-                                    .color colors/green)
-                            #(dart:core/print "yes"))])])))
+                            (if (empty? v)
+                              (m/Icon m.Icons/keyboard_backspace
+                                      .color colors/grey)
+                              (m/Icon font-awesome.FontAwesomeIcons/check
+                                      .color colors/green))
+                            on-add)])])))

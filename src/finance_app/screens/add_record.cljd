@@ -7,9 +7,12 @@
    [finance-app.widgets.button :as button]
    [finance-app.widgets.num-keyboard :as num-keyboard]
    [finance-app.widgets.floating-input :as floating-input]
-   [finance-app.states.global :as gs]
+   [finance-app.widgets.category :as category]
+   [finance-app.widgets.bottom-sheet :as bottom-sheet]
    [finance-app.utils.colors :as colors]
-   [finance-app.widgets.category :as category]))
+   [finance-app.utils.datetime :as datetime]
+   [finance-app.states.global :as gs]
+   [finance-app.states.transactions :as transactions]))
 
 (declare on-add)
 
@@ -26,13 +29,15 @@
      :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
                   (reset! amount input-text))
 
-     (m/Scaffold)
+     (m/Scaffold
+      ;; .drawer ()
+      )
      .body
      (m/SafeArea)
      (m/Stack
       .children
       [(m/LayoutBuilder
-        .builder (fn [context ^m/BoxConstraints constraints]
+        .builder (fn [^m/BuildContext context ^m/BoxConstraints constraints]
                    (m/Column
                     .crossAxisAlignment m.CrossAxisAlignment/start
                     .children [(m/IconButton
@@ -46,11 +51,36 @@
                                             (m/Expanded
                                              .child
                                              (category/main-tab nil))
+                                            (m/SizedBox
+                                             .width (* 0.02 (.-maxWidth constraints))
+                                             .child (m/Container
+                                                     .color (-> m/Theme (.of ctx) .-canvasColor)))
+                                            (m/Container
+                                             .width (* 0.09 (.-maxWidth constraints))
+                                             .color (-> m/Theme (.of ctx) .-canvasColor)
+                                             .child (m/Column
+                                                     .mainAxisAlignment m.MainAxisAlignment/end
+                                                     .children [(m/Container
+                                                                 .decoration
+                                                                 (m/BoxDecoration .color colors/grey-text-field
+                                                                                  .borderRadius
+                                                                                  (.all m/BorderRadius (.circular m/Radius 4)))
+                                                                 .child
+                                                                 (mgl/MongolTextButton
+                                                                  .onPressed (fn []
+                                                                               (bottom-sheet/show-bottom-sheet context)
+                                                                               nil)
+                                                                  .child
+                                                                  (m/Column
+                                                                   .mainAxisAlignment m.MainAxisAlignment/center
+                                                                   .crossAxisAlignment m.CrossAxisAlignment/end
+                                                                   .children [(m/Icon m.Icons/calendar_month)
+                                                                              (mgl/MongolText (datetime/current-year-month "HH:MM"))])))]))
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                                             (custom-field/num-field text-controller amount text-value)
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
                                (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (num-keyboard/keyboard amount-controller)])))
+                               (num-keyboard/keyboard amount amount-controller #(on-add amount text-value))])))
        (if (true? floating-input)
          (floating-input/input-box text-value)
          (m/SizedBox))]))))
@@ -59,5 +89,10 @@
 (defn ^m/Widget screen [ctx]
   (create-record))
 
-(defn on-add []
-  )
+(defn on-add [value remark]
+  (let [info {:catetory_id (:curr-cate @gs/state)
+              :content @remark
+              :types_of (:subtype @gs/state)
+              :amount @value
+              :transaction_time nil}]
+    (transactions/create-transaction info)))

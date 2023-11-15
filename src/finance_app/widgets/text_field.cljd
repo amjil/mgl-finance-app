@@ -1,6 +1,7 @@
 (ns finance-app.widgets.text-field
   (:require
    ["package:flutter/material.dart" :as m]
+   ["package:flutter/painting.dart" :as paint]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:math_expressions/math_expressions.dart" :as exp]
    [cljd.flutter.alpha2 :as f]
@@ -39,31 +40,43 @@
     .padding (m.EdgeInsets/symmetric .vertical 10)
     .width 60
     .child
-    (m/Column
-     .mainAxisSize m.MainAxisSize/max
-     .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+    (m/Stack
      .children
-     [(m/GestureDetector
-       .onTap (fn []
-                (gs/open-floating-input controller))
+     [(m/Align
+       .alignment m.Alignment/topCenter
+       .child
+       (m/GestureDetector
+        .onTap (fn []
+                 (gs/open-floating-input controller)
+                 (swap! gs/state assoc :keyboard/return-mode :single-line))
+        .child
+        (f/widget
+         :context ctx
+         :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+         (m/Container
+          .height (* 0.8 h)
+          .child
+          (mgl/MongolText
+           (if (empty? r)
+             "ᠳᠠᠩᠰᠠᠨ ᠤ ᠪᠣᠰᠤᠳ ᠨᠡᠮᠡᠯᠲᠡ ᠲᠠᠢᠯᠪᠦᠷᠢ ᠪᠠᠨ ᠪᠢᠴᠢᠭᠡᠷᠡᠢ"
+             r)
+           .maxLines nil 
+           .style (m/TextStyle .fontSize 20
+                               .color (if (empty? r)
+                                        colors/grey-text
+                                        colors/green)
+                               .fontWeight m.FontWeight/w400))))))
+      (m/Align
+       .alignment m.Alignment/bottomCenter
        .child
        (mgl/MongolText
-        (if (empty? r)
-          "ᠳᠠᠩᠰᠠᠨ ᠤ ᠪᠣᠰᠤᠳ ᠨᠡᠮᠡᠯᠲᠡ ᠲᠠᠢᠯᠪᠦᠷᠢ ᠪᠠᠨ ᠪᠢᠴᠢᠭᠡᠷᠡᠢ"
-          r)
-        .style (m/TextStyle .fontSize 20
-                            .color (if (empty? r)
-                                     colors/grey-text
-                                     colors/green)
-                            .fontWeight m.FontWeight/w400)))
-      (mgl/MongolText
-       (if (empty? v)
-         "0.00"
-         (let [v (if (or (clojure.string/ends-with? v "+")
-                         (clojure.string/ends-with? v "-")
-                         (clojure.string/ends-with? v "."))
-                   (str v "0")
-                   v)]
-           (str (.evaluate (.parse p v) exp.EvaluationType/REAL (exp/ContextModel)))))
-       .style (m/TextStyle .fontSize 24
-                           .color m.Colors/red))]))))
+        (if (empty? v)
+          "0.00"
+          (let [v (if (or (clojure.string/ends-with? v "+")
+                          (clojure.string/ends-with? v "-")
+                          (clojure.string/ends-with? v "."))
+                    (str v "0")
+                    v)]
+            (str (.evaluate (.parse p v) exp.EvaluationType/REAL (exp/ContextModel)))))
+        .style (m/TextStyle .fontSize 24
+                            .color m.Colors/red)))]))))

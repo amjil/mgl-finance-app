@@ -1,0 +1,37 @@
+(ns finance-app.widgets.bottom-sheet
+  (:require 
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.widgets.wheel-scroll :as wheel-scroll]
+   [finance-app.utils.colors :as colors]))
+
+(defn show-bottom-sheet [^m/BuildContext ctx ]
+  (-> m/Scaffold
+      (.of ctx)
+      (.showBottomSheet
+       (fn [^m/BuildContext context]
+         (f/widget
+          (m/MediaQuery 
+           .data (.fromWindow m/MediaQueryData
+                              (-> m/WidgetsBinding .-instance .-window)))
+          (m/Container .height (* 0.86 (-> m/MediaQuery (.of ctx) .-size .-height)))
+          (m/SafeArea)
+          (m/Row
+           .children
+           [(m/Column
+             .mainAxisAlignment m.MainAxisAlignment/center
+             .children [(wheel-scroll/scroll-view nil {:loop? false} ["1" "2" "3" "4" "5" "6"])
+                        (wheel-scroll/scroll-view nil {:loop? false} ["1" "2" "3" "4" "5" "6"])])
+            (m/Column
+             .mainAxisAlignment m.MainAxisAlignment/end
+             .children
+             [(m/Container
+               .decoration
+               (m/BoxDecoration .color colors/grey-text-field
+                                .borderRadius
+                                (.all m/BorderRadius (.circular m/Radius 4)))
+               .child
+              (mgl/MongolTextButton
+               .onPressed (fn [] (dart:core/print "xxxx"))
+               .child (mgl/MongolText "ABC")))])]))))))

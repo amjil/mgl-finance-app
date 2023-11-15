@@ -90,7 +90,9 @@
                         nil)
                .child (m/Container
                        .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
-                       .child (mgl/MongolText (-> subtypes (nth i) (get "name")))))]))))
+                       .child (mgl/MongolText (if (empty? (-> subtypes (nth i) (get "name")))
+                                                "content"
+                                                (-> subtypes (nth i) (get "name"))))))]))))
         (m/VerticalDivider)
         (f/widget
          (m/Expanded)
@@ -141,7 +143,9 @@
                         nil)
                .child (m/Container
                        .padding (m.EdgeInsets/only .left 16 .right 10 .top 20 .bottom 20)
-                       .child (mgl/MongolText (-> (categories-state/get-types) (get i) (get "name"))
+                       .child (mgl/MongolText (if (empty? (-> (categories-state/get-types) (get i) (get "name")))
+                                                ""
+                                                (-> (categories-state/get-types) (get i) (get "name")))
                                               .style (m/TextStyle .fontSize 20
                                                                   .color colors/green))))]))))
         (m/VerticalDivider)
