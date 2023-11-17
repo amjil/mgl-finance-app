@@ -12,9 +12,10 @@
 (defn query-transactions [m]
   (when (empty? (get @gs/state (str "trans-" m)))
     (let [trans (await (transaction-service/query-transactions m))]
-      (swap! gs/state assoc (str "trans-" m) trans))))
+      (swap! gs/state assoc "curr-month" (subs m 0 7))
+      (swap! gs/state assoc (subs m 0 7) trans))))
 
 (defn create-transaction [m]
   (transaction-service/create-transaction m)
-  (let [curr-month (datetime/current-year-month "yy-mm")]
+  (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
     (query-transactions curr-month)))

@@ -22,7 +22,7 @@
       (do
         (await (.execute db "CREATE TABLE IF NOT EXISTS category_types(id integer primary key AUTOINCREMENT, name varchar(80), types_of smallint)"))
         (await (.execute db "CREATE TABLE IF NOT EXISTS categories(id integer primary key AUTOINCREMENT, content text, types_of integer, icon_name varchar(100), default_order smallint DEFAULT 0, enabled smallint DEFAULT 1)"))
-        (await (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer, category_id integer, content varchar(200), types_of smallint, amount numeric, transaction_time datetime DEFAULT CURRENT_TIMESTAMP, created_at datetime DEFAULT CURRENT_TIMESTAMP)"))
+        (await (.execute db "CREATE TABLE IF NOT EXISTS transactions(id integer primary key AUTOINCREMENT, category_id integer, content varchar(200), types_of smallint, amount numeric, transaction_time datetime DEFAULT CURRENT_TIMESTAMP, created_at datetime DEFAULT CURRENT_TIMESTAMP)"))
         (await (.execute db "INSERT INTO category_types(name, types_of)
                       VALUES
                       ('ᠵᠠᠷᠤᠯᠭ᠎ᠠ', 0),
