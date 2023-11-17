@@ -5,7 +5,10 @@
         amjil/mongol-virtual-keyboard
         {:local/root "../mongol-virtual-keyboard"}
         amjil/mongol-menu-bar
-        {:local/root "../mongol-menu-bar"}}
+        {:local/root "../mongol-menu-bar"}
+        amjil/mongol-date-picker
+        {:git/url "https://github.com/amjil/mongol-date-picker.git"
+         :sha "aeb820f9382eaea82222936a2f4f43920e59b0a9"}}
  :aliases {:cljd {:main-opts ["-m" "cljd.build"]}}
  :cljd/opts {:kind :flutter
              :main finance-app.main}}

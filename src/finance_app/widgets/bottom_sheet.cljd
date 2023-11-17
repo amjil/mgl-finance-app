@@ -3,6 +3,8 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
+   [mongol-date-picker.picker :as picker]
+   [mongol-date-picker.util :as picker-util]
    [finance-app.widgets.wheel-scroll :as wheel-scroll]
    [finance-app.utils.colors :as colors]))
 
@@ -19,10 +21,7 @@
           (m/SafeArea)
           (m/Row
            .children
-           [(m/Column
-             .mainAxisAlignment m.MainAxisAlignment/center
-             .children [(wheel-scroll/scroll-view nil {:loop? false} ["1" "2" "3" "4" "5" "6"])
-                        (wheel-scroll/scroll-view nil {:loop? false} ["1" "2" "3" "4" "5" "6"])])
+           [(picker/datetime-picker (picker-util/default-state))
             (m/Column
              .mainAxisAlignment m.MainAxisAlignment/end
              .children
