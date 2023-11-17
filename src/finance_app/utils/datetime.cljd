@@ -7,3 +7,38 @@
   (let [date (.now DateTime)
         formatter (intl/DateFormat format)]
     (.format formatter date)))
+
+(defn get-value [state k]
+  (get-in @state [k :val]))
+
+(defn datetime-from-list [year month day hour minute]
+  (str year
+       "-"
+       (->
+        month
+        (.toString)
+        (.padLeft 2 "0"))
+       "-"
+       (->
+        day
+        (.toString)
+        (.padLeft 2 "0"))
+       " "
+       (->
+        hour
+        (.toString)
+        (.padLeft 2 "0"))
+       ":"
+       (->
+        minute
+        (.toString)
+        (.padLeft 2 "0"))
+       ":00"))
+  
+(defn datetime-from-state [state]
+  (datetime-from-list
+   (get-value state :year)
+   (get-value state :month)
+   (get-value state :day)
+   (get-value state :hour)
+   (get-value state :minute)))

@@ -12,8 +12,7 @@
    [finance-app.states.transactions :as transactions]
    [finance-app.states.categories :as categories]
    [finance-app.states.global :as gs]
-   [finance-app.utils.datetime :as datetime]
-   [finance-app.services.pref :as pref]))
+   [finance-app.utils.datetime :as datetime]))
 
 (def screen
   (f/widget
@@ -25,12 +24,13 @@
      .onPressed (fn [] ;(dart:core/print "xxxx")
                   ;; (pref/remove-value "db-version")
                   ;; (categories/get-sub-types 1))
+                  ;; (dart:core/print (await (sql/getDatabasesPath)))
+                  (await (categories/all-categories))
                   (tab.PersistentNavBarNavigator/pushNewScreen
                    ctx
                    .screen
                    (add-record/screen ctx)
                    .withNavBar false)
-                  (await (categories/all-categories))
                   (swap! gs/state assoc :type 1)
                   (swap! gs/state assoc :subtypes (categories/get-sub-types 1))
                   (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))

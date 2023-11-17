@@ -4,11 +4,10 @@
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
    [mongol-date-picker.picker :as picker]
-   [mongol-date-picker.util :as picker-util]
    [finance-app.widgets.wheel-scroll :as wheel-scroll]
    [finance-app.utils.colors :as colors]))
 
-(defn show-bottom-sheet [^m/BuildContext ctx ]
+(defn show-bottom-sheet [^m/BuildContext ctx state]
   (-> m/Scaffold
       (.of ctx)
       (.showBottomSheet
@@ -21,7 +20,7 @@
           (m/SafeArea)
           (m/Row
            .children
-           [(picker/datetime-picker (picker-util/default-state))
+           [(picker/datetime-picker state)
             (m/Column
              .mainAxisAlignment m.MainAxisAlignment/end
              .children

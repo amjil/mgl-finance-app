@@ -1,7 +1,8 @@
 (ns finance-app.states.transactions
   (:require
    [finance-app.services.transaction :as transaction-service]
-   [finance-app.states.global :as gs]))
+   [finance-app.states.global :as gs]
+   [finance-app.utils.datetime :as datetime]))
 
 (def transactions
   [["Rent" "20231015" "-300"]
@@ -13,3 +14,7 @@
     (let [trans (await (transaction-service/query-transactions m))]
       (swap! gs/state assoc (str "trans-" m) trans))))
 
+(defn create-transaction [m]
+  (transaction-service/create-transaction m)
+  (let [curr-month (datetime/current-year-month "yy-mm")]
+    (query-transactions curr-month)))

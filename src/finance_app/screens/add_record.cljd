@@ -3,6 +3,7 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
+   [mongol-date-picker.util :as picker-util]
    [finance-app.widgets.text-field :as custom-field]
    [finance-app.widgets.button :as button]
    [finance-app.widgets.num-keyboard :as num-keyboard]
@@ -11,6 +12,7 @@
    [finance-app.widgets.bottom-sheet :as bottom-sheet]
    [finance-app.utils.colors :as colors]
    [finance-app.utils.datetime :as datetime]
+   [finance-app.utils.util :as util]
    [finance-app.states.global :as gs]
    [finance-app.states.transactions :as transactions]))
 
@@ -18,7 +20,8 @@
 
 (defn create-record []
   (let [amount (atom nil)
-        text-value (atom nil)]
+        text-value (atom nil)
+        picker (picker-util/default-state)]
     (f/widget
      :context ctx
      :managed [amount-controller (m/TextEditingController)
@@ -29,9 +32,7 @@
      :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
                   (reset! amount input-text))
 
-     (m/Scaffold
-      ;; .drawer ()
-      )
+     (m/Scaffold)
      .body
      (m/SafeArea)
      (m/Stack
@@ -68,19 +69,19 @@
                                                                  .child
                                                                  (mgl/MongolTextButton
                                                                   .onPressed (fn []
-                                                                               (bottom-sheet/show-bottom-sheet context)
+                                                                               (bottom-sheet/show-bottom-sheet context picker)
                                                                                nil)
                                                                   .child
                                                                   (m/Column
                                                                    .mainAxisAlignment m.MainAxisAlignment/center
                                                                    .crossAxisAlignment m.CrossAxisAlignment/end
                                                                    .children [(m/Icon m.Icons/calendar_month)
-                                                                              (mgl/MongolText (datetime/current-year-month "HH:MM"))])))]))
+                                                                              (mgl/MongolText (str (get-in @picker [:hour :val]) ":" (get-in @picker [:minute :val])))])))]))
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
                                             (custom-field/num-field text-controller amount text-value)
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
                                (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (num-keyboard/keyboard amount amount-controller #(on-add amount text-value))])))
+                               (num-keyboard/keyboard amount amount-controller #(on-add ctx amount text-value picker))])))
        (if (true? floating-input)
          (floating-input/input-box text-value)
          (m/SizedBox))]))))
@@ -89,10 +90,13 @@
 (defn ^m/Widget screen [ctx]
   (create-record))
 
-(defn on-add [value remark]
-  (let [info {:catetory_id (:curr-cate @gs/state)
-              :content @remark
-              :types_of (:subtype @gs/state)
-              :amount @value
-              :transaction_time nil}]
-    (transactions/create-transaction info)))
+(defn on-add [ctx value remark picker-state]
+  (if (empty? @value)
+    (util/show-toast ctx "Zero is not accepted!")
+    (let [info {:catetory_id (:curr-cate @gs/state)
+                :content @remark
+                :types_of (:subtype @gs/state)
+                :amount @value
+                :transaction_time (datetime/datetime-from-state picker-state)}]
+      (transactions/create-transaction info)
+      (-> m/Navigator (.of ctx) .pop))))
