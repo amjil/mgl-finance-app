@@ -57,7 +57,7 @@
                                       .mainAxisAlignment m.MainAxisAlignment/center
                                       .children [(m/Icon m.Icons/calendar_month)
                                                  (m/Text
-                                                  (datetime/current-year-month "yyyy-MM"))]))
+                                                  curr-month)]))
                              (m/Align
                               .alignment m.Alignment/centerRight
                               .child (m/IconButton
@@ -67,33 +67,37 @@
                                       .onPressed (fn [] (dart:core/print "xxxx"))))])
                  (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
                  (m/Container
-                  .height (* 0.3 (.-maxHeight constraints))
+                  .height (* 0.24 (.-maxHeight constraints))
+                  .padding (m.EdgeInsets/symmetric .vertical 20)
                   .decoration (m/BoxDecoration .color (-> m/Theme (.of context) .-primaryColor)
                                                .borderRadius
                                                (.all m/BorderRadius (.circular m/Radius 20)))
                   .child (m/Row
                           .mainAxisAlignment m.MainAxisAlignment/spaceAround
-                          .children [(m/Row
+                          .children [(m/Column
+                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
                                       .children [(mgl/MongolText
-                                                  "Expose"
+                                                  "ᠵᠠᠷᠤᠯᠭ᠎ᠠ"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                                 (mgl/MongolText
+                                                 (m/Text
                                                   "8000"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                     (m/Row
-                                      .children [(mgl/MongolText "Incode"
-                                                                 .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                                 (mgl/MongolText
+                                     (m/VerticalDivider .color m.Colors/white)
+                                     (m/Column
+                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                      .children [(mgl/MongolText
+                                                  "ᠣᠷᠤᠯᠭ᠎ᠠ"
+                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                 (m/Text
                                                   "10000"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                     (m/Row
+                                     (m/VerticalDivider .color m.Colors/white)
+                                     (m/Column
+                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
                                       .children [(mgl/MongolText
-                                                  "Balance"
+                                                  "ᠬᠠᠳᠠᠭᠠᠯᠠᠮᠵᠢ"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                                 (mgl/MongolText
+                                                 (m/Text
                                                   "2000"
                                                   .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])]))
                  (f/widget
