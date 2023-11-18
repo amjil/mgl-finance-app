@@ -7,7 +7,7 @@
    [finance-app.widgets.wheel-scroll :as wheel-scroll]
    [finance-app.utils.colors :as colors]))
 
-(defn show-bottom-sheet [^m/BuildContext ctx state]
+(defn show-datetime-picker [^m/BuildContext ctx state]
   (-> m/Scaffold
       (.of ctx)
       (.showBottomSheet
@@ -33,3 +33,31 @@
               (mgl/MongolTextButton
                .onPressed (fn [] (dart:core/print "xxxx"))
                .child (mgl/MongolText "ABC")))])]))))))
+
+
+(defn show-month-picker [^m/BuildContext ctx state]
+  (-> m/Scaffold
+      (.of ctx)
+      (.showBottomSheet
+       (fn [^m/BuildContext context]
+         (f/widget
+          (m/MediaQuery
+           .data (.fromWindow m/MediaQueryData
+                              (-> m/WidgetsBinding .-instance .-window)))
+          (m/Container .height (* 0.86 (-> m/MediaQuery (.of ctx) .-size .-height)))
+          (m/SafeArea)
+          (m/Row
+           .children
+           [(picker/datetime-picker state)
+            (m/Column
+             .mainAxisAlignment m.MainAxisAlignment/end
+             .children
+             [(m/Container
+               .decoration
+               (m/BoxDecoration .color colors/grey-text-field
+                                .borderRadius
+                                (.all m/BorderRadius (.circular m/Radius 4)))
+               .child
+               (mgl/MongolTextButton
+                .onPressed (fn [] (dart:core/print "xxxx"))
+                .child (mgl/MongolText "ABC")))])]))))))

@@ -2,6 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
+   ["package:sqflite/sqflite.dart" :as sql]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
    [finance-app.screens.add-record :as add-record]
@@ -18,6 +19,8 @@
   (f/widget
    :get [m/Navigator]
    :context ctx
+   :watch [{curr-month :curr-month
+            trans :trans} gs/state]
    (m/Scaffold
     .floatingActionButton 
     (m/FloatingActionButton 
@@ -25,6 +28,7 @@
                   ;; (pref/remove-value "db-version")
                   ;; (categories/get-sub-types 1))
                   ;; (dart:core/print (await (sql/getDatabasesPath)))
+                  ;; (dart:core/print trans)
                   (await (categories/all-categories))
                   (tab.PersistentNavBarNavigator/pushNewScreen
                    ctx
@@ -103,12 +107,12 @@
                                .child
                                (m.ListView/separated
                                 .scrollDirection m.Axis/horizontal
-                                .itemCount (count transactions/transactions)
+                                .itemCount (count trans)
                                 .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
-                                .itemBuilder (fn [_ index]
+                                .itemBuilder (fn [_ i]
                                                (transaction-card/card
                                                 (* 0.05 (.-maxHeight constraints))
-                                                (nth (nth transactions/transactions index) 0)
-                                                (nth (nth transactions/transactions index) 1)
-                                                (nth (nth transactions/transactions index) 2)))))]))])))))
+                                                (-> trans (nth i) (get "content"))
+                                                (-> trans (nth i) (get "transaction_time"))
+                                                (-> trans (nth i) (get "amount") str)))))]))])))))
 

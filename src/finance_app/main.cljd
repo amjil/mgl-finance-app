@@ -6,13 +6,18 @@
    [cljd.flutter.alpha2 :as f]
    [virtual-keyboard.options :as keyboard-options]
    [finance-app.states.global :as gs]
+   [finance-app.states.transactions :as transactions]
    [finance-app.utils.themes :as themes]
+   [finance-app.utils.datetime :as datetime]
    [finance-app.widgets.navbar :as nav]
    [finance-app.screens.add-record :as add-record]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
   (await (.load dotenv/dotenv .fileName ".env"))
+  
+  (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
+    (transactions/query-transactions curr-month))
   
   (let [initial-theme (await (themes/initial-theme))] 
     (m/runApp

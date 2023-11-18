@@ -69,7 +69,7 @@
                                                                  .child
                                                                  (mgl/MongolTextButton
                                                                   .onPressed (fn []
-                                                                               (bottom-sheet/show-bottom-sheet context picker)
+                                                                               (bottom-sheet/show-datetime-picker context picker)
                                                                                nil)
                                                                   .child
                                                                   (m/Column
