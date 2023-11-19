@@ -5,9 +5,11 @@
    ["package:sqflite/sqflite.dart" :as sql]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
+   [mongol-date-picker.util :as picker-util]
    [finance-app.screens.add-record :as add-record]
    [finance-app.widgets.custom-card :as custom-card]
    [finance-app.widgets.transaction-card :as transaction-card]
+   [finance-app.widgets.bottom-sheet :as bottom-sheet]
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
    [finance-app.states.transactions :as transactions]
@@ -16,107 +18,116 @@
    [finance-app.utils.datetime :as datetime]))
 
 (def screen
-  (f/widget
-   :get [m/Navigator]
-   :context ctx
-   :watch [{curr-month :curr-month
-            trans :trans} gs/state]
-   (m/Scaffold
-    .floatingActionButton 
-    (m/FloatingActionButton 
-     .onPressed (fn [] ;(dart:core/print "xxxx")
+  (let [picker-state (picker-util/default-state)]
+    (f/widget
+     :get [m/Navigator]
+     :context ctx
+     :watch [{curr-month :curr-month
+              trans :trans} gs/state]
+     (m/Scaffold
+      .floatingActionButtonLocation m.FloatingActionButtonLocation/endContained
+      .floatingActionButton
+      (m/Padding
+       .padding (m.EdgeInsets/only .bottom 20)
+       .child
+       (m/FloatingActionButton
+        .onPressed (fn [] ;(dart:core/print "xxxx")
                   ;; (pref/remove-value "db-version")
                   ;; (categories/get-sub-types 1))
                   ;; (dart:core/print (await (sql/getDatabasesPath)))
                   ;; (dart:core/print trans)
-                  (await (categories/all-categories))
-                  (tab.PersistentNavBarNavigator/pushNewScreen
-                   ctx
-                   .screen
-                   (add-record/screen ctx)
-                   .withNavBar false)
-                  (swap! gs/state assoc :type 1)
-                  (swap! gs/state assoc :subtypes (categories/get-sub-types 1))
-                  (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))
-                  (swap! gs/state assoc :cates (categories/get-cates))
-                  nil)
-     .child (m/Icon m.Icons/add)))
-   .body
-   (m/SafeArea)
-   (m/Padding
-    .padding (.symmetric m/EdgeInsets .horizontal 16 .vertical 16))
-   (m/LayoutBuilder
-    .builder (fn [context ^m/BoxConstraints constraints]
-               (m/Column
-                .crossAxisAlignment m.CrossAxisAlignment/start
-                .children
-                [(m/Stack
-                  .children [(m/Align
-                              .alignment m.Alignment/center
-                              .child (m/Row
-                                      .mainAxisAlignment m.MainAxisAlignment/center
-                                      .children [(m/Icon m.Icons/calendar_month)
-                                                 (m/Text
-                                                  curr-month)]))
-                             (m/Align
-                              .alignment m.Alignment/centerRight
-                              .child (m/IconButton
-                                      .padding m.EdgeInsets/zero
-                                      .constraints (m/BoxConstraints)
-                                      .icon (m/Icon m.Icons/search)
-                                      .onPressed (fn [] (dart:core/print "xxxx"))))])
-                 (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                 (m/Container
-                  .height (* 0.24 (.-maxHeight constraints))
-                  .padding (m.EdgeInsets/symmetric .vertical 20)
-                  .decoration (m/BoxDecoration .color (-> m/Theme (.of context) .-primaryColor)
-                                               .borderRadius
-                                               (.all m/BorderRadius (.circular m/Radius 20)))
-                  .child (m/Row
-                          .mainAxisAlignment m.MainAxisAlignment/spaceAround
-                          .children [(m/Column
-                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                      .children [(mgl/MongolText
-                                                  "ᠵᠠᠷᠤᠯᠭ᠎ᠠ"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/Text
-                                                  "8000"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                     (m/VerticalDivider .color m.Colors/white)
-                                     (m/Column
-                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                      .children [(mgl/MongolText
-                                                  "ᠣᠷᠤᠯᠭ᠎ᠠ"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/Text
-                                                  "10000"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                     (m/VerticalDivider .color m.Colors/white)
-                                     (m/Column
-                                      .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                      .children [(mgl/MongolText
-                                                  "ᠬᠠᠳᠠᠭᠠᠯᠠᠮᠵᠢ"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                 (m/Text
-                                                  "2000"
-                                                  .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])]))
-                 (f/widget
-                  (m/Expanded)
-                  (m/Padding
-                   .padding (.symmetric m/EdgeInsets .vertical 20))
-                  (m/Row
-                   .crossAxisAlignment m.CrossAxisAlignment/start
-                   .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                              (m/Expanded
-                               .child
-                               (m.ListView/separated
-                                .scrollDirection m.Axis/horizontal
-                                .itemCount (count trans)
-                                .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
-                                .itemBuilder (fn [_ i]
-                                               (transaction-card/card
-                                                (* 0.05 (.-maxHeight constraints))
-                                                (-> trans (nth i) (get "content"))
-                                                (-> trans (nth i) (get "transaction_time"))
-                                                (-> trans (nth i) (get "amount") str)))))]))])))))
+                     (await (categories/all-categories))
+                     (tab.PersistentNavBarNavigator/pushNewScreen
+                      ctx
+                      .screen
+                      (add-record/screen ctx)
+                      .withNavBar false)
+                     (swap! gs/state assoc :type 1)
+                     (swap! gs/state assoc :subtypes (categories/get-sub-types 1))
+                     (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))
+                     (swap! gs/state assoc :cates (categories/get-cates))
+                     nil)
+        .child (m/Icon m.Icons/add))))
+     .body
+     (m/SafeArea)
+     (m/Padding
+      .padding (.symmetric m/EdgeInsets .horizontal 16 .vertical 16))
+     (m/LayoutBuilder
+      .builder (fn [context ^m/BoxConstraints constraints]
+                 (m/Column
+                  .crossAxisAlignment m.CrossAxisAlignment/start
+                  .children
+                  [(m/Stack
+                    .children [(m/Align
+                                .alignment m.Alignment/center
+                                .child (m/GestureDetector
+                                        .onTap (fn [] (bottom-sheet/show-month-picker context picker-state))
+                                        .child (m/Row
+                                                .mainAxisAlignment m.MainAxisAlignment/center
+                                                .children [(m/Icon m.Icons/calendar_month)
+                                                           (m/Text
+                                                            curr-month)])))
+                               (m/Align
+                                .alignment m.Alignment/centerRight
+                                .child (m/IconButton
+                                        .padding m.EdgeInsets/zero
+                                        .constraints (m/BoxConstraints)
+                                        .icon (m/Icon m.Icons/search)
+                                        .onPressed (fn [] (dart:core/print "xxxx"))))])
+                   (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                   (m/Container
+                    .height (* 0.24 (.-maxHeight constraints))
+                    .padding (m.EdgeInsets/symmetric .vertical 20)
+                    .decoration (m/BoxDecoration .color (-> m/Theme (.of context) .-primaryColor)
+                                                 .borderRadius
+                                                 (.all m/BorderRadius (.circular m/Radius 20)))
+                    .child (m/Row
+                            .mainAxisAlignment m.MainAxisAlignment/spaceAround
+                            .children [(m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
+                                       (m/Column
+                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                        .children [(mgl/MongolText
+                                                    "ᠵᠠᠷᠤᠯᠭ᠎ᠠ"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                   (m/Text
+                                                    "8000"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                                       (m/VerticalDivider .color m.Colors/white)
+                                       (m/Column
+                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                        .children [(mgl/MongolText
+                                                    "ᠣᠷᠤᠯᠭ᠎ᠠ"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                   (m/Text
+                                                    "10000"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                                       (m/VerticalDivider .color m.Colors/white)
+                                       (m/Column
+                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                        .children [(mgl/MongolText
+                                                    "ᠬᠠᠳᠠᠭᠠᠯᠠᠮᠵᠢ"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                                   (m/Text
+                                                    "2000"
+                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                                       (m/SizedBox .width (* 0.01 (.-maxWidth constraints)))]))
+                   (f/widget
+                    (m/Expanded)
+                    (m/Padding
+                     .padding (.symmetric m/EdgeInsets .vertical 20))
+                    (m/Row
+                     .crossAxisAlignment m.CrossAxisAlignment/start
+                     .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                (m/Expanded
+                                 .child
+                                 (m.ListView/separated
+                                  .scrollDirection m.Axis/horizontal
+                                  .itemCount (count trans)
+                                  .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
+                                  .itemBuilder (fn [_ i]
+                                                 (transaction-card/card
+                                                  (* 0.05 (.-maxHeight constraints))
+                                                  (-> trans (nth i) (get "content"))
+                                                  (-> trans (nth i) (get "transaction_time"))
+                                                  (-> trans (nth i) (get "amount") str)))))]))]))))))
 

@@ -36,6 +36,7 @@
 
 
 (defn show-month-picker [^m/BuildContext ctx state]
+  (swap! state assoc :keys [:year :month])
   (-> m/Scaffold
       (.of ctx)
       (.showBottomSheet
@@ -44,20 +45,8 @@
           (m/MediaQuery
            .data (.fromWindow m/MediaQueryData
                               (-> m/WidgetsBinding .-instance .-window)))
-          (m/Container .height (* 0.86 (-> m/MediaQuery (.of ctx) .-size .-height)))
+          (m/Container .height (* 0.48 (-> m/MediaQuery (.of ctx) .-size .-height)))
           (m/SafeArea)
           (m/Row
            .children
-           [(picker/datetime-picker state)
-            (m/Column
-             .mainAxisAlignment m.MainAxisAlignment/end
-             .children
-             [(m/Container
-               .decoration
-               (m/BoxDecoration .color colors/grey-text-field
-                                .borderRadius
-                                (.all m/BorderRadius (.circular m/Radius 4)))
-               .child
-               (mgl/MongolTextButton
-                .onPressed (fn [] (dart:core/print "xxxx"))
-                .child (mgl/MongolText "ABC")))])]))))))
+           [(picker/datetime-picker state)]))))))
