@@ -10,10 +10,9 @@
    ["Funds added!" "20231023" "+100000"]])
 
 (defn query-transactions [m]
-  (when (empty? (get @gs/state (str "trans-" m)))
-    (let [trans (await (transaction-service/query-transactions m))]
-      (swap! gs/state assoc :curr-month (subs m 0 7))
-      (swap! gs/state assoc :trans trans))))
+  (let [trans (await (transaction-service/query-transactions m))]
+    (swap! gs/state assoc :curr-month (subs m 0 7))
+    (swap! gs/state assoc :trans trans)))
 
 (defn create-transaction [m]
   (transaction-service/create-transaction m)

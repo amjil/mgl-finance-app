@@ -8,7 +8,7 @@
         {:local/root "../mongol-menu-bar"}
         amjil/mongol-date-picker
         {:git/url "https://github.com/amjil/mongol-date-picker.git"
-         :sha "8417a475be20a89a8f33d51adf1099f062237774"}}
+         :sha "4a9a7c8b3dcb058deb73efe31c540bd3616f0809"}}
  :aliases {:cljd {:main-opts ["-m" "cljd.build"]}}
  :cljd/opts {:kind :flutter
              :main finance-app.main}}
