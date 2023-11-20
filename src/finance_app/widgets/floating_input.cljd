@@ -15,7 +15,8 @@
    :get [:info]
    :let [w (-> m/MediaQuery (.of ctx) .-size .-width)
          text-controller (:keyboard/text-controller @gs/state)]
-   :watch [{candidates-list :keyboard/candidates-list} gs/state]
+   :watch [{candidates-list :keyboard/candidates-list} gs/state
+           text-value value]
    :bg-watcher ([^m/TextEditingValue {input-text .-text} text-controller]
                 (reset! value input-text))
    (m/Column
@@ -45,6 +46,7 @@
                       (.all m/BorderRadius (.circular m/Radius 10))
                       .border (.all m/Border .width 0.1))
          .constraints (m/BoxConstraints
+                       .minHeight double/infinity
                        .minWidth 100
                        .maxWidth (/ w 2))
          .child
@@ -54,8 +56,8 @@
           .decoration (m/InputDecoration
                        .border m.InputBorder/none)
           .showCursor true
-          .readOnly true
-          .maxLines nil))
+          .autofocus true
+          .readOnly true))
         (m/Positioned
          .bottom 10
          .right 0
