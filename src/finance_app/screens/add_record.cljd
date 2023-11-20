@@ -96,7 +96,9 @@
     (let [info {:catetory_id (:curr-cate @gs/state)
                 :content @remark
                 :types_of (:subtype @gs/state)
-                :amount @value
+                :amount (if (zero? (:type @gs/state))
+                          (- @value)
+                          @value)
                 :transaction_time (datetime/datetime-from-state picker-state)}]
       (transactions/create-transaction info)
       (-> m/Navigator (.of ctx) .pop))))

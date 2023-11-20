@@ -54,3 +54,47 @@
      (.rawDelete db
                  "DELETE FROM transactions WHERE id = ?"
                  [id]))))
+                 
+
+;;;;;
+(defn query-with-category [m c]
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT id, category_id, content, types_of, amount, transaction_time, created_at
+         FROM transactions a
+         where strftime('%Y',transaction_time) = strftime('%Y', ?) 
+            AND  strftime('%m',transaction_time) = strftime('%m', ?)
+            AND category_id = ?
+         ORDER BY id
+         ;"
+      [m m c]))))
+
+(defn daily-count [m]
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT strftime('%d', transaction_time) as day, b.types_of, sum(a.amount) as amount
+         FROM transactions a
+              left join category_types b on a.types_of = b.id
+         where strftime('%Y',transaction_time) = strftime('%Y', ?) 
+            AND  strftime('%m',transaction_time) = strftime('%m', ?)
+         group by strftime('%d', transaction_time), b.types_of
+         ;"
+      [m m]))))
+
+(defn category-count [m]
+  (let [^sqf/Database db (await (sql/initialize-db))]
+    (await
+     (.rawQuery
+      db
+      "SELECT b.id, b.content as category, sum(a.amount) as amount
+         FROM transactions a
+              left join categories b on a.category_id = b.id
+         where strftime('%Y',transaction_time) = strftime('%Y', ?) 
+            AND  strftime('%m',transaction_time) = strftime('%m', ?)
+         group by b.id, b.content
+         ;"
+      [m m]))))

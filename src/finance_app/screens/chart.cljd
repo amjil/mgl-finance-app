@@ -1,4 +1,4 @@
-(ns finance-app.screens.planning
+(ns finance-app.screens.chart
   (:require
    ["package:flutter/material.dart" :as m]
    [cljd.flutter.alpha2 :as f]))
@@ -6,9 +6,8 @@
 (def screen
   (f/widget
    (m/Scaffold
-    .appBar (m/AppBar
-             .title (m/Text "Budget"))
+    .appBar nil 
     .body
     (m/Center
      .child
-     (m/Text "Planning")))))
+     (m/Text "chart")))))

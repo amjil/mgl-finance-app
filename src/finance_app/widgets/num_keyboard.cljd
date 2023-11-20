@@ -28,10 +28,10 @@
    (m/Icon icon)
    on-tap))
 
-(defn on-tap [controller v]
+(defn on-tap [^m/TextEditingController controller v]
   (set! (.-text controller) (str (.-text controller) v)))
 
-(defn keyboard [value controller on-add]
+(defn keyboard [value ^m/TextEditingController controller on-add]
   (f/widget
    :watch [v value]
    (m/Container

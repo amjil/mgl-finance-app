@@ -15,7 +15,7 @@
                                   (init-database db))
                       .version 1)))
 
-(defn init-database [db]
+(defn init-database [^sql/Database db]
   (let [result (await (perf/get-int "db-version"))]
     (cond
       (nil? result)

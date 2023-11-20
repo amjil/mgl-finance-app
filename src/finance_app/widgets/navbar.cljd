@@ -7,7 +7,7 @@
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
    [finance-app.screens.home :as home]
-   [finance-app.screens.planning :as planning]
+   [finance-app.screens.chart :as planning]
    [finance-app.screens.profile :as profile]))
 
 (defn- nav-item [color icon]
