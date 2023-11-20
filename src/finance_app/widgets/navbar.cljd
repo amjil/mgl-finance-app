@@ -8,8 +8,7 @@
    [finance-app.utils.colors :as colors]
    [finance-app.screens.home :as home]
    [finance-app.screens.planning :as planning]
-   [finance-app.screens.profile :as profile]
-   [finance-app.screens.wallet :as wallet]))
+   [finance-app.screens.profile :as profile]))
 
 (defn- nav-item [color icon]
   (tab/PersistentBottomNavBarItem

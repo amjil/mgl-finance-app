@@ -23,7 +23,10 @@
       .crossAxisAlignment m.CrossAxisAlignment/start
       .mainAxisAlignment m.MainAxisAlignment/center
       .children
-      [(mgl/MongolText transaction-name .style (m/TextStyle .fontSize 16))
+      [(mgl/MongolText (if (empty? transaction-name) 
+                         ""
+                         transaction-name) 
+                       .style (m/TextStyle .fontSize 16))
        (m/SizedBox .width 2)
        (mgl/MongolText date-and-time .style (m/TextStyle .fontSize 12))])
      (m/Spacer)

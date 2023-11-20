@@ -1,0 +1,81 @@
+(ns finance-app.screens.search
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.widgets.transaction-card :as transaction-card]
+   [finance-app.widgets.floating-input :as floating-input]
+   [finance-app.states.global :as gs]
+   [finance-app.utils.colors :as colors]))
+
+(defn ^m/Widget screen [ctx]
+  (let [text-value (atom nil)]
+    (f/widget
+     :get [m/Navigator]
+     :context ctx
+     :managed [text-controller (m/TextEditingController)]
+     :watch [{trans :trans
+              floating-input :floating-input} gs/state
+             text text-value]
+     (m/Scaffold
+      .appBar nil)
+     .body
+     (m/SafeArea)
+     (m/Stack
+      .children
+      [(m/LayoutBuilder
+        .builder (fn [^m/BuildContext context ^m/BoxConstraints constraints]
+                   (m/Column
+                    .crossAxisAlignment m.CrossAxisAlignment/start
+                    .children [(m/IconButton
+                                .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                                .icon (m/Icon m.Icons/keyboard_backspace))
+                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                               (m/Expanded
+                                .child
+                                (m/Row
+                                 .children
+                                 [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                  (m/GestureDetector
+                                   .onTap (fn []
+                                            (gs/open-floating-input text-controller)
+                                            (swap! gs/state assoc :keyboard/return-callback 
+                                                   (fn [] 
+                                                     (swap! gs/state assoc :floating-input false)
+                                                     (reset! text-value (.-text text-controller))))
+                                            (swap! gs/state assoc :keyboard/return-mode :single-line))
+                                   .child
+                                   (f/widget
+                                    :context ctx
+                                    :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+                                    (m/Container
+                                     .decoration (m/BoxDecoration
+                                                  .border (m.Border/all .color m.Colors/blueAccent))
+                                     .padding (m.EdgeInsets/all 10)
+                                     .height (* 0.8 h)
+                                     .child
+                                     (mgl/MongolText
+                                      (if (empty? text)
+                                        "ᠪᠢᠴᠢᠭᠡᠷᠡᠢ"
+                                        text)
+                                      .style (m/TextStyle .fontSize 20
+                                                          .color (if (empty? text)
+                                                                   colors/grey-text
+                                                                   colors/green)
+                                                          .fontWeight m.FontWeight/w400)))))
+                                  (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                  (m/Expanded
+                                   .child
+                                   (m.ListView/separated
+                                    .scrollDirection m.Axis/horizontal
+                                    .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
+                                    .itemCount (count trans)
+                                    .itemBuilder (fn [ctx i]
+                                                   (transaction-card/card
+                                                    (* 0.05 (.-maxHeight constraints))
+                                                    (-> trans (nth i) (get "content"))
+                                                    (-> trans (nth i) (get "transaction_time"))
+                                                    (-> trans (nth i) (get "amount") str)))))]))])))
+       (if (true? floating-input)
+         (floating-input/input-box text-value)
+         (m/SizedBox))]))))

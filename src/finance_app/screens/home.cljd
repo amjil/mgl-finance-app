@@ -7,6 +7,7 @@
    [cljd.flutter.alpha2 :as f]
    [mongol-date-picker.util :as picker-util]
    [finance-app.screens.add-record :as add-record]
+   [finance-app.screens.search :as search]
    [finance-app.widgets.custom-card :as custom-card]
    [finance-app.widgets.transaction-card :as transaction-card]
    [finance-app.widgets.bottom-sheet :as bottom-sheet]
@@ -73,7 +74,13 @@
                                         .padding m.EdgeInsets/zero
                                         .constraints (m/BoxConstraints)
                                         .icon (m/Icon m.Icons/search)
-                                        .onPressed (fn [] (dart:core/print "xxxx"))))])
+                                        .onPressed (fn []
+                                                     (tab.PersistentNavBarNavigator/pushNewScreen
+                                                      ctx
+                                                      .screen
+                                                      (search/screen ctx)
+                                                      .withNavBar false)
+                                                     nil)))])
                    (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
                    (m/Container
                     .height (* 0.24 (.-maxHeight constraints))
