@@ -1,0 +1,109 @@
+(ns finance-app.screens.statistics
+  (:require
+   ["package:flutter/material.dart" :as m]
+   ["package:fl_chart/fl_chart.dart" :as chart]
+   ["package:mongol/mongol.dart" :as mgl]
+   [cljd.flutter.alpha2 :as f]))
+   
+(def bar-gradient (m/LinearGradient .colors
+                                    [(m/Color 0xFF2196F3) (m/Color 0xFF50E4FF)]
+                                    .begin (.-bottomCenter m/Alignment)
+                                    .end (.-topCenter m/Alignment)))
+
+(defn ^m/Widget get-titles [^double value ^chart/TitleMeta meta]
+  (let [style (m/TextStyle .color (m/Color 0xFF2196F3)
+                           .fontWeight (.-bold m/FontWeight)
+                           .fontSize 14)
+        text (condp = (.toInt value)
+               0 "Mn"
+               1 "Te"
+               2 "Wd"
+               3 "Tu"
+               4 "Fr"
+               5 "St"
+               6 "Sn"
+               "")]
+    (chart/SideTitleWidget
+     .axisSide (.-axisSide meta)
+     .space 4
+     .child (mgl/MongolText text .style style))))
+     
+(def screen
+  (f/widget
+   (m/Scaffold
+    .appBar nil)
+   .body
+   (m/SafeArea)
+   (m/Container
+    .height 300)
+   (m/Center)
+   (chart/BarChart
+    (chart/BarChartData
+     .barTouchData
+     (chart/BarTouchData
+      .enabled false
+      .touchTooltipData
+      (chart/BarTouchTooltipData
+       .tooltipBgColor (.-transparent m/Colors)
+       .tooltipPadding (.-zero m/EdgeInsets)
+       .tooltipMargin 8
+       .getTooltipItem (fn [^chart/BarChartGroupData group,
+                            ^int groupIndex,
+                            ^chart/BarChartRodData rod,
+                            ^int rodIndex]
+                         (chart/BarTooltipItem (-> rod .-toY .round .toString)
+                                               (m/TextStyle .color (m/Color 0xFF50E4FF)
+                                                            .fontWeight (.-bold m/FontWeight))))))
+     .titlesData (chart/FlTitlesData
+                  .show true
+                  .bottomTitles
+                  (chart/AxisTitles
+                   .sideTitles (chart/SideTitles .showTitles true .reservedSize 30
+                                                 .getTitlesWidget get-titles))
+                  .leftTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false))
+                  .topTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false))
+                  .rightTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false)))
+    .borderData (chart/FlBorderData .show false)
+    .barGroups [(chart/BarChartGroupData .x
+                                     0
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 8 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     1
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 10 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     2
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 14 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     3
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 15 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     4
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 13 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     5
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 10 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])
+                (chart/BarChartGroupData .x
+                                     6
+                                     .barRods
+                                     [(chart/BarChartRodData .toY 16 .gradient bar-gradient)]
+                                     .showingTooltipIndicators
+                                     [0])]
+     ))))

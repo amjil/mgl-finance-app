@@ -7,7 +7,7 @@
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
    [finance-app.screens.home :as home]
-   [finance-app.screens.chart :as planning]
+   [finance-app.screens.statistics :as statistics]
    [finance-app.screens.profile :as profile]))
 
 (defn- nav-item [color icon]
@@ -26,7 +26,7 @@
    (tab/PersistentTabView
     ctx
     .screens [home/screen
-              planning/screen
+              statistics/screen
               profile/screen]
     .items [(nav-item color (m/Icon m.Icons/home))
             (nav-item color (m/Icon m.Icons/insert_chart))
