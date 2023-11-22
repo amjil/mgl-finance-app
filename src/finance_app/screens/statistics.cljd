@@ -28,15 +28,16 @@
      .space 4
      .child (mgl/MongolText text .style style))))
      
-(def screen
-  (f/widget
-   (m/Scaffold
-    .appBar nil)
-   .body
-   (m/SafeArea)
-   (m/Container
-    .height 300)
-   (m/Center)
+(defn bar-groups-data []
+  (map #(chart/BarChartGroupData .x (first %)
+                                  .barRods [(chart/BarChartRodData .toY (last %) .gradient bar-gradient)]
+                                  .showingTooltipIndicators [0])
+       [[0 8] [1 10] [2 14] [3 15] [4 13] [5 10] [6 16]]))
+       
+(defn bar-chart []
+  (m/Container
+   .height 300
+   .child
    (chart/BarChart
     (chart/BarChartData
      .barTouchData
@@ -63,47 +64,53 @@
                   .leftTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false))
                   .topTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false))
                   .rightTitles (chart/AxisTitles .sideTitles (chart/SideTitles .showTitles false)))
-    .borderData (chart/FlBorderData .show false)
-    .barGroups [(chart/BarChartGroupData .x
-                                     0
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 8 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     1
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 10 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     2
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 14 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     3
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 15 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     4
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 13 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     5
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 10 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])
-                (chart/BarChartGroupData .x
-                                     6
-                                     .barRods
-                                     [(chart/BarChartRodData .toY 16 .gradient bar-gradient)]
-                                     .showingTooltipIndicators
-                                     [0])]
-     ))))
+     .borderData (chart/FlBorderData .show false)
+     .barGroups (bar-groups-data)))))
+     
+(defn pie-chart-item [item color selected]
+  (chart/PieChartSectionData .color color
+                             .value item
+                             .title (str item "%")
+                             .radius (if (true? selected) 60.0 50.0)
+                             .titleStyle
+                             (m/TextStyle
+                              .fontSize (if (true? selected) 25 16)
+                              .fontWeight (.-bold m/FontWeight)
+                              .color m.Colors/white
+                              .shadows [(m/Shadow .color (.-black m/Colors) .blurRadius 2)])))
+     
+(defn pie-chart []
+  (let [item-index (atom -1)]
+    (f/widget
+     :watch [selected item-index]
+     (m/Container
+      .height 300
+      .child
+      (chart/PieChart (chart/PieChartData
+                   .pieTouchData (chart/PieTouchData
+                                  .touchCallback (fn [^chart/FlTouchEvent e response]
+                                                   (if (or (not (.isInterestedForInteractions e))
+                                                           (nil? response)
+                                                           (nil? (.-touchedSection response)))
+                                                     (reset! item-index -1)
+                                                     (when-not (nil? (.-touchedSection response))
+                                                       (reset! item-index
+                                                               (.-touchedSectionIndex (.-touchedSection response)))))))
+                   .borderData (chart/FlBorderData .show false)
+                   .sectionsSpace 0
+                   .centerSpaceRadius 40
+                   .sections (map-indexed (fn [idx itm] (pie-chart-item (:val itm) (:color itm) (= idx selected)))
+                                          [{:val 40 :color (m/Color 0xFF2196F3)}
+                                           {:val 30 :color (m/Color 0xFFFFC300)}
+                                           {:val 15 :color (m/Color 0xFF6E1BFF)}
+                                           {:val 15 :color (m/Color 0xFF3BFF49)}])))))))
+     
+(def screen
+  (f/widget
+   (m/Scaffold
+    .appBar nil)
+   .body
+   (m/SafeArea)
+   (m/Column 
+    .children [(bar-chart)
+               (pie-chart)])))
