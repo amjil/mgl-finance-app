@@ -8,13 +8,15 @@
    [finance-app.utils.colors :as colors]
    [finance-app.screens.home :as home]
    [finance-app.screens.statistics :as statistics]
-   [finance-app.screens.profile :as profile]))
+   [finance-app.screens.profile :as profile]
+   [finance-app.states.transactions :as transactions]))
 
-(defn- nav-item [color icon]
+(defn- nav-item [color icon nav-fun]
   (tab/PersistentBottomNavBarItem
    .inactiveColorPrimary color
    .activeColorPrimary color
-   .icon icon))
+   .icon icon
+   .onPressed nav-fun))
 
 (defn bottom-nav []
   (f/widget
@@ -26,11 +28,20 @@
    (tab/PersistentTabView
     ctx
     .screens [home/screen
-              statistics/screen
+              profile/screen
               profile/screen]
-    .items [(nav-item color (m/Icon m.Icons/home))
-            (nav-item color (m/Icon m.Icons/insert_chart))
-            (nav-item color (m/Icon m.Icons/person))]
+    .items [(nav-item color (m/Icon m.Icons/home) (fn [ctx] (dart:core/print "xxx1")))
+            (nav-item color (m/Icon m.Icons/insert_chart)
+                      (fn [c]
+                        (await (transactions/daily-sum))
+                        (await (transactions/category-sum))
+                        (tab.PersistentNavBarNavigator/pushNewScreen
+                         ctx
+                         .screen
+                         (statistics/screen ctx)
+                         .withNavBar false)))
+            (nav-item color (m/Icon m.Icons/person) 
+                      (fn [ctx] (dart:core/print "xxx2")))]
     .controller controller
     .navBarHeight 60
     .decoration

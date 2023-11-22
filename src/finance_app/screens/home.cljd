@@ -36,7 +36,8 @@
                   ;; (pref/remove-value "db-version")
                   ;; (categories/get-sub-types 1))
                   ;; (dart:core/print (await (sql/getDatabasesPath)))
-                  ;; (dart:core/print trans)
+                    ;;  (transactions/daily-sum)
+                    ;; (dart:core/print (map #(into [] %) (:daily-sum @gs/state)))
                      (await (categories/all-categories))
                      (tab.PersistentNavBarNavigator/pushNewScreen
                       ctx

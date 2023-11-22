@@ -4,11 +4,6 @@
    [finance-app.states.global :as gs]
    [finance-app.utils.datetime :as datetime]))
 
-(def transactions
-  [["Rent" "20231015" "-300"]
-   ["Insurance" "20231020" "-2100"]
-   ["Funds added!" "20231023" "+100000"]])
-
 (defn query-transactions [m]
   (let [trans (await (transaction-service/query-transactions m))]
     (swap! gs/state assoc :curr-month (subs m 0 7))
@@ -18,3 +13,20 @@
   (transaction-service/create-transaction m)
   (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
     (query-transactions curr-month)))
+    
+(defn daily-sum []
+  (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")
+        result
+        (->> (await (transaction-service/daily-count curr-month))
+             (map (fn [x] [(int/parse (get x "day")) (get x "amount")]))
+             (into {}))
+        month-days (datetime/month-days (DateTime/parse curr-month))
+        days (->> (range 1 (inc month-days))
+                  (map #(hash-map % 0))
+                  (into {}))]
+    (swap! gs/state assoc :daily-sum (merge days result))))
+    
+(defn category-sum []
+  (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")
+        result (await (transaction-service/category-count curr-month))]
+    (swap! gs/state assoc :category-sum result)))

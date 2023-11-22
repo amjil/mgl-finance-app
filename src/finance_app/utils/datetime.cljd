@@ -1,5 +1,6 @@
 (ns finance-app.utils.datetime
-  (:require 
+  (:require
+   ["package:flutter/material.dart" :as m]
    ["package:intl/intl.dart" :as intl]))
 
 ;; yyyy-MM
@@ -42,3 +43,13 @@
    (get-value state :day)
    (get-value state :hour)
    (get-value state :minute)))
+   
+
+(defn month-days [date]
+  (-> (m/DateTimeRange .start
+                       (DateTime (.-year date) (.-month date) 1)
+                       .end
+                       (DateTime (.-year date) (+ (.-month date) 1)))
+      .-duration
+      .-inDays))
+      
