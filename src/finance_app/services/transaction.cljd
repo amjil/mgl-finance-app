@@ -99,8 +99,10 @@
       "SELECT b.id, b.content as category, sum(a.amount) as amount
          FROM transactions a
               left join categories b on a.category_id = b.id
+              left join category_types c on a.types_of = c.id
          where strftime('%Y',transaction_time) = strftime('%Y', ?) 
             AND  strftime('%m',transaction_time) = strftime('%m', ?)
+            AND c.types_of = 1
          group by b.id, b.content
          ;"
       [m m]))))
