@@ -28,8 +28,8 @@
    (tab/PersistentTabView
     ctx
     .screens [home/screen
-              profile/screen
-              profile/screen]
+              profile/frozen-screen
+              profile/frozen-screen]
     .items [(nav-item color (m/Icon m.Icons/home) (fn [ctx] (dart:core/print "xxx1")))
             (nav-item color (m/Icon m.Icons/insert_chart)
                       (fn [c]
@@ -41,7 +41,12 @@
                          (statistics/screen ctx)
                          .withNavBar false)))
             (nav-item color (m/Icon m.Icons/person) 
-                      (fn [ctx] (dart:core/print "xxx2")))]
+                      (fn [c]
+                        (tab.PersistentNavBarNavigator/pushNewScreen
+                         ctx
+                         .screen
+                         (profile/screen ctx)
+                         .withNavBar false)))]
     .controller controller
     .navBarHeight 60
     .decoration

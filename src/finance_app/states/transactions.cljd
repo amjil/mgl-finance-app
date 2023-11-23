@@ -32,9 +32,11 @@
   (let [random- (math/Random)
         curr-month (str (:curr-month @gs/state) "-01 00:00:00")
         result (->> (await (transaction-service/category-count curr-month))
-                    (map #(assoc % "color" (m.Color/fromARGB
+                    (map #(assoc {} "color" (m.Color/fromARGB
                                             (.nextInt random- 256)
                                             (.nextInt random- 256)
                                             (.nextInt random- 256)
-                                            (.nextInt random- 256)) )))]
+                                            (.nextInt random- 256))
+                                 "amount" (get % "amount")
+                                 "category" (get % "category"))))]
     (swap! gs/state assoc :category-sum result)))
