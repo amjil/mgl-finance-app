@@ -76,6 +76,7 @@
                                         .constraints (m/BoxConstraints)
                                         .icon (m/Icon m.Icons/search)
                                         .onPressed (fn []
+                                                     (swap! gs/state assoc :search-result trans)
                                                      (tab.PersistentNavBarNavigator/pushNewScreen
                                                       ctx
                                                       .screen

@@ -6,7 +6,8 @@
    [finance-app.widgets.transaction-card :as transaction-card]
    [finance-app.widgets.floating-input :as floating-input]
    [finance-app.states.global :as gs]
-   [finance-app.utils.colors :as colors]))
+   [finance-app.utils.colors :as colors]
+   [finance-app.states.transactions :as transactions]))
 
 (defn ^m/Widget screen [ctx]
   (let [text-value (atom nil)]
@@ -14,7 +15,7 @@
      :get [m/Navigator]
      :context ctx
      :managed [text-controller (m/TextEditingController)]
-     :watch [{trans :trans
+     :watch [{search-result :search-result
               floating-input :floating-input} gs/state
              text text-value]
      (m/Scaffold
@@ -42,7 +43,8 @@
                                             (swap! gs/state assoc :keyboard/return-callback 
                                                    (fn [] 
                                                      (swap! gs/state assoc :floating-input false)
-                                                     (reset! text-value (.-text text-controller))))
+                                                     (reset! text-value (.-text text-controller))
+                                                     (transactions/search-transactions (.-text text-controller))))
                                             (swap! gs/state assoc :keyboard/return-mode :single-line))
                                    .child
                                    (f/widget
@@ -69,11 +71,11 @@
                                    (m.ListView/separated
                                     .scrollDirection m.Axis/horizontal
                                     .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
-                                    .itemCount (count trans)
+                                    .itemCount (count search-result)
                                     .itemBuilder (fn [ctx i]
                                                    (transaction-card/card
                                                     (* 0.05 (.-maxHeight constraints))
-                                                    (nth trans i)))))]))])))
+                                                    (nth search-result i)))))]))])))
        (if (true? floating-input)
          (floating-input/input-box text-value)
          (m/SizedBox))]))))

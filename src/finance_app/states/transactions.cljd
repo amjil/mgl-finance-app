@@ -11,6 +11,10 @@
     (swap! gs/state assoc :curr-month (subs m 0 7))
     (swap! gs/state assoc :trans trans)))
 
+(defn search-transactions [s]
+  (let [trans (await (transaction-service/search-transactions s))]
+    (swap! gs/state assoc :search-result trans)))
+
 (defn create-transaction [m]
   (transaction-service/create-transaction m)
   (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
