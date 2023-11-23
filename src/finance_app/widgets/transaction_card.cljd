@@ -2,13 +2,15 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]))
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.utils.icons :as icons]
+   [finance-app.utils.colors :as colors]))
 
-(defn card [height transaction-name date-and-time transaction-amount]
+(defn card [height t]
   (f/widget
    :context context
    (m/Container
-    .padding (.symmetric m/EdgeInsets .vertical 5)
+    .padding (.symmetric m/EdgeInsets .vertical 10)
     .width 65
     .decoration
     (m/BoxDecoration
@@ -17,21 +19,36 @@
    (m/Column
     .crossAxisAlignment m.CrossAxisAlignment/center
     .children
-    [(m/Icon m.Icons/currency_rupee)
+    [(m/Icon (get icons/icons (get t "icon_name"))
+             .color colors/green)
      (m/SizedBox .height height)
      (m/Row
       .crossAxisAlignment m.CrossAxisAlignment/start
       .mainAxisAlignment m.MainAxisAlignment/center
       .children
-      [(mgl/MongolText (if (empty? transaction-name) 
+      [(m/Column
+        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+        .children
+        [(mgl/MongolText (get t "category_name"))
+         (mgl/MongolText
+          (subs
+           (get t "transaction_time") 0 10)
+          .style (m/TextStyle .fontSize 12))])
+       (mgl/MongolText (if (empty? (get t "content"))
                          ""
-                         transaction-name) 
+                         (get t "content"))
                        .style (m/TextStyle .fontSize 16))
-       (m/SizedBox .width 2)
-       (mgl/MongolText date-and-time .style (m/TextStyle .fontSize 12))])
+       (m/SizedBox .width 2)])
      (m/Spacer)
      (mgl/MongolText
-      transaction-amount
+      (str
+       (if (= 1 (get t "main_type"))
+         "- "
+         "+ ")
+       (-> (get t "amount") str))
       .style (m/TextStyle
               .fontSize 18
-              .fontWeight m.FontWeight/bold))])))
+              .fontWeight m.FontWeight/bold
+              .color (if (= 1 (get t "main_type"))
+                       m.Colors/red
+                       m.Colors/green)))])))

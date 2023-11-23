@@ -45,7 +45,7 @@
    (get-value state :minute)))
    
 
-(defn month-days [date]
+(defn month-days [^DateTime date]
   (-> (m/DateTimeRange .start
                        (DateTime (.-year date) (.-month date) 1)
                        .end

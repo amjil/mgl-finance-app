@@ -135,7 +135,5 @@
                                   .itemBuilder (fn [_ i]
                                                  (transaction-card/card
                                                   (* 0.05 (.-maxHeight constraints))
-                                                  (-> trans (nth i) (get "content"))
-                                                  (-> trans (nth i) (get "transaction_time"))
-                                                  (-> trans (nth i) (get "amount") str)))))]))]))))))
+                                                  (nth trans i)))))]))]))))))
 

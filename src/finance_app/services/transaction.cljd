@@ -10,10 +10,11 @@
       db
       "SELECT a.id, a.category_id, 
               b.content as category_name, 
-              b.icon_name,
+              b.icon_name, c.types_of as main_type,
               a.content, a.types_of, a.amount, a.transaction_time, a.created_at
          FROM transactions a
              left join categories b on a.category_id = b.id
+             left join category_types c on c.id = b.types_of
          where strftime('%Y',transaction_time) = strftime('%Y', ?) 
             AND  strftime('%m',transaction_time) = strftime('%m', ?)
          ORDER BY a.id
