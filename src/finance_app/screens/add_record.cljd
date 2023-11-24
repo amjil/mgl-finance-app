@@ -16,13 +16,18 @@
    [finance-app.states.global :as gs]
    [finance-app.states.transactions :as transactions]))
 
-(declare on-add)
+(declare record-editor on-add on-edit)
 
 (defn create-record []
   (let [amount (atom nil)
         text-value (atom nil)
         picker (picker-util/default-state)]
     (f/widget
+     :context ctx
+     (record-editor amount text-value picker #(on-add ctx amount text-value picker)))))
+    
+(defn record-editor [amount text-value picker num-keyboard-fn]
+  (f/widget
      :context ctx
      :managed [amount-controller (m/TextEditingController)
                text-controller (m/TextEditingController)]
@@ -81,10 +86,11 @@
                                             (custom-field/num-field text-controller amount text-value)
                                             (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
                                (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (num-keyboard/keyboard amount amount-controller #(on-add ctx amount text-value picker))])))
+                               (num-keyboard/keyboard amount amount-controller num-keyboard-fn)])))
        (if (true? floating-input)
          (floating-input/input-box text-value)
-         (m/SizedBox))]))))
+         (m/SizedBox))])))
+
 
 
 (defn ^m/Widget screen [ctx]
