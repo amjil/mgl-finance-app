@@ -2,8 +2,14 @@
 
 A Personal Finance Management Flutter APP.
 
-<br/>
-<img src="screenshots/screenshot1.png" width="300">
+## Mobile App Screenshots
+<p  float="left">
+    <img src="screenshots/screenshot1.png" width="200">
+    <img src="screenshots/screenshot2.png" width="200">
+    <img src="screenshots/screenshot3.png" width="200">
+    <img src="screenshots/screenshot4.png" width="200">
+    <img src="screenshots/screenshot5.png" width="200">
+</p>
 
 ## Getting Started
 
