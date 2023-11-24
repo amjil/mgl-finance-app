@@ -1,6 +1,7 @@
 (ns finance-app.screens.profile
   (:require
    ["package:flutter/material.dart" :as m]
+   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
    [finance-app.widgets.settings :as settings]))
 
@@ -15,6 +16,7 @@
      
 (defn ^m/Widget screen [ctx]
   (f/widget
+   :context ctx
    (m/Scaffold
     .appBar nil)
    .body
@@ -32,6 +34,12 @@
                             (m/ListView
                              .scrollDirection m.Axis/horizontal
                              .children [(settings/settings-group
-                                         [{:title "About"}
-                                          {:title "License"}])]))])))
-                            ))
+                                         [{:title "About" 
+                                           :on-tap (fn [] 
+                                                    ;;  (tab.PersistentNavBarNavigator/pushNewScreen
+                                                    ;;   ctx
+                                                    ;;   .screen
+                                                    ;;   (search/screen ctx)
+                                                    ;;   .withNavBar false)
+                                                     )}
+                                          {:title "License"}])]))])))))

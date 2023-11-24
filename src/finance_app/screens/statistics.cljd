@@ -67,11 +67,11 @@
 (defn pie-chart-item [item category color selected]
   (chart/PieChartSectionData .color color
                              .value item
-                             .title category
+                             .title (str item " " category)
                              .radius (if (true? selected) 100.0 90.0)
                              .titleStyle
                              (m/TextStyle
-                              .fontSize (if (true? selected) 25 16)
+                              .fontSize (if (true? selected) 18 14)
                               .fontWeight (.-bold m/FontWeight)
                               .color m.Colors/white
                               .shadows [(m/Shadow .color (.-black m/Colors) .blurRadius 2)])))
@@ -88,7 +88,7 @@
      (chart/PieChart (chart/PieChartData
                       .pieTouchData (chart/PieTouchData
                                      .touchCallback (fn [^chart/FlTouchEvent e ^chart/PieTouchResponse response]
-                                                      (if (or (not (.isInterestedForInteractions e))
+                                                      (if (or (not (.-isInterestedForInteractions e))
                                                               (nil? response)
                                                               (nil? (.-touchedSection response)))
                                                         (reset! item-index -1)

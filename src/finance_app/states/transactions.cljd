@@ -20,6 +20,10 @@
   (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
     (query-transactions curr-month)))
     
+(defn delete-transaction [id]
+  (await
+   (transaction-service/delete-transaction id)))
+    
 (defn daily-sum []
   (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")
         result

@@ -3,12 +3,15 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    [cljd.flutter.alpha2 :as f]
+   [finance-app.widgets.bottom-sheet :as bottom-sheet]
    [finance-app.utils.icons :as icons]
    [finance-app.utils.colors :as colors]))
 
 (defn card [height t]
   (f/widget
    :context context
+   (m/GestureDetector 
+    .onTap (fn [] (bottom-sheet/show-transaction context t)))
    (m/Container
     .padding (.symmetric m/EdgeInsets .vertical 10)
     .width 65
