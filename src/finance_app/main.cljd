@@ -9,8 +9,7 @@
    [finance-app.states.transactions :as transactions]
    [finance-app.utils.themes :as themes]
    [finance-app.utils.datetime :as datetime]
-   [finance-app.widgets.navbar :as nav]
-   [finance-app.screens.add-record :as add-record]))
+   [finance-app.widgets.navbar :as nav]))
 
 (defn main []
   (m.WidgetsFlutterBinding/ensureInitialized)
@@ -39,6 +38,5 @@
                    .darkTheme dark
                   ;; .home (nav/bottom-nav)
                    .initialRoute "/"
-                   .routes {"/" nav/screen
-                            "/add_record" add-record/screen}
+                   .routes {"/" nav/screen}
                    .debugShowCheckedModeBanner false)))))))

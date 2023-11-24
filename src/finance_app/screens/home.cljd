@@ -6,7 +6,7 @@
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
    [mongol-date-picker.util :as picker-util]
-   [finance-app.screens.add-record :as add-record]
+   [finance-app.screens.transaction :as transaction-screen]
    [finance-app.screens.search :as search]
    [finance-app.widgets.custom-card :as custom-card]
    [finance-app.widgets.transaction-card :as transaction-card]
@@ -42,7 +42,7 @@
                      (tab.PersistentNavBarNavigator/pushNewScreen
                       ctx
                       .screen
-                      (add-record/screen ctx)
+                      (transaction-screen/screen ctx)
                       .withNavBar false)
                      (swap! gs/state assoc :type 1)
                      (swap! gs/state assoc :subtypes (categories/get-sub-types 1))

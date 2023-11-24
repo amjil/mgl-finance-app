@@ -1,4 +1,4 @@
-(ns finance-app.screens.add-record
+(ns finance-app.screens.transaction
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
