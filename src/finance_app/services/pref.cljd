@@ -2,7 +2,7 @@
   (:require 
    ["package:shared_preferences/shared_preferences.dart" :as sp]))
 
-(defn- get-value [info]
+(defn get-value [info]
   (let [prefs (await (sp.SharedPreferences/getInstance))]
     (condp = (:type info)
       :string (await (.getString prefs (:key info)))
@@ -11,7 +11,7 @@
       :double (await (.getDouble prefs (:key info)))
       :list (await (.getStringList prefs (:key info))))))
 
-(defn- set-value [info]
+(defn set-value [info]
   (let [prefs (await (sp.SharedPreferences/getInstance))]
     (condp = (:type info)
       :string (await (.setString prefs (:key info) (:value info)))
