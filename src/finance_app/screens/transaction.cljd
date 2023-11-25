@@ -21,80 +21,91 @@
 (defn create-record []
   (let [amount (atom nil)
         text-value (atom nil)
-        picker (picker-util/default-state)]
+        picker (picker-util/default-state nil)]
+    (f/widget
+     :context ctx
+     (record-editor amount text-value picker #(on-add ctx amount text-value picker)))))
+     
+(defn edit-record [amount-value remark-value category date]
+  (let [amount (atom (str amount-value ".0"))
+        text-value (atom remark-value)
+        picker (picker-util/default-state (DateTime/parse date))]
     (f/widget
      :context ctx
      (record-editor amount text-value picker #(on-add ctx amount text-value picker)))))
     
 (defn record-editor [amount text-value picker num-keyboard-fn]
   (f/widget
-     :context ctx
-     :managed [amount-controller (m/TextEditingController)
-               text-controller (m/TextEditingController)]
-     :watch [value amount
-             text text-value
-             {floating-input :floating-input} gs/state]
-     :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
-                  (reset! amount input-text))
+   :context ctx
+   :managed [amount-controller (m/TextEditingController .text @amount)
+             text-controller (m/TextEditingController .text @text-value)]
+   :watch [value amount
+           text text-value
+           {floating-input :floating-input} gs/state]
+   :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
+                (reset! amount input-text))
 
-     (m/Scaffold)
-     .body
-     (m/SafeArea)
-     (m/Stack
-      .children
-      [(m/LayoutBuilder
-        .builder (fn [^m/BuildContext context ^m/BoxConstraints constraints]
-                   (m/Column
-                    .crossAxisAlignment m.CrossAxisAlignment/start
-                    .children [(m/IconButton
-                                .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
-                                .icon (m/Icon m.Icons/keyboard_backspace))
-                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (m/Expanded
-                                .child
-                                (m/Row
-                                 .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                            (m/Expanded
-                                             .child
-                                             (category/main-tab nil))
-                                            (m/SizedBox
-                                             .width (* 0.02 (.-maxWidth constraints))
-                                             .child (m/Container
-                                                     .color (-> m/Theme (.of ctx) .-canvasColor)))
-                                            (m/Container
-                                             .width (* 0.09 (.-maxWidth constraints))
-                                             .color (-> m/Theme (.of ctx) .-canvasColor)
-                                             .child (m/Column
-                                                     .mainAxisAlignment m.MainAxisAlignment/end
-                                                     .children [(m/Container
-                                                                 .decoration
-                                                                 (m/BoxDecoration .color colors/grey-text-field
-                                                                                  .borderRadius
-                                                                                  (.all m/BorderRadius (.circular m/Radius 4)))
-                                                                 .child
-                                                                 (mgl/MongolTextButton
-                                                                  .onPressed (fn []
-                                                                               (bottom-sheet/show-datetime-picker context picker)
-                                                                               nil)
-                                                                  .child
-                                                                  (m/Column
-                                                                   .mainAxisAlignment m.MainAxisAlignment/center
-                                                                   .crossAxisAlignment m.CrossAxisAlignment/end
-                                                                   .children [(m/Icon m.Icons/calendar_month)
-                                                                              (mgl/MongolText (str (get-in @picker [:hour :val]) ":" (get-in @picker [:minute :val])))])))]))
-                                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                            (custom-field/num-field text-controller amount text-value)
-                                            (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
-                               (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                               (num-keyboard/keyboard amount amount-controller num-keyboard-fn)])))
-       (if (true? floating-input)
-         (floating-input/input-box text-value)
-         (m/SizedBox))])))
+   (m/Scaffold)
+   .body
+   (m/SafeArea)
+   (m/Stack
+    .children
+    [(m/LayoutBuilder
+      .builder (fn [^m/BuildContext context ^m/BoxConstraints constraints]
+                 (m/Column
+                  .crossAxisAlignment m.CrossAxisAlignment/start
+                  .children [(m/IconButton
+                              .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                              .icon (m/Icon m.Icons/keyboard_backspace))
+                             (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                             (m/Expanded
+                              .child
+                              (m/Row
+                               .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                          (m/Expanded
+                                           .child
+                                           (category/main-tab nil))
+                                          (m/SizedBox
+                                           .width (* 0.02 (.-maxWidth constraints))
+                                           .child (m/Container
+                                                   .color (-> m/Theme (.of ctx) .-canvasColor)))
+                                          (m/Container
+                                           .width (* 0.09 (.-maxWidth constraints))
+                                           .color (-> m/Theme (.of ctx) .-canvasColor)
+                                           .child (m/Column
+                                                   .mainAxisAlignment m.MainAxisAlignment/end
+                                                   .children [(m/Container
+                                                               .decoration
+                                                               (m/BoxDecoration .color colors/grey-text-field
+                                                                                .borderRadius
+                                                                                (.all m/BorderRadius (.circular m/Radius 4)))
+                                                               .child
+                                                               (mgl/MongolTextButton
+                                                                .onPressed (fn []
+                                                                             (bottom-sheet/show-datetime-picker context picker)
+                                                                             nil)
+                                                                .child
+                                                                (m/Column
+                                                                 .mainAxisAlignment m.MainAxisAlignment/center
+                                                                 .crossAxisAlignment m.CrossAxisAlignment/end
+                                                                 .children [(m/Icon m.Icons/calendar_month)
+                                                                            (mgl/MongolText (str (get-in @picker [:hour :val]) ":" (get-in @picker [:minute :val])))])))]))
+                                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                          (custom-field/num-field text-controller amount text-value)
+                                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
+                             (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                             (num-keyboard/keyboard amount amount-controller num-keyboard-fn)])))
+     (if (true? floating-input)
+       (floating-input/input-box text-value)
+       (m/SizedBox))])))
 
 
 
 (defn ^m/Widget screen [ctx]
   (create-record))
+  
+(defn ^m/Widget edit-screen [ctx amount remark category date]
+  (edit-record amount remark category date))
 
 (defn on-add [ctx value remark picker-state]
   (if (empty? @value)

@@ -3,7 +3,9 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:flutter_styled_toast/flutter_styled_toast.dart" :as styled-toast]
-   [cljd.flutter.alpha2 :as f]))
+   [cljd.flutter.alpha2 :as f]
+   [finance-app.utils.icons :as icons]
+   [finance-app.utils.colors :as colors]))
 
 (defn show-toast [ctx msg]
   (styled-toast/showToastWidget
@@ -38,3 +40,94 @@
                           (mgl/MongolTextButton .child (mgl/MongolText "ᠦᠭᠡᠢ")
                                                 .onPressed (fn []
                                                              (.pop navigator)))]))))))
+                                                             
+
+
+
+(defn show-transaction [^m/BuildContext ctx t delete-fn edit-fn]
+  (-> m/Scaffold
+      (.of ctx)
+      (.showBottomSheet
+       (fn [^m/BuildContext context]
+         (f/widget
+          (m/MediaQuery
+           .data (.fromWindow m/MediaQueryData
+                              (-> m/WidgetsBinding .-instance .-window)))
+          (m/Container .height (* 0.60 (-> m/MediaQuery (.of ctx) .-size .-height)))
+          (m/SafeArea .top false)
+          (m/Column
+           .mainAxisAlignment m.MainAxisAlignment/start
+           .children [(m/Row
+                       .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                       .children [(m/Padding
+                                   .padding (m.EdgeInsets/only .left 20)
+                                   .child
+                                   (m/Icon (get icons/icons (get t "icon_name"))
+                                           .color colors/green))
+                                  (m/Row
+                                  ;;  .mainAxisSize m.MainAxisSize/min
+                                   .mainAxisAlignment m.MainAxisAlignment/center
+                                   .children [(m/ElevatedButton
+                                               .child (m/Icon m.Icons/delete)
+                                               .style (m.ElevatedButton/styleFrom
+                                                       .padding (m.EdgeInsets/all 4)
+                                                       .shape (m/CircleBorder)
+                                                       .backgroundColor colors/green-dark)
+                                               .onPressed delete-fn)
+                                              (m/ElevatedButton
+                                               .child (m/Icon m.Icons/edit)
+                                               .style (m.ElevatedButton/styleFrom
+                                                       .shape (m/CircleBorder)
+                                                       .backgroundColor colors/green-dark)
+                                               .onPressed edit-fn)])])
+                      (m/Divider)
+                      (m/Expanded
+                       .child
+                       (m/ListView
+                        .scrollDirection m.Axis/horizontal
+                        .children [(m/Padding
+                                    .padding (m.EdgeInsets/all 20)
+                                    .child
+                                    (mgl/MongolText (get t "category_name")
+                                                    .style (m/TextStyle .fontSize 22
+                                                                        .color colors/green
+                                                                        .fontWeight m.FontWeight/bold)))
+                                   (m/VerticalDivider)
+                                   (m/Padding
+                                    .padding (m.EdgeInsets/all 18)
+                                    .child
+                                    (m/Column
+                                     .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                     .children [(mgl/MongolText "ᠦᠨ᠎ᠡ:")
+                                                (mgl/MongolText
+                                                 (str
+                                                  (if (= 1 (get t "main_type"))
+                                                    "- "
+                                                    "+ ")
+                                                  (-> (get t "amount") str))
+                                                 .style (m/TextStyle
+                                                         .fontSize 18
+                                                         .fontWeight m.FontWeight/bold
+                                                         .color (if (= 1 (get t "main_type"))
+                                                                  m.Colors/red
+                                                                  m.Colors/green)))]))
+                                   (m/Padding
+                                    .padding (m.EdgeInsets/all 18)
+                                    .child
+                                    (m/Column
+                                     .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                     .children [(mgl/MongolText "ᠨᠡᠮᠡᠯᠲᠡ ᠲᠠᠢᠯᠪᠦᠷᠢ:")
+                                                (mgl/MongolText
+                                                 (if (empty? (get t "content"))
+                                                   "---"
+                                                   (get t "content"))
+                                                 .style (m/TextStyle .fontSize 12))]))
+                                   (m/Padding
+                                    .padding (m.EdgeInsets/all 18)
+                                    .child
+                                    (m/Column
+                                     .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                                     .children [(mgl/MongolText "ᠴᠠᠭ:")
+                                                (mgl/MongolText
+                                                 (get t "transaction_time")
+                                                 .style (m/TextStyle .fontSize 12))]))]))]))))))

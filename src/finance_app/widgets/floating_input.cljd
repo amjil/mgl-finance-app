@@ -19,9 +19,6 @@
            text-value value]
    :bg-watcher ([^m/TextEditingValue {input-text .-text} text-controller]
                 (reset! value input-text))
-   (m/Scaffold)
-   .body
-   (m/SafeArea)
    (m/Column
     .crossAxisAlignment m.CrossAxisAlignment/stretch
     .children

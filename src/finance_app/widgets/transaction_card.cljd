@@ -2,16 +2,43 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
+   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
-   [finance-app.widgets.bottom-sheet :as bottom-sheet]
+   [finance-app.states.categories :as categories]
+   [finance-app.states.global :as gs]
+   [finance-app.screens.transaction :as transaction-screen]
    [finance-app.utils.icons :as icons]
+   [finance-app.utils.util :as util]
    [finance-app.utils.colors :as colors]))
 
 (defn card [height t]
   (f/widget
    :context context
    (m/GestureDetector 
-    .onTap (fn [] (bottom-sheet/show-transaction context t)))
+    .onTap (fn [] (util/show-transaction
+                   context t
+                   (fn []
+                     ;; (transactions/delete-transaction (get t "id"))
+                     (util/show-confirm-dialog context "aaaaaa" #(dart:core/print "confirm ....")))
+                   (fn []
+                    ;;  (-> m/Navigator (.of ctx) .pop)
+                     (await (categories/all-categories))
+                     (swap! gs/state assoc :type (get t "main_type"))
+                     (swap! gs/state assoc :subtypes (categories/get-sub-types (get t "main_type")))
+                     (swap! gs/state assoc :subtype (get t "types_of"))
+                     (swap! gs/state assoc :cates (categories/get-cates))
+                     (swap! gs/state assoc :curr-cate (get t "category_id"))
+                     (tab.PersistentNavBarNavigator/pushNewScreen
+                      context
+                      .screen
+                      (transaction-screen/edit-screen
+                       context
+                       (get t "amount")
+                       (get t "content")
+                       (get t "category_id")
+                       (get t "transaction_time"))
+                      .withNavBar false)
+                     nil))))
    (m/Container
     .padding (.symmetric m/EdgeInsets .vertical 10)
     .width 65

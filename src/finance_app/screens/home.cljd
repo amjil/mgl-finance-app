@@ -19,7 +19,7 @@
    [finance-app.utils.datetime :as datetime]))
 
 (def screen
-  (let [picker-state (picker-util/default-state)]
+  (let [picker-state (picker-util/default-state nil)]
     (f/widget
      :get [m/Navigator]
      :context ctx
