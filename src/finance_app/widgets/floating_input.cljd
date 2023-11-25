@@ -9,7 +9,7 @@
    [menu-bar.menu :as menu]
    [finance-app.states.global :as gs]))
 
-(defn input-box [value]
+(defn ^m/Widget input-box [value]
   (f/widget
    :context ctx
    :get [:info]
@@ -19,11 +19,14 @@
            text-value value]
    :bg-watcher ([^m/TextEditingValue {input-text .-text} text-controller]
                 (reset! value input-text))
+   (m/Scaffold)
+   .body
+   (m/SafeArea)
    (m/Column
     .crossAxisAlignment m.CrossAxisAlignment/stretch
     .children
     [(m/Expanded
-      .child 
+      .child
       (m/Stack
        .children
        [(m/Container
