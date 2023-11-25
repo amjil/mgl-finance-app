@@ -19,6 +19,11 @@
   (transaction-service/create-transaction m)
   (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
     (query-transactions curr-month)))
+
+(defn edit-transaction [info]
+  (transaction-service/edit-transaction (:id info) (dissoc info :id))
+  (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
+    (query-transactions curr-month)))
     
 (defn delete-transaction [id]
   (await

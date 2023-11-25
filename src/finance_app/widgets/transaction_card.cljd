@@ -33,6 +33,7 @@
                       .screen
                       (transaction-screen/edit-screen
                        context
+                       (get t "id")
                        (get t "amount")
                        (get t "content")
                        (get t "category_id")
