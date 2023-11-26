@@ -5,6 +5,7 @@
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter.alpha2 :as f]
    [finance-app.states.categories :as categories]
+   [finance-app.states.transactions :as transactions]
    [finance-app.states.global :as gs]
    [finance-app.screens.transaction :as transaction-screen]
    [finance-app.utils.icons :as icons]
@@ -18,10 +19,14 @@
     .onTap (fn [] (util/show-transaction
                    context t
                    (fn []
-                     ;; (transactions/delete-transaction (get t "id"))
-                     (util/show-confirm-dialog context "aaaaaa" #(dart:core/print "confirm ....")))
+                     ;; 
+                     (util/show-confirm-dialog
+                      context "ᠲᠠ ᠦᠨᠡᠬᠡᠷ ᠤᠰᠠᠳᠭᠠᠬᠤ ᠤᠤ?"
+                      (fn []
+                        (-> m/Navigator (.of context) .pop)
+                        (transactions/delete-transaction (get t "id")))))
                    (fn []
-                    ;;  (-> m/Navigator (.of ctx) .pop)
+                     (-> m/Navigator (.of context) .pop)
                      (await (categories/all-categories))
                      (swap! gs/state assoc :type (get t "main_type"))
                      (swap! gs/state assoc :subtypes (categories/get-sub-types (get t "main_type")))

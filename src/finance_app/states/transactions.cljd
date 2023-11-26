@@ -21,13 +21,16 @@
     (query-transactions curr-month)))
 
 (defn edit-transaction [info]
-  (transaction-service/edit-transaction (:id info) (dissoc info :id))
-  (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
+  (await 
+   (transaction-service/edit-transaction (:id info) (dissoc info :id)))
+  (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")]
     (query-transactions curr-month)))
     
 (defn delete-transaction [id]
   (await
-   (transaction-service/delete-transaction id)))
+   (transaction-service/delete-transaction id))
+  (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")]
+    (query-transactions curr-month)))
     
 (defn daily-sum []
   (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")
