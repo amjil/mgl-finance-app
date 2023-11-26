@@ -45,7 +45,7 @@
    :bg-watcher ([^m/TextEditingValue {input-text .-text} amount-controller]
                 (reset! amount input-text))
 
-   (m/Scaffold)
+   (m/Scaffold .resizeToAvoidBottomInset false)
    .body
    (m/SafeArea)
    (m/Stack

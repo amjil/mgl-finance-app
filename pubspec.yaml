@@ -43,6 +43,7 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   http: ^1.1.0
   intl: ^0.18.1
+  keyboard_height_plugin: ^0.0.4
   math_expressions: ^2.4.0
   mongol: ^6.0.1
   mongol_code: ^0.3.0
