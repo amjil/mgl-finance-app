@@ -18,8 +18,7 @@
      :watch [{search-result :search-result
               floating-input :floating-input} gs/state
              text text-value]
-     (m/Scaffold
-      .appBar nil)
+     (m/Scaffold .resizeToAvoidBottomInset false)
      .body
      (m/SafeArea)
      (m/Stack
