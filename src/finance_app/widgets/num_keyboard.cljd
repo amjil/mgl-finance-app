@@ -33,6 +33,7 @@
 
 (defn keyboard [value ^m/TextEditingController controller on-add]
   (f/widget
+   :context ctx
    :watch [v value]
    (m/Container
     .padding (m.EdgeInsets/only .left 32 .right 32 .top 20)
@@ -71,4 +72,6 @@
                                       .color colors/grey)
                               (m/Icon font-awesome.FontAwesomeIcons/check
                                       .color colors/green))
-                            on-add)])])))
+                            (if (empty? v)
+                              #(-> m/Navigator (.of ctx) .pop)
+                              on-add))])])))
