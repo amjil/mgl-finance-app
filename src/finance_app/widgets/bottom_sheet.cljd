@@ -18,26 +18,35 @@
       (.showBottomSheet
        (fn [^m/BuildContext context]
          (f/widget
-          (m/MediaQuery 
+          (m/MediaQuery
            .data (.fromWindow m/MediaQueryData
                               (-> m/WidgetsBinding .-instance .-window)))
-          (m/Container .height (* 0.86 (-> m/MediaQuery (.of ctx) .-size .-height)))
-          (m/SafeArea)
-          (m/Row
+          (m/Container .height (* 0.6 (-> m/MediaQuery (.of ctx) .-size .-height)))
+          (m/SafeArea .top false)
+          (m/Column
+           .crossAxisAlignment m.CrossAxisAlignment/center
            .children
-           [(picker/datetime-picker state)
-            (m/Column
-             .mainAxisAlignment m.MainAxisAlignment/end
+           [(m/Container
+             .alignment m.FractionalOffset/topRight
+             .child (m/IconButton
+                     .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                     .icon (m/Icon m.Icons/clear)))
+
+            (m/Row
              .children
-             [(m/Container
-               .decoration
-               (m/BoxDecoration .color colors/grey-text-field
-                                .borderRadius
-                                (.all m/BorderRadius (.circular m/Radius 4)))
-               .child
-              (mgl/MongolTextButton
-               .onPressed (fn [] (dart:core/print "xxxx"))
-               .child (mgl/MongolText "ABC")))])]))))))
+             [(picker/datetime-picker state)
+              (m/Column
+               .mainAxisAlignment m.MainAxisAlignment/end
+               .children
+               [(m/Container
+                 .decoration
+                 (m/BoxDecoration .color colors/grey-text-field
+                                  .borderRadius
+                                  (.all m/BorderRadius (.circular m/Radius 4)))
+                 .child
+                 (mgl/MongolTextButton
+                  .onPressed (fn [] (dart:core/print "xxxx"))
+                  .child (mgl/MongolText "ABC")))])])]))))))
 
 
 (defn show-month-picker [^m/BuildContext ctx state]
@@ -57,8 +66,14 @@
            .data (.fromWindow m/MediaQueryData
                               (-> m/WidgetsBinding .-instance .-window)))
           (m/Container .height (* 0.48 (-> m/MediaQuery (.of ctx) .-size .-height)))
-          (m/SafeArea)
-          (m/Row
+          (m/SafeArea .top false)
+          (m/Column
+           .crossAxisAlignment m.CrossAxisAlignment/center
            .children
-           [(picker/datetime-picker state)]))))))
+           [(m/Container
+             .alignment m.FractionalOffset/topRight
+             .child (m/IconButton
+                     .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                     .icon (m/Icon m.Icons/clear)))
+            (picker/datetime-picker state)]))))))
            
