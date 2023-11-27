@@ -2,6 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
+   ["package:math_expressions/math_expressions.dart" :as exp]
    [cljd.flutter.alpha2 :as f]
    [mongol-date-picker.util :as picker-util]
    [finance-app.widgets.text-field :as custom-field]
@@ -106,6 +107,15 @@
   
 (defn ^m/Widget edit-screen [ctx id amount remark category date]
   (edit-record id amount remark category date))
+  
+(defn- get-amount-result [value]
+  (let [p (exp/Parser)
+        v (if (or (clojure.string/ends-with? value "+")
+                  (clojure.string/ends-with? value "-")
+                  (clojure.string/ends-with? value "."))
+            (str value "0")
+            value)]
+    (.evaluate (.parse p v) exp.EvaluationType/REAL (exp/ContextModel))))
 
 (defn on-add [ctx value remark picker-state]
   (if (empty? @value)
@@ -113,9 +123,7 @@
     (let [info {:catetory_id (:curr-cate @gs/state)
                 :content @remark
                 :types_of (:subtype @gs/state)
-                :amount (if (zero? (:type @gs/state))
-                          (- @value)
-                          @value)
+                :amount (get-amount-result @value)
                 :transaction_time (datetime/datetime-from-state picker-state)}]
       (transactions/create-transaction info)
       (-> m/Navigator (.of ctx) .pop))))
@@ -127,9 +135,7 @@
                 :catetory_id (:curr-cate @gs/state)
                 :content @remark
                 :types_of (:subtype @gs/state)
-                :amount (if (zero? (:type @gs/state))
-                          (- @value)
-                          @value)
+                :amount (get-amount-result @value)
                 :transaction_time (datetime/datetime-from-state picker-state)}]
       (transactions/edit-transaction info)
       (-> m/Navigator (.of ctx) .pop))))
