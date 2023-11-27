@@ -5,11 +5,14 @@
    [finance-app.services.transaction :as transaction-service]
    [finance-app.states.global :as gs]
    [finance-app.utils.datetime :as datetime]))
+   
+(declare home-statistic)
 
 (defn query-transactions [m]
   (let [trans (await (transaction-service/query-transactions m))]
     (swap! gs/state assoc :curr-month (subs m 0 7))
-    (swap! gs/state assoc :trans trans)))
+    (swap! gs/state assoc :trans trans)
+    (home-statistic)))
 
 (defn search-transactions [s]
   (let [trans (await (transaction-service/search-transactions s))]
@@ -56,3 +59,14 @@
                                  "amount" (get % "amount")
                                  "category" (get % "category"))))]
     (swap! gs/state assoc :category-sum result)))
+    
+;;
+(defn home-statistic []
+  (let [curr-month (str (:curr-month @gs/state) "-01 00:00:00")
+        default-result {1 0 2 0}
+        result (as-> (await (transaction-service/home-statistic curr-month)) m
+                 (map (fn [x] [(get x "types_of")
+                               (get x "amount")]) m)
+                 (into {} m)
+                 (merge default-result m))]
+    (swap! gs/state assoc :home-statistic result)))
