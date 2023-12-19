@@ -17,10 +17,15 @@
     .child child)))
 
 (defn num-button [v style on-tap]
+  (f/widget 
+   :context ctx
   (base-button
    v
-   (m/Text v .style (or style (m/TextStyle .color (.-black m/Colors) .fontSize 28)))
-   on-tap))
+   (m/Text v .style (or style
+                        (m/TextStyle .color
+                                     (-> m/Theme (.of ctx) .-colorScheme .-primary)
+                                     .fontSize 28)))
+   on-tap)))
 
 (defn icon-button [icon on-tap]
   (base-button 
