@@ -10,67 +10,74 @@
    [finance-app.utils.datetime :as datetime]))
 
 (defn show-datetime-picker [^m/BuildContext ctx state]
-  (-> m/Scaffold
-      (.of ctx)
-      (.showBottomSheet
-       (fn [^m/BuildContext context]
-         (f/widget
-          (m/MediaQuery
-           .data (.fromWindow m/MediaQueryData
-                              (-> m/WidgetsBinding .-instance .-window)))
-          (m/Container .height (* 0.6 (-> m/MediaQuery (.of ctx) .-size .-height)))
-          (m/SafeArea .top false)
+  (m/showModalBottomSheet
+   .context ctx
+   .isScrollControlled true
+   .shape (m/RoundedRectangleBorder
+           .borderRadius (m.BorderRadius/vertical .top (m.Radius/circular 20)))
+   .builder
+   (fn [^m/BuildContext context]
+     (f/widget
+      (m/MediaQuery
+       .data (.fromWindow m/MediaQueryData
+                          (-> m/WidgetsBinding .-instance .-window)))
+      (m/Container .height (* 0.6 (-> m/MediaQuery (.of ctx) .-size .-height)))
+      (m/SafeArea .top false)
+      (m/Column
+       .crossAxisAlignment m.CrossAxisAlignment/center
+       .children
+       [(m/Container
+         .alignment m.FractionalOffset/topRight
+         .child (m/IconButton
+                 .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                 .icon (m/Icon m.Icons/clear)))
+
+        (m/Row
+         .children
+         [(picker/datetime-picker state)
           (m/Column
-           .crossAxisAlignment m.CrossAxisAlignment/center
+           .mainAxisAlignment m.MainAxisAlignment/end
            .children
            [(m/Container
-             .alignment m.FractionalOffset/topRight
-             .child (m/IconButton
-                     .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
-                     .icon (m/Icon m.Icons/clear)))
-
-            (m/Row
-             .children
-             [(picker/datetime-picker state)
-              (m/Column
-               .mainAxisAlignment m.MainAxisAlignment/end
-               .children
-               [(m/Container
-                 .decoration
-                 (m/BoxDecoration .color colors/grey-text-field
-                                  .borderRadius
-                                  (.all m/BorderRadius (.circular m/Radius 4)))
-                 .child
-                 (mgl/MongolTextButton
-                  .onPressed (fn [] (dart:core/print "xxxx"))
-                  .child (mgl/MongolText "ABC")))])])]))))))
+             .decoration
+             (m/BoxDecoration .color colors/grey-text-field
+                              .borderRadius
+                              (.all m/BorderRadius (.circular m/Radius 4)))
+             .child
+             (mgl/MongolTextButton
+              .onPressed (fn [] (dart:core/print "xxxx"))
+              .child (mgl/MongolText "ABC")))])])])))))
 
 
 (defn show-month-picker [^m/BuildContext ctx state]
   (swap! state assoc :keys [:year :month])
-  (-> m/Scaffold
-      (.of ctx)
-      (.showBottomSheet
-       (fn [^m/BuildContext context]
-         (f/widget
-          :bg-watcher ([{{year :val} :year
-                         {month :val} :month} state]
-                       (let [m (datetime/datetime-from-list year month 1 0 0)]
-                         (when-not (= (subs m 0 7)
-                                      (get @gs/state :curr-month))
-                           (transactions/query-transactions m))))
-          (m/MediaQuery
-           .data (.fromWindow m/MediaQueryData
-                              (-> m/WidgetsBinding .-instance .-window)))
-          (m/Container .height (* 0.48 (-> m/MediaQuery (.of ctx) .-size .-height)))
-          (m/SafeArea .top false)
-          (m/Column
-           .crossAxisAlignment m.CrossAxisAlignment/center
-           .children
-           [(m/Container
-             .alignment m.FractionalOffset/topRight
-             .child (m/IconButton
-                     .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
-                     .icon (m/Icon m.Icons/clear)))
-            (picker/datetime-picker state)]))))))
+  (m/showModalBottomSheet
+   .context ctx
+   .isScrollControlled true
+   .shape (m/RoundedRectangleBorder
+           .borderRadius (m.BorderRadius/vertical .top (m.Radius/circular 20)))
+   .builder
+   (fn [^m/BuildContext context]
+     (f/widget
+      :bg-watcher ([{{year :val} :year
+                     {month :val} :month} state]
+                   (let [m (datetime/datetime-from-list year month 1 0 0)]
+                     (when-not (= (subs m 0 7)
+                                  (get @gs/state :curr-month))
+                       (transactions/query-transactions m))))
+      (m/FractionallySizedBox
+       .heightFactor 0.48)
+      (m/Scaffold)
+      .body
+      (m/Container)
+      (m/SafeArea .top false)
+      (m/Column
+       .crossAxisAlignment m.CrossAxisAlignment/center
+       .children
+       [(m/Container
+         .alignment m.FractionalOffset/topRight
+         .child (m/IconButton
+                 .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                 .icon (m/Icon m.Icons/clear)))
+        (picker/datetime-picker state)])))))
            

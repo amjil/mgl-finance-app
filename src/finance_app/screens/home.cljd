@@ -3,7 +3,7 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [mongol-date-picker.util :as picker-util]
    [finance-app.screens.transaction :as transaction-screen]
    [finance-app.screens.search :as search]
@@ -17,6 +17,8 @@
     (f/widget
      :get [m/Navigator]
      :context ctx
+     :let [h (-> m/MediaQuery (.of ctx) .-size .-height)
+           w (-> m/MediaQuery (.of ctx) .-size .-width)]
      :watch [{curr-month :curr-month
               trans :trans
               statistic :home-statistic} gs/state]
@@ -44,87 +46,85 @@
      (m/SafeArea)
      (m/Padding
       .padding (.symmetric m/EdgeInsets .horizontal 16 .vertical 16))
-     (m/LayoutBuilder
-      .builder (fn [context ^m/BoxConstraints constraints]
-                 (m/Column
-                  .crossAxisAlignment m.CrossAxisAlignment/start
-                  .children
-                  [(m/Stack
-                    .children [(m/Align
-                                .alignment m.Alignment/center
-                                .child (m/GestureDetector
-                                        .onTap (fn [] (bottom-sheet/show-month-picker context picker-state))
-                                        .child (m/Row
-                                                .mainAxisAlignment m.MainAxisAlignment/center
-                                                .children [(m/Icon m.Icons/calendar_month)
-                                                           (m/Text
-                                                            curr-month)])))
-                               (m/Align
-                                .alignment m.Alignment/centerRight
-                                .child (m/IconButton
-                                        .padding m.EdgeInsets/zero
-                                        .constraints (m/BoxConstraints)
-                                        .icon (m/Icon m.Icons/search)
-                                        .onPressed (fn []
-                                                     (swap! gs/state assoc :search-result trans)
-                                                     (tab.PersistentNavBarNavigator/pushNewScreen
-                                                      ctx
-                                                      .screen
-                                                      (search/screen ctx)
-                                                      .withNavBar false)
-                                                     nil)))])
-                   (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                   (m/Container
-                    .height (* 0.24 (.-maxHeight constraints))
-                    .padding (m.EdgeInsets/symmetric .vertical 20)
-                    .decoration (m/BoxDecoration .color (-> m/Theme (.of context) .-primaryColor)
-                                                 .borderRadius
-                                                 (.all m/BorderRadius (.circular m/Radius 20)))
-                    .child (m/Row
-                            .mainAxisAlignment m.MainAxisAlignment/spaceAround
-                            .children [(m/SizedBox .width (* 0.01 (.-maxWidth constraints)))
-                                       (m/Column
-                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                        .children [(mgl/MongolText
-                                                    "ᠵᠠᠷᠤᠯᠭ᠎ᠠ"
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                   (m/Text
-                                                    (str (get statistic 1))
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                       (m/VerticalDivider .color m.Colors/white)
-                                       (m/Column
-                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                        .children [(mgl/MongolText
-                                                    "ᠣᠷᠤᠯᠭ᠎ᠠ"
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                   (m/Text
-                                                    (str (get statistic 2))
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                       (m/VerticalDivider .color m.Colors/white)
-                                       (m/Column
-                                        .mainAxisAlignment m.MainAxisAlignment/spaceBetween
-                                        .children [(mgl/MongolText
-                                                    "ᠬᠠᠳᠠᠭᠠᠯᠠᠮᠵᠢ"
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
-                                                   (m/Text
-                                                    (str (- (get statistic 2) (get statistic 1)))
-                                                    .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
-                                       (m/SizedBox .width (* 0.01 (.-maxWidth constraints)))]))
-                   (f/widget
-                    (m/Expanded)
-                    (m/Padding
-                     .padding (.symmetric m/EdgeInsets .vertical 20))
-                    (m/Row
-                     .crossAxisAlignment m.CrossAxisAlignment/start
-                     .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
-                                (m/Expanded
-                                 .child
-                                 (m.ListView/separated
-                                  .scrollDirection m.Axis/horizontal
-                                  .itemCount (count trans)
-                                  .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 (.-maxWidth constraints))))
-                                  .itemBuilder (fn [_ i]
-                                                 (transaction-card/card
-                                                  (* 0.05 (.-maxHeight constraints))
-                                                  (nth trans i)))))]))]))))))
+     (m/Column
+      .crossAxisAlignment m.CrossAxisAlignment/start
+      .children
+      [(m/Stack
+        .children [(m/Align
+                    .alignment m.Alignment/center
+                    .child (m/GestureDetector
+                            .onTap (fn [] (bottom-sheet/show-month-picker ctx picker-state))
+                            .child (m/Row
+                                    .mainAxisAlignment m.MainAxisAlignment/center
+                                    .children [(m/Icon m.Icons/calendar_month)
+                                               (m/Text
+                                                curr-month)])))
+                   (m/Align
+                    .alignment m.Alignment/centerRight
+                    .child (m/IconButton
+                            .padding m.EdgeInsets/zero
+                            .constraints (m/BoxConstraints)
+                            .icon (m/Icon m.Icons/search)
+                            .onPressed (fn []
+                                         (swap! gs/state assoc :search-result trans)
+                                         (tab.PersistentNavBarNavigator/pushNewScreen
+                                          ctx
+                                          .screen
+                                          (search/screen ctx)
+                                          .withNavBar false)
+                                         nil)))])
+       (m/SizedBox .height (* 0.02 h))
+       (m/Container
+        .height (* 0.24 h)
+        .padding (m.EdgeInsets/symmetric .vertical 20)
+        .decoration (m/BoxDecoration .color (-> m/Theme (.of ctx) .-primaryColor)
+                                     .borderRadius
+                                     (.all m/BorderRadius (.circular m/Radius 20)))
+        .child (m/Row
+                .mainAxisAlignment m.MainAxisAlignment/spaceAround
+                .children [(m/SizedBox .width (* 0.01 w))
+                           (m/Column
+                            .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                            .children [(mgl/MongolText
+                                        "ᠵᠠᠷᠤᠯᠭ᠎ᠠ"
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                       (m/Text
+                                        (str (get statistic 1))
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                           (m/VerticalDivider .color m.Colors/white)
+                           (m/Column
+                            .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                            .children [(mgl/MongolText
+                                        "ᠣᠷᠤᠯᠭ᠎ᠠ"
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                       (m/Text
+                                        (str (get statistic 2))
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                           (m/VerticalDivider .color m.Colors/white)
+                           (m/Column
+                            .mainAxisAlignment m.MainAxisAlignment/spaceBetween
+                            .children [(mgl/MongolText
+                                        "ᠬᠠᠳᠠᠭᠠᠯᠠᠮᠵᠢ"
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/w500))
+                                       (m/Text
+                                        (str (- (get statistic 2) (get statistic 1)))
+                                        .style (m/TextStyle .fontSize 25 .color m.Colors/white .fontWeight m.FontWeight/bold))])
+                           (m/SizedBox .width (* 0.01 w))]))
+       (f/widget
+        (m/Expanded)
+        (m/Padding
+         .padding (.symmetric m/EdgeInsets .vertical 20))
+        (m/Row
+         .crossAxisAlignment m.CrossAxisAlignment/start
+         .children [(m/SizedBox .width (* 0.02 w))
+                    (m/Expanded
+                     .child
+                     (m.ListView/separated
+                      .scrollDirection m.Axis/horizontal
+                      .itemCount (count trans)
+                      .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 w)))
+                      .itemBuilder (fn [_ i]
+                                     (transaction-card/card
+                                      (* 0.05 h)
+                                      (nth trans i)))))]))]))))
 
