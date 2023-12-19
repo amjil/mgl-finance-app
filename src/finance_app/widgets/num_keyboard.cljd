@@ -2,7 +2,7 @@
   (:require 
    ["package:flutter/material.dart" :as m]
    ["package:font_awesome_flutter/font_awesome_flutter.dart" :as font-awesome]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.utils.colors :as colors]))
 
 (defn base-button [v child on-tap]

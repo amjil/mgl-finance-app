@@ -12,7 +12,6 @@
 (defn ^m/Widget input-box [value]
   (f/widget
    :context ctx
-   :get [:info]
    :let [w (-> m/MediaQuery (.of ctx) .-size .-width)
          h (-> m/MediaQuery (.of ctx) .-size .-height)
          text-controller (:keyboard/text-controller @gs/state)]
@@ -73,7 +72,7 @@
          (menu/menu {:bar {:elavation 10
                            :background-color
                            (-> m/Theme (.of ctx) .-colorScheme .-tertiaryContainer)}
-                     :item {:on-tap (fn [x] (keyboard-action/on-candidates-clicked x gs/state info))}}
+                     :item {:on-tap (fn [x] (keyboard-action/on-candidates-clicked x gs/state))}}
                     candidates-list))]))
      (if (true? in-app-keyboard)
        (m/Container

@@ -3,7 +3,7 @@
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:math_expressions/math_expressions.dart" :as exp]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [mongol-date-picker.util :as picker-util]
    [finance-app.widgets.text-field :as custom-field]
    [finance-app.widgets.button :as button]
@@ -38,6 +38,8 @@
 (defn record-editor [amount text-value picker num-keyboard-fn]
   (f/widget
    :context ctx
+   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)
+         w (-> m/MediaQuery (.of ctx) .-size .-width)]
    :managed [amount-controller (m/TextEditingController .text @amount)
              text-controller (m/TextEditingController .text @text-value)]
    :watch [value amount
@@ -58,20 +60,20 @@
                   .children [(m/IconButton
                               .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
                               .icon (m/Icon m.Icons/keyboard_backspace))
-                             (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                             (m/SizedBox .height (* 0.02 h))
                              (m/Expanded
                               .child
                               (m/Row
-                               .children [(m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                               .children [(m/SizedBox .width (* 0.02 w))
                                           (m/Expanded
                                            .child
                                            (category/main-tab nil))
                                           (m/SizedBox
-                                           .width (* 0.02 (.-maxWidth constraints))
+                                           .width (* 0.02 w)
                                            .child (m/Container
                                                    .color (-> m/Theme (.of ctx) .-canvasColor)))
                                           (m/Container
-                                           .width (* 0.09 (.-maxWidth constraints))
+                                           .width (* 0.09 w)
                                            .color (-> m/Theme (.of ctx) .-canvasColor)
                                            .child (m/Column
                                                    .mainAxisAlignment m.MainAxisAlignment/end
@@ -91,10 +93,10 @@
                                                                  .crossAxisAlignment m.CrossAxisAlignment/end
                                                                  .children [(m/Icon m.Icons/calendar_month)
                                                                             (mgl/MongolText (str (get-in @picker [:hour :val]) ":" (get-in @picker [:minute :val])))])))]))
-                                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))
+                                          (m/SizedBox .width (* 0.02 w))
                                           (custom-field/num-field text-controller amount text-value)
-                                          (m/SizedBox .width (* 0.02 (.-maxWidth constraints)))]))
-                             (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
+                                          (m/SizedBox .width (* 0.02 w))]))
+                             (m/SizedBox .height (* 0.02 h))
                              (num-keyboard/keyboard amount amount-controller num-keyboard-fn)])))
      (if (true? floating-input)
        (floating-input/input-box text-value)

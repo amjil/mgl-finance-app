@@ -2,7 +2,7 @@
   (:require 
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [mongol-date-picker.picker :as picker]
    [finance-app.utils.colors :as colors]
    [finance-app.states.transactions :as transactions]

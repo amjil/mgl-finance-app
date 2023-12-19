@@ -2,7 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.widgets.settings :as settings]
    [finance-app.states.global :as gs]
    [finance-app.states.profile :as profile-state]))
@@ -19,41 +19,40 @@
 (defn ^m/Widget screen [ctx]
   (f/widget
    :context ctx
+   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
    (m/Scaffold
     .appBar nil)
    .body
    (m/SafeArea)
-   (m/LayoutBuilder
-    .builder (fn [^m/BuildContext context ^m/BoxConstraints constraints]
-               (m/Column
-                .crossAxisAlignment m.CrossAxisAlignment/start
-                .children [(m/IconButton
-                            .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
-                            .icon (m/Icon m.Icons/keyboard_backspace))
-                           (m/SizedBox .height (* 0.02 (.-maxHeight constraints)))
-                           (m/Expanded
-                            .child
-                            (m/ListView
-                             .scrollDirection m.Axis/horizontal
-                             .children [(settings/settings-group
-                                         [{:title "In-APP embeded virtual keyboard"
-                                           :trailing
-                                           (f/widget
-                                            :watch [{{v "in-app-keyboard"} :profile} gs/state]
-                                            (m/RotatedBox
-                                             .quarterTurns 1)
-                                            (m/Switch
-                                             .activeColor m.Colors/blueAccent
-                                             .value v
-                                             .onChanged (fn [b] 
-                                                          (profile-state/set-profile-setting {:key "in-app-keyboard" :type :bool :value b}))))}])
-                                        (settings/settings-group
-                                         [{:title "About"
-                                           :on-tap (fn []
+   (m/Column
+    .crossAxisAlignment m.CrossAxisAlignment/start
+    .children [(m/IconButton
+                .onPressed (fn [] (-> m/Navigator (.of ctx) .pop))
+                .icon (m/Icon m.Icons/keyboard_backspace))
+               (m/SizedBox .height (* 0.02 h))
+               (m/Expanded
+                .child
+                (m/ListView
+                 .scrollDirection m.Axis/horizontal
+                 .children [(settings/settings-group
+                             [{:title "In-APP embeded virtual keyboard"
+                               :trailing
+                               (f/widget
+                                :watch [{{v "in-app-keyboard"} :profile} gs/state]
+                                (m/RotatedBox
+                                 .quarterTurns 1)
+                                (m/Switch
+                                 .activeColor m.Colors/blueAccent
+                                 .value v
+                                 .onChanged (fn [b]
+                                              (profile-state/set-profile-setting {:key "in-app-keyboard" :type :bool :value b}))))}])
+                            (settings/settings-group
+                             [{:title "About"
+                               :on-tap (fn []
                                                     ;;  (tab.PersistentNavBarNavigator/pushNewScreen
                                                     ;;   ctx
                                                     ;;   .screen
                                                     ;;   (search/screen ctx)
                                                     ;;   .withNavBar false)
-                                                     )}
-                                          {:title "License"}])]))])))))
+                                         )}
+                              {:title "License"}])]))])))

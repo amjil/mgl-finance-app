@@ -3,7 +3,7 @@
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    ["package:flutter/material.dart" :as m]
    ["package:flutter/painting.dart" :as painting]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.utils.themes :as themes]
    [finance-app.utils.colors :as colors]
    [finance-app.screens.home :as home]
