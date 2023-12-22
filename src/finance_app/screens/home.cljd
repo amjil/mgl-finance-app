@@ -41,6 +41,8 @@
                      (swap! gs/state assoc :subtype (-> (categories/get-sub-types 1) (first) (get "id")))
                      (swap! gs/state assoc :cates (categories/get-cates))
                      nil)
+        .shape (m/CircleBorder)
+        .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
         .child (m/Icon m.Icons/add))))
      .body
      (m/SafeArea)
@@ -122,7 +124,7 @@
                      (m.ListView/separated
                       .scrollDirection m.Axis/horizontal
                       .itemCount (count trans)
-                      .separatorBuilder (fn [_ i] (m/SizedBox .width (* 0.01 w)))
+                      .separatorBuilder (fn [_ _] (m/SizedBox .width (* 0.01 w)))
                       .itemBuilder (fn [_ i]
                                      (transaction-card/card
                                       (* 0.05 h)
