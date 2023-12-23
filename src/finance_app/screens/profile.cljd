@@ -19,7 +19,7 @@
 (defn ^m/Widget screen [ctx]
   (f/widget
    :context ctx
-   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+   :get {{{h .-height} .-size}m/MediaQuery}
    (m/Scaffold
     .appBar nil)
    .body

@@ -6,15 +6,17 @@
    [cljd.flutter.alpha2 :as f]
    [finance-app.states.global :as gs]))
    
-(def bar-gradient (m/LinearGradient .colors
-                                    [(m/Color 0xFF2196F3) (m/Color 0xFF50E4FF)]
-                                    .begin (.-bottomCenter m/Alignment)
-                                    .end (.-topCenter m/Alignment)))
+(def bar-gradient (m/LinearGradient
+                   .colors
+                   [(m/Color 0xFF2196F3) (m/Color 0xFF50E4FF)]
+                   .begin (.-bottomCenter m/Alignment)
+                   .end (.-topCenter m/Alignment)))
 
 (defn ^m/Widget get-titles [^double value ^chart/TitleMeta meta]
-  (let [style (m/TextStyle .color (m/Color 0xFF2196F3)
-                           .fontWeight (.-bold m/FontWeight)
-                           .fontSize 14)
+  (let [style (m/TextStyle
+               .color (m/Color 0xFF2196F3)
+               .fontWeight (.-bold m/FontWeight)
+               .fontSize 14)
         text (str (.toInt value) " ᠤ ᠡᠳᠥᠷ")]
     (chart/SideTitleWidget
      .axisSide (.-axisSide meta)
@@ -50,8 +52,9 @@
                              ^chart/BarChartRodData rod,
                              ^int rodIndex]
                           (chart/BarTooltipItem (-> rod .-toY .round .toString)
-                                                (m/TextStyle .color (m/Color 0xFF50E4FF)
-                                                             .fontWeight (.-bold m/FontWeight))))))
+                                                (m/TextStyle
+                                                 .color (m/Color 0xFF50E4FF)
+                                                 .fontWeight (.-bold m/FontWeight))))))
       .titlesData (chart/FlTitlesData
                    .show true
                    .bottomTitles
@@ -65,16 +68,17 @@
       .barGroups (bar-groups-data daily-sum))))))
      
 (defn pie-chart-item [item category color selected]
-  (chart/PieChartSectionData .color color
-                             .value item
-                             .title (str item " " category)
-                             .radius (if (true? selected) 100.0 90.0)
-                             .titleStyle
-                             (m/TextStyle
-                              .fontSize (if (true? selected) 18 14)
-                              .fontWeight (.-bold m/FontWeight)
-                              .color m.Colors/white
-                              .shadows [(m/Shadow .color (.-black m/Colors) .blurRadius 2)])))
+  (chart/PieChartSectionData
+   .color color
+   .value item
+   .title (str item " " category)
+   .radius (if (true? selected) 100.0 90.0)
+   .titleStyle
+   (m/TextStyle
+    .fontSize (if (true? selected) 18 14)
+    .fontWeight (.-bold m/FontWeight)
+    .color m.Colors/white
+    .shadows [(m/Shadow .color (.-black m/Colors) .blurRadius 2)])))
      
 (defn pie-chart []
   (let [item-index (atom -1)]
@@ -107,7 +111,7 @@
 (defn ^m/Widget screen [ctx]
   (f/widget
    :context ctx
-   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+   :get {{{h .-height} .-size} m/MediaQuery}
    (m/Scaffold
     .appBar nil)
    .body

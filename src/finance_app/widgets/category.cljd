@@ -12,7 +12,7 @@
 (defn view [items]
   (f/widget
    :context ctx
-   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+   :get {{{h .-height} .-size} m/MediaQuery}
    :watch [{curr-cate :curr-cate} gs/state]
    (m.GridView/builder
     .scrollDirection m.Axis/horizontal
@@ -50,13 +50,14 @@
 (defn tab-view [info]
   (f/widget
    :context ctx
+   :get {{canvas-color .-canvasColor} m/Theme}
    :watch [{curr-sub-tab :subtype
             subtypes :subtypes
             curr-tab :tab
             cates :cates} gs/state]
    (m/Container
     .color (if (nil? (:bg-color info))
-             (-> m/Theme (.of ctx) .-canvasColor)
+             canvas-color
              (:bg-color info)))
    (m/Column
     .mainAxisSize m.MainAxisSize/min
@@ -104,10 +105,11 @@
 (defn main-tab [info]
   (f/widget
    :context ctx
+   :get {{canvas-color .-canvasColor} m/Theme}
    :watch [{curr-tab :type} gs/state]
    (m/Container
     .color (if (nil? (:bg-color info))
-             (-> m/Theme (.of ctx) .-canvasColor)
+             canvas-color
              (:bg-color info)))
    (m/Column
     .mainAxisSize m.MainAxisSize/min

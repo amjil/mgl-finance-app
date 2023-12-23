@@ -15,7 +15,7 @@
 (def screen
   (let [picker-state (picker-util/default-state nil)]
     (f/widget
-     :get [m/Navigator]
+     :get {{primary-color .-primaryColor}m/Theme}
      :context ctx
      :let [h (-> m/MediaQuery (.of ctx) .-size .-height)
            w (-> m/MediaQuery (.of ctx) .-size .-width)]
@@ -42,7 +42,7 @@
                      (swap! gs/state assoc :cates (categories/get-cates))
                      nil)
         .shape (m/CircleBorder)
-        .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
+        .backgroundColor primary-color
         .child (m/Icon m.Icons/add))))
      .body
      (m/SafeArea)
@@ -79,7 +79,7 @@
        (m/Container
         .height (* 0.24 h)
         .padding (m.EdgeInsets/symmetric .vertical 20)
-        .decoration (m/BoxDecoration .color (-> m/Theme (.of ctx) .-primaryColor)
+        .decoration (m/BoxDecoration .color primary-color
                                      .borderRadius
                                      (.all m/BorderRadius (.circular m/Radius 20)))
         .child (m/Row

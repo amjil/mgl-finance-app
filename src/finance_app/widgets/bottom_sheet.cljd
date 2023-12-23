@@ -18,10 +18,12 @@
    .builder
    (fn [^m/BuildContext context]
      (f/widget
+      :get {{{h .-height} .-size} m/MediaQuery}
       (m/MediaQuery
        .data (.fromWindow m/MediaQueryData
                           (-> m/WidgetsBinding .-instance .-window)))
-      (m/Container .height (* 0.6 (-> m/MediaQuery (.of ctx) .-size .-height)))
+      ;; (m/Container .height (* 0.6 (-> m/MediaQuery (.of ctx) .-size .-height)))
+      (m/Container .height (* 0.6 h))
       (m/SafeArea .top false)
       (m/Column
        .crossAxisAlignment m.CrossAxisAlignment/center

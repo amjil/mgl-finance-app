@@ -12,10 +12,9 @@
 (defn ^m/Widget screen [ctx]
   (let [text-value (atom nil)]
     (f/widget
-     :get [m/Navigator]
      :context ctx
-     :let [h (-> m/MediaQuery (.of ctx) .-size .-height)
-           w (-> m/MediaQuery (.of ctx) .-size .-width)]
+     :get {{{h .-height
+             w .-width} .-size}m/MediaQuery}
      :managed [text-controller (m/TextEditingController)]
      :watch [{search-result :search-result
               floating-input :floating-input} gs/state
@@ -50,7 +49,7 @@
                                    .child
                                    (f/widget
                                     :context ctx
-                                    :let [h (-> m/MediaQuery (.of ctx) .-size .-height)]
+                                    :get {{{h .-height} .-size} m/MediaQuery}
                                     (m/Container
                                      .decoration (m/BoxDecoration
                                                   .border (m.Border/all .color m.Colors/blueAccent))

@@ -38,8 +38,9 @@
 (defn record-editor [amount text-value picker num-keyboard-fn]
   (f/widget
    :context ctx
-   :let [h (-> m/MediaQuery (.of ctx) .-size .-height)
-         w (-> m/MediaQuery (.of ctx) .-size .-width)]
+   :get {{{h .-height
+           w .-width} .-size} m/MediaQuery
+         {canvas-color .-canvasColor} m/Theme}
    :managed [amount-controller (m/TextEditingController .text @amount)
              text-controller (m/TextEditingController .text @text-value)]
    :watch [value amount
@@ -71,17 +72,18 @@
                                           (m/SizedBox
                                            .width (* 0.02 w)
                                            .child (m/Container
-                                                   .color (-> m/Theme (.of ctx) .-canvasColor)))
+                                                   .color canvas-color))
                                           (m/Container
                                            .width (* 0.09 w)
-                                           .color (-> m/Theme (.of ctx) .-canvasColor)
+                                           .color canvas-color
                                            .child (m/Column
                                                    .mainAxisAlignment m.MainAxisAlignment/end
                                                    .children [(m/Container
                                                                .decoration
-                                                               (m/BoxDecoration .color colors/grey-text-field
-                                                                                .borderRadius
-                                                                                (.all m/BorderRadius (.circular m/Radius 4)))
+                                                               (m/BoxDecoration
+                                                                .color colors/grey-text-field
+                                                                .borderRadius
+                                                                (.all m/BorderRadius (.circular m/Radius 4)))
                                                                .child
                                                                (mgl/MongolTextButton
                                                                 .onPressed (fn []
