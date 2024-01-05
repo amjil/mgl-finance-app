@@ -4,6 +4,7 @@
    ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
    [cljd.flutter :as f]
    [finance-app.widgets.settings :as settings]
+   [finance-app.services.backup :as backup]
    [finance-app.states.global :as gs]
    [finance-app.states.profile :as profile-state]))
 
