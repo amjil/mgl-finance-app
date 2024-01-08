@@ -51,7 +51,7 @@
                              ^int groupIndex,
                              ^chart/BarChartRodData rod,
                              ^int rodIndex]
-                          (chart/BarTooltipItem (-> rod .-toY .round .toString)
+                          (chart/BarTooltipItem (-> rod .-toY .toString)
                                                 (m/TextStyle
                                                  .color (m/Color 0xFF50E4FF)
                                                  .fontWeight (.-bold m/FontWeight))))))
