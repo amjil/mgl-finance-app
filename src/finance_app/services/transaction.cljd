@@ -139,6 +139,6 @@
                 left join category_types c on a.types_of = c.id
            where strftime('%Y',transaction_time) = strftime('%Y', ?) 
               AND  strftime('%m',transaction_time) = strftime('%m', ?)
-           group by b.types_of
+           group by c.types_of
            ;"
       [m m]))))
