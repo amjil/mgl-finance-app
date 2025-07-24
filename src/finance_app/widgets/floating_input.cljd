@@ -2,7 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [virtual-keyboard.keyboard :as keyboard]
    [virtual-keyboard.options :as keyboard-options]
    [virtual-keyboard.keyboard-action :as keyboard-action]
@@ -14,12 +14,12 @@
    :context ctx
    :get {{{w .-width
            h .-height} .-size} m/MediaQuery
-                          ;;  (-> m/Theme (.of ctx) .-colorScheme .-tertiaryContainer)}
+         ;;  (-> m/Theme (.of ctx) .-colorScheme .-tertiaryContainer)}
          {{tertiary-container-color .-tertiaryContainer
            primary-container-color .-primaryContainer
            background-color .-background} .-colorScheme
           canvas-color .-canvasColor} m/Theme}
-   :let [text-controller (:keyboard/text-controller @gs/state)]
+   :managed [text-controller (m/TextEditingController.)]
    :watch [{candidates-list :keyboard/candidates-list
             keyboard-height :keyboard-height
             {in-app-keyboard "in-app-keyboard"} :profile} gs/state
@@ -56,19 +56,21 @@
                       .borderRadius
                       (.all m/BorderRadius (.circular m/Radius 10))
                       .border (.all m/Border .width 0.1))
-        ;;  .constraints (m/BoxConstraints
-        ;;                .minHeight double/infinity
-        ;;                .minWidth 100
-        ;;                .maxWidth (/ w 2))
+         ;;  .constraints (m/BoxConstraints
+         ;;                .minHeight double/infinity
+         ;;                .minWidth 100
+         ;;                .maxWidth (/ w 2))
          .child
          (mgl/MongolTextField
-          .controller (get @gs/state :keyboard/text-controller)
+          .controller text-controller
           .style (m/TextStyle .fontSize 22)
           .decoration (m/InputDecoration
                        .border m.InputBorder/none)
           .showCursor true
           .autofocus true
-          .readOnly (if (true? in-app-keyboard) true false)))
+          .keyboardType m/TextInputType.none
+          ;; .readOnly (if (true? in-app-keyboard) true false)
+          ))
         (m/Positioned
          .bottom 10
          .right 0
@@ -85,5 +87,5 @@
         .child
         (m/IntrinsicHeight
          .child
-         (keyboard/keyboard)))
+         (keyboard/keyboard {:custom-fns nil})))
        (m/Container))])))

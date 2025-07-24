@@ -2,7 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.states.global :as gs]
    [finance-app.states.categories :as categories-state]
    [finance-app.utils.icons :as icons]

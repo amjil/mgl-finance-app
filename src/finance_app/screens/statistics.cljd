@@ -3,7 +3,7 @@
    ["package:flutter/material.dart" :as m]
    ["package:fl_chart/fl_chart.dart" :as chart]
    ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.states.global :as gs]))
    
 (def bar-gradient (m/LinearGradient
@@ -19,7 +19,7 @@
                .fontSize 14)
         text (str (.toInt value) " ᠤ ᠡᠳᠥᠷ")]
     (chart/SideTitleWidget
-     .axisSide (.-axisSide meta)
+     .meta meta
      .space 4
      .child (mgl/MongolText text .style style))))
      
@@ -44,7 +44,7 @@
        .enabled false
        .touchTooltipData
        (chart/BarTouchTooltipData
-        .tooltipBgColor (.-transparent m/Colors)
+        .getTooltipColor (fn [group] (.-transparent m/Colors))
         .tooltipPadding (.-zero m/EdgeInsets)
         .tooltipMargin 8
         .getTooltipItem (fn [^chart/BarChartGroupData group,

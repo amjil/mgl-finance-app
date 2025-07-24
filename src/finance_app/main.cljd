@@ -4,8 +4,9 @@
    ["package:flutter_dotenv/flutter_dotenv.dart" :as dotenv]
    ["package:adaptive_theme/adaptive_theme.dart" :as adaptive]
    ["package:keyboard_height_plugin/keyboard_height_plugin.dart" :as keyboard-plugin]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [virtual-keyboard.options :as keyboard-options]
+   [virtual-keyboard.input-control :as control]
    [finance-app.states.global :as gs]
    [finance-app.states.transactions :as transactions]
    [finance-app.states.profile :as profile]
@@ -18,10 +19,13 @@
   (await (.load dotenv/dotenv .fileName ".env"))
   
   (let [curr-month (datetime/current-year-month "yyyy-MM-dd HH:mm:ss")]
-    (transactions/query-transactions curr-month))
+    (await (transactions/query-transactions curr-month)))
   
   ;;
   (profile/prepopulate-profile-settings)
+
+  ;; Set up input control
+  (control/set-control)
   
   ;; keyboard height
   (let [keyboard-height-plugin (keyboard-plugin/KeyboardHeightPlugin)]
@@ -36,7 +40,12 @@
       :context ctx
       :let [width  (-> m/MediaQuery (.of ctx) .-size .-width)
             info (merge keyboard-options/keyboard-option
-                        {:keyboard/key-cap-border-radius 6}
+                        {:keyboard/key-cap-border-radius 6
+                        ;;  :keyboard/key-container-color (m/Colors.black 100)
+                        ;;  :keyboard/action-keys-container-color (m/Colors.black 100)
+                        ;;  :keyboard/key-text-color (m/Colors.grey 400)
+                        ;;  :keyboard/action-text-color (m/Colors.grey 400)
+                         }
                         {:keyboard/width width})]
       :bind {:info info :state gs/state}
       (adaptive/AdaptiveTheme

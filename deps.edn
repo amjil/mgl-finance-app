@@ -3,8 +3,10 @@
         {:git/url "https://github.com/tensegritics/ClojureDart.git"
          :sha "9385be3c88ab6593350fdda50d86af985224971b"}
         amjil/mongol-virtual-keyboard
-        {:git/url "https://github.com/amjil/mongol-virtual-keyboard.git"
-         :sha "f409d7bd417017ecf52bc752ca347883c8ceae92"}
+        {
+         :local/root "/Users/amjil/projects/cljd/m-v-k/"}
+         ;:git/url "https://github.com/amjil/mongol-virtual-keyboard.git"
+         ;:sha "f409d7bd417017ecf52bc752ca347883c8ceae92"}
         amjil/mongol-menu-bar
         {:git/url "https://github.com/amjil/mongol-menu-bar.git"
          :sha "d070ea149db29bed57a77eee09af3f865462c4ac"}

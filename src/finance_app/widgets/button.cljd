@@ -1,9 +1,7 @@
 (ns finance-app.widgets.button
   (:require
    ["package:flutter/material.dart" :as m]
-   ["package:mongol/mongol.dart" :as mgl]
-   [cljd.flutter.alpha2 :as f]
-   [finance-app.utils.colors :as colors]))
+   ["package:mongol/mongol.dart" :as mgl]))
 
 
 (defn button [constraints btn-color btn-text on-pressed]

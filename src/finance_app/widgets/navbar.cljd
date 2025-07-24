@@ -1,6 +1,6 @@
 (ns finance-app.widgets.navbar
   (:require
-   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
+   ["package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart" :as tab]
    ["package:flutter/material.dart" :as m]
    ["package:flutter/painting.dart" :as painting]
    [cljd.flutter :as f]
@@ -58,15 +58,16 @@
                           (.only painting/BorderRadius
                                  .topLeft (.circular painting/Radius 15)
                                  .topRight (.circular painting/Radius 15)))
-    .padding (.all tab/NavBarPadding 0)
+    .padding (m.EdgeInsets/all 0)
     .backgroundColor (-> m/Theme (.of ctx) .-primaryColor)
     .navBarStyle (.-style13 tab/NavBarStyle)
-    .itemAnimationProperties
-    (tab/ItemAnimationProperties
-     .duration (Duration .milliseconds 400)
-     .curve (.-ease m/Curves))
-    .screenTransitionAnimation
-    (tab/ScreenTransitionAnimation .curve (.-ease m/Curves)))))
+    .animationSettings
+    (tab/NavBarAnimationSettings
+      .navBarItemAnimation (tab/ItemAnimationSettings
+                             .duration (Duration .milliseconds 400)
+                             .curve (.-ease m/Curves))
+      .screenTransitionAnimation (tab/ScreenTransitionAnimationSettings
+                                   .curve (.-ease m/Curves))))))
 
 (defn ^m/Widget screen [ctx]
   (bottom-nav))

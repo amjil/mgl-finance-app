@@ -4,7 +4,7 @@
    ["package:flutter/painting.dart" :as paint]
    ["package:mongol/mongol.dart" :as mgl]
    ["package:math_expressions/math_expressions.dart" :as exp]
-   [cljd.flutter.alpha2 :as f]
+   [cljd.flutter :as f]
    [finance-app.utils.colors :as colors]
    [finance-app.states.global :as gs]))
 

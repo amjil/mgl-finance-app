@@ -2,7 +2,7 @@
   (:require
    ["package:flutter/material.dart" :as m]
    ["package:mongol/mongol.dart" :as mgl]
-   ["package:persistent_bottom_nav_bar/persistent_tab_view.dart" :as tab]
+   ["package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart" :as tab]
    [cljd.flutter :as f]
    [finance-app.states.categories :as categories]
    [finance-app.states.transactions :as transactions]
